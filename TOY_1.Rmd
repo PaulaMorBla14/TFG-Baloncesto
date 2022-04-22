@@ -22,6 +22,7 @@ library(corrplot)
 library(RColorBrewer)
 library("colorspace")
 library(graphics)
+library(rpart)
 ```
 
 
@@ -203,7 +204,8 @@ STINTS
 
 
 ```{r}
-STINTS_Reduced <- STINTS %>% select(c(SeasonGame, quarter, lineups, lineups_H, lineups_A, stint_times, PM))
+names(STINTS)
+STINTS_Reduced <- STINTS %>% dplyr::select(c(SeasonGame, quarter, lineups, lineups_H, lineups_A, stint_times, PM))
 STINTS_Reduced
 ```
 
@@ -315,15 +317,13 @@ df_dummys_PM_2 <- df_dummys_PM %>% select(-c(SeasonGame, quarter))
 PM_Lineups <-  aggregate(. ~ lineups, df_dummys_PM_2, sum, na.rm = TRUE) %>%
                   mutate(stint_times = Print_MS(stint_times))
 PM_Lineups
+
+PM_C <- colSums(PM_Lineups[3:ncol(PM_Lineups)])
+PM_C
 ```
 
 ```{r}
-PM_C <- colSums(PM_Lineups[3:ncol(PM_Lineups)])
-
-
-barplot(PM_C, xaxt = "n", xlab='PM Classic')
-axis(1, at=1:15, labels=FALSE)
-text(x = seq(1, 15, by=1), par("usr")[3] - 0.2, labels = names(PM_C), srt = 45, pos = 1, xpd = TRUE)
+barplot(PM_C, las=3)
 
 table(PM_C)
 ```
@@ -334,8 +334,11 @@ Variable outcome: PM
 
 ```{r}
 names(df_dummys)
-mod1 <- lm(PM ~ . -SeasonGame -quarter -lineups, data=df_dummys)
+mod1 <- lm(PM ~ . -SeasonGame -quarter -lineups -stint_times, data=df_dummys)
 summary(mod1)
+
+mod2 <- lm(PM ~ Anna * Diego, data=df_dummys)
+summary(mod2)
 ```
 
 
