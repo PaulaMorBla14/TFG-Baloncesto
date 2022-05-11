@@ -23,6 +23,10 @@ library(RColorBrewer)
 library("colorspace")
 library(graphics)
 library(rpart)
+
+library(ggplot2)
+
+library(car)                   # VIF
 ```
 
 
@@ -39,43 +43,11 @@ equipo2 <- c("Ignasi","Anna","Gerard","Jose","Paula")
 equipo3 <- c("Bella","Gus","Alba","Erik","Kevin")
 equipo4 <- c("Emma","Mauri","Berta","Judith","Roger")
 
-toy <- data.frame(
-  "id_play" = 1:15,
-  "season" = c(rep("S2017",15)),
-  "game_code_code" = c(rep("G1",10), rep("G2",5)),
-  "quarter" = c(rep(1,3), rep(2,2),rep(3,2),rep(4,3),rep(1,4),rep(2,1)),
-  "time" = c('00:00:00','00:03:20','00:05:12','00:11:20','00:15:36','00:21:45','00:27:20','00:31:45','00:33:00','00:36:17','00:00:00','00:03:48','00:04:45','00:06:46','00:11:21'),
-  "points_home" =    c(0,0,0,2,2,2,5,5,7,7,0,3,3,5,6),
-  "points_away" = c(0,2,2,2,4,4,7,7,9,9,0,0,2,2,2),
-  "homeplayer1" = c(rep(equipo1[1],4), rep(equipo1[2],6), rep(equipo2[1],5)),
-  "homeplayer2" = c(rep(equipo1[3],10),                   rep(equipo2[2],5)),
-  "homeplayer3" = c(rep(equipo1[4],7), rep(equipo1[5],3), rep(equipo2[3],5)),
-  "awayplayer1" = c(rep(equipo3[2],10),                   rep(equipo4[2],5)),
-  "awayplayer2" = c(rep(equipo3[1],8), rep(equipo3[3],2), rep(equipo4[6],5)),
-  "awayplayer3" = c(rep(equipo3[4],10),                   rep(equipo4[4],5))
-  )
+df <- read.csv(file = './DF_TOY2.csv', header = TRUE, sep = ";")
 
-toy2 <- data.frame(                         #DF2 para comprovar que funciona
-  "id_play"    = 1:20,
-  "season"     = c(rep("S2017",20)),
-  "game_code"  = c(rep(1,10), rep(2,10)),
-  "quarter"    = c(rep(1,3), rep(2,2),rep(3,2),rep(4,3),rep(1,4),rep(2,6)),
-  "time"       = c('00:00:00','00:03:20','00:05:12','00:11:20','00:15:36','00:21:45','00:27:20','00:31:45',
-                   '00:33:00','00:36:17','00:00:00','00:03:48','00:04:45','00:06:46','00:11:21','00:12:30',
-                   '00:14:20','00:16:12','00:17:09','00:19:54'),
-  "points_home" = c(0,0,0,2,2,2,5,5,7,7,0,2,2,5,5,7,7,7,9,10),
-  "points_away" = c(0,2,2,2,4,4,7,7,9,9,0,0,2,2,4,4,6,6,6,6),
-  "homeplayer1" = c(rep(equipo1[1],4),  rep(equipo1[2],6),   rep(equipo2[1],7), rep(equipo2[2],3)),
-  "homeplayer2" = c(rep(equipo1[3],10),                      rep(equipo2[3],10)),
-  "homeplayer3" = c(rep(equipo1[4],7),  rep(equipo1[5],3),   rep(equipo2[4],8), rep(equipo2[5],2)),
-  "awayplayer1" = c(rep(equipo2[1],10),                      rep(equipo3[1],10)), 
-  "awayplayer2" = c(rep(equipo2[2],8),  rep(equipo2[4],2),   rep(equipo3[2],8), rep(equipo3[5],2)),
-  "awayplayer3" = c(rep(equipo2[3],10),                      rep(equipo3[3],7), rep(equipo3[4],3))
-  )
+df_backup <- df
 
-toy_backup <- toy2
-
-df <- toy2
+names(df)
 ```
 
 ## Modificar variable tiempo
@@ -101,169 +73,144 @@ Print_MS <- function(x){
 df$time <- CHR_to_Time(df$time)
 ```
 
-
-Se crea variable 'lineups' que recoge los quintetos de ambos equipos en pista. También se modifica variable 'game_code' para que quede categorizada con el mismo numero de caracteres
+## Lsita Jugadores-Equipo
 
 ```{r}
-#names(df)
-df <- df %>% 
-        unite("lineups_H", matches("homeplayer[1-5]"), remove = TRUE) %>%
-        unite("lineups_A", matches("awayplayer[1-5]"), remove = TRUE) %>%
-        unite("lineups", matches("lineups_"), remove = FALSE) %>%
-        mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
-               quarter   = paste0("Q", quarter)) 
+TP_home <- df %>%
+  select(c(contains("team_home"), contains("_home_"))) %>%
+  unique()
 
-df
+TP_away <- df %>%
+  select(c(contains("team_away"), contains("_away_"))) %>%
+  unique()
+
+CBIND_MultipleCol_n <- function(data,col,n){
+  d <- unlist(data[col])
+  x <- cbind(rep(d, n))
+  y <- unlist(data[-1])
+
+  res <- cbind(x, y)
+  rownames(res) <- NULL
+  
+  res <- unique(res)
+  
+  return(res)
+}
+
+TeamPlayers_home <- CBIND_MultipleCol_n(TP_home, 1, 3)
+TeamPlayers_away <- CBIND_MultipleCol_n(TP_away, 1, 3)
+
+TeamPlayers <- rbind(TeamPlayers_home, TeamPlayers_away) %>%
+  as.data.frame() %>%
+  `colnames<-`(c("Team", "Player")) %>%
+  arrange(Team) %>%
+  unique()
+
+Players_Sorted_byTeam <- TeamPlayers$Player
+```
+
+
+## Lineups
+Se crea variable 'lineups' que recoge los quintetos de ambos equipos en pista.
+
+```{r Lineups}
+# Ordenar Lineups para evitar duplicados por DESORDEN
+Lineups_PasteSort <- function(x) {
+  paste(sort(x), collapse = "-")
+}
+
+lineup_home <- df %>% select(contains("_home_"))
+lineup_away <- df %>% select(contains("_away_"))
+lineups     <- cbind(lineup_home, lineup_away)
+
+lineup_home_sorted <- apply(lineup_home, 1, Lineups_PasteSort)
+lineup_away_sorted <- apply(lineup_away, 1, Lineups_PasteSort)
+lineups_sorted     <- apply(lineups, 1, Lineups_PasteSort)
+
+#lineups
+df_lineups_sorted <- df %>%
+  mutate(lineup = lineups_sorted,
+    lineup_home = lineup_home_sorted,
+    lineup_away = lineup_away_sorted
+  ) %>% select(-starts_with("player_"))
 ```
 
 ## MERGE Temporada+game_code
+Se modifica variable 'game_code' para que quede categorizada con el mismo numero de caracteres. Y unimos 'Season' y 'Game_Code' para tener una variable identificadora del partido.
 
-Unimos 'Season' y 'Game_Code' para tener una variable identificativa del partido.
-
-```{r}
-df_merged <- df %>%  unite("SeasonGame", c("season", "game_code"))
-df_merged
+```{r Merge Season Game}
+df_merged <- df_lineups_sorted %>%
+  mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
+                     quarter   = paste0("Q", quarter)) %>%
+  unite("SeasonGame", c("season", "game_code"))
 ```
 
 
-## ORDENAR DF -> Ya no hace falta
+## Stints
 
-```{r eval=FALSE, include=FALSE}
-players_pbp <- df %>% select(matches("_player[1-5]")) #subset de solo jugadores pbp
-resto_pbp <- df %>% select(!matches("_player[1-5]"))
+Queremos obtener un df con los quintetos identificados cada vez que se produce un cambio. Se dejaran aquellos que esten duplicados ya que es necesario diferenciarlos para posteriormente poder hacer el Más/Menos correctamente. 
 
-## Ordenar alfabeticamente jugadores
-order_players_pbp <- lapply(1:nrow(players_pbp), function(row) 
-                     players_pbp[row, order(players_pbp[row, ], decreasing = TRUE)])
-df_order_players_pbp <- data.frame(matrix(unlist(order_players_pbp), 
-                        nrow=length(order_players_pbp), byrow=TRUE))
-names(df_order_players_pbp) <- names(players_pbp)
+```{r DF Reduced 1}
+df_stints <- df_merged %>%
+  arrange(SeasonGame) %>%
+  mutate(StintChanged = (lineup != lag(lineup)),
+         StintChanged = replace_na(StintChanged, TRUE),
+         stint        = cumsum(StintChanged))
 
-df <- cbind(resto_pbp, df_order_players_pbp)
-
-df
+df_reduced <- df_stints %>%
+  mutate(StintRemove  = (stint == lead(stint)),
+         StintRemove  = replace_na(StintRemove, FALSE)) %>%
+  filter(StintRemove != TRUE)
 ```
 
+## Mas/Menos
 
+Obtenemos el Más/Menos segun cada stint. Se tendrá en cuenta el cambio de partido.
+Además, esta variable estará hecha con HOME como referéncia, pero eso no hace ninguna diferencia estadística importante en nuestro resultado final.
 
-## UNIQUE quintetos
-
-Queremos obtener un df con los quintetos sin duplicar, con la información agupada por 
-
-```{r}
-# Columnas TRUE o FALSE si son iguales a su lag row
-df_merged <- df_merged %>% 
-  mutate(players_SAME = (lineups == lag(lineups)),
-         SeasonGame_SAME = (SeasonGame == lag(SeasonGame)))
-
-## Determinamos los primeros elementos de estas dos variables como FALSE para que no  
-## nos aparezca NA, ya que no puede evaluar con anterior
-df_merged$players_SAME[1]    <- FALSE
-df_merged$SeasonGame_SAME[1] <- FALSE
-
-df_merged <- df_merged %>%
-  mutate(NEW_STINT = ifelse(((players_SAME == FALSE)|(SeasonGame_SAME == FALSE )),TRUE, FALSE),
-         ### 1ra condicions para cambio de jugadores y 2nda para cambio de partido.
-         stint = ifelse((lead(NEW_STINT) == TRUE)|(SeasonGame_SAME == FALSE ), NEW_STINT, NA))
-         ### La primera condicion nos mantiene las que son iguales anterior a la fila en la que estamos
-         ### ha habiado cambio. La segunda condicion nos mantiene la primera entrada de cada partido.
-          
-
-df_merged
-```
-
-Hasta aquí tenemos detectados los stints que mantendremos.
-
-## STINTS
-
-Para que nos aparezcan tambien la primera y la ultima entrada:
-
-```{r}
-n_df <- dim(df_merged)[1]
-df_merged$stint[1] <- df_merged$NEW_STINT[1]
-df_merged$stint[n_df] <- df_merged$NEW_STINT[n_df]
-
-df_merged
-```
-
-
-```{r}
-STINTS <- df_merged %>% drop_na(stint)         #Eliminar NA rows
-
-PM_function <- function(h,a){
+```{r MasMenos}
+PlusMinus_function <- function(h,a){
   (h-lag(h))-(a-lag(a))
 }
 
-STINTS <- STINTS %>% 
-  mutate(ID_Stint = 1:nrow(STINTS),
-         stint_times = times(ifelse(SeasonGame_SAME == TRUE, time-lag(time), 0)),
-         PM = ifelse(SeasonGame_SAME == TRUE, PM_function(points_home, points_away), 0)) #Home como referencia
+#Home como referencia
+df_PlusMinus <- df_reduced %>%
+  group_by(SeasonGame) %>%
+  mutate(
+    stint_time = ifelse(is.na(lag(time)), time, time - lag(time)),
+    PlusMinus  = ifelse(is.na(lag(time)), points_home - points_away,
+                       PlusMinus_function(points_home, points_away))
+  ) %>% ungroup()
 
-STINTS
+df_PlusMinus_reduced <- df_PlusMinus %>% 
+  select(c(SeasonGame, quarter, lineup, lineup_home, lineup_away, stint_time, PlusMinus)) 
+
+#Eliminar stints duplicados
+df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>% 
+  group_by(SeasonGame, quarter, lineup, lineup_home, lineup_away) %>% 
+  summarise(
+    stint_time = sum(stint_time),
+    PlusMinus  = sum(PlusMinus) ) %>% 
+  ungroup() %>%
+  as.data.frame()
 ```
 
+# PARTE 2: Dummys Jugadores
 
-```{r}
-names(STINTS)
-STINTS_Reduced <- STINTS %>% dplyr::select(c(SeasonGame, quarter, lineups, lineups_H, lineups_A, stint_times, PM))
-STINTS_Reduced
-```
-
-
-
-# PARTE 2:  Dummys Jugadores
-
-```{r eval=FALSE, include=FALSE}
-#PRUEBA1
-players <- c(equipo1, equipo2, equipo3, equipo4)
-length(players)
-
-NA_players <- matrix(data=NA, nrow = dim(STINTS_PM)[1], ncol = length(players)) #Solo jugadores
-
-df_DummyPlayers <- cbind(STINTS_PM, NA_players)                     #DF con jugadores como columnas
-names(df_DummyPlayers) <- c(names(STINTS_PM), players)
-
-## TRUE/FALSE si aparecen en la alineacion
-df_DummyPlayers[players] <- grepl(players, df_DummyPlayers$lineups, fixed=TRUE) 
-
-#Me las rellena todas igual al primer jugador que aparece en players (homeplayer1). Como hacer 
-#para que rellene con todos los jugadores??
-
-
-#Como deberian ser:
-d1 <- grepl(players[1], df_DummyPlayers$lineups, fixed=TRUE) #homeplayer1
-d2 <- grepl(players[2], df_DummyPlayers$lineups, fixed=TRUE) #homeplayer2
-d3 <- grepl(players[3], df_DummyPlayers$lineups, fixed=TRUE) #homeplayer3
-d4 <- grepl(players[4], df_DummyPlayers$lineups, fixed=TRUE) #homeplayer4
-
-df_Dum <- data.frame(
-  "homeplayer1" <- d1,
-  "homeplayer2" <- d2,
-  "homeplayer3" <- d3,
-  "homeplayer4" <- d4
-)
-
-names(df_Dum) <- paste0("homeplayer", 1:4)
-df_Dum
-
-#Lo que sale
-df_DummyPlayers
-```
-
-```{r}
-#PRUEBA2 - fastDummies
-
+```{r Dummys}
 # Vector con todos los nombres de los jugadores:
 players <- c(equipo1, equipo2, equipo3, equipo4)
 length(players)
 
-df_dummys_H <- fastDummies::dummy_cols(STINTS_Reduced, select_columns = "lineups_H", split = "_")
+df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_home", 
+                                       split = "-")
+df_dummys_A <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_away", 
+                                       split = "-") %>% 
+                  mutate(across(starts_with("lineup_away_"), function(x) -x))
 
-df_dummys_A <- fastDummies::dummy_cols(STINTS_Reduced, select_columns = "lineups_A", split = "_")
-df_dummys_A <- df_dummys_A %>% 
-                  mutate(across(starts_with("lineups_A_"), function(x) -x))
-
-Remove_first_char <- function(data, char){
+Remove_firsts_chars_colnames <- function(data, char){
   num_char <- nchar(char)+1
   substring(names(data), num_char)
 }
@@ -275,17 +222,17 @@ COL_From <- function(data, first_col){
 
 COL_to <- function(data, first_col, char){
   last_col = ncol(data)
-  Remove_first_char(data[first_col:last_col], char)
+  Remove_firsts_chars_colnames(data[first_col:last_col], char)
 }
 
 #Primera columna con el nombre de un jugador
-match <- match(paste0("lineups_A_", players), names(df_dummys_A)) %>%
+match <- match(paste0("lineup_away_", players), names(df_dummys_A)) %>%
             na.omit() %>%
             min()
 
-#nombre columnas sin primera palabras:
-col_to_A <- COL_to(df_dummys_A, match, "lineups_A_")
-col_to_H <- COL_to(df_dummys_H, match, "lineups_H_")
+#nombre columnas sin primeras palabras:
+col_to_A <- COL_to(df_dummys_A, match, "lineup_away_")
+col_to_H <- COL_to(df_dummys_H, match, "lineup_home_")
 
 df_dummys_A <- df_dummys_A %>% rename_at(vars(COL_From(df_dummys_A,match)), function(x) col_to_A)
 df_dummys_H <- df_dummys_H %>% rename_at(vars(COL_From(df_dummys_H,match)), function(x) col_to_H)
@@ -297,49 +244,102 @@ df_dummys_H[df_dummys_H == 0] <- NA
 df_dummys <- coalesce(df_dummys_H,df_dummys_A)
 df_dummys[is.na(df_dummys)] <- 0
 
-df_dummys <- df_dummys %>% select(-c(starts_with("lineups_")))
-df_dummys
+df_dummys <- df_dummys %>% select(-c(starts_with("lineup_"))) %>% ungroup()
 ```
 
-Ahora mismo tenemos un DF con el PM con HOME como referencia (si es positivo, ganaban HOME. Si es Negativo ganaban AWAY). Luego tenemos variables "dummys" con 1 si estaban jugando como HOME, -1 si estaban jugando como AWAY y 0 si no estaban en pista.
+Ahora mismo tenemos un DF con el PlusMinus con HOME como referencia (si es positivo, ganaban HOME. Si es Negativo ganaban AWAY). Luego tenemos variables "dummys" con 1 si estaban jugando como HOME, -1 si estaban jugando como AWAY y 0 si no estaban en pista.
 
-# PARTE 3: PM por stint (PM CLASSIC)
+# PARTE 3: PlusMinus por stint (PlusMinus CLASSIC)
 
-```{r}
-df_dummys_PM <- df_dummys %>% 
-                  mutate(across(matches(players), function(x) x*PM)) %>%
-                  select(-c(PM))
+```{r Más Menos clásico}
+df_dummys_PlusMinus <- df_dummys %>%
+  group_by(SeasonGame, quarter, lineup, stint_time) %>%
+  mutate(across(matches(players), function(x) x*PlusMinus)) %>%
+  select(-c(PlusMinus)) %>%
+  ungroup()
 
-### PM de los mismos lineups (sin tener en cuenta SeasonGame o Quarter):
+### MasMenos de los mismos lineups (sin tener en cuenta SeasonGame o Quarter):
 
-df_dummys_PM_2 <- df_dummys_PM %>% select(-c(SeasonGame, quarter))
+df_dummys_PlusMinus_2 <- df_dummys_PlusMinus %>% select(-c(SeasonGame, quarter))
 
-PM_Lineups <-  aggregate(. ~ lineups, df_dummys_PM_2, sum, na.rm = TRUE) %>%
-                  mutate(stint_times = Print_MS(stint_times))
-PM_Lineups
+PlusMinus_Lineups <- aggregate(. ~ lineup, df_dummys_PlusMinus_2, sum, na.rm = TRUE) %>%
+                     mutate(stint_time = Print_MS(stint_time))
 
-PM_C <- colSums(PM_Lineups[3:ncol(PM_Lineups)])
-PM_C
+PlusMinus_Classic <- colSums(PlusMinus_Lineups[3:ncol(PlusMinus_Lineups)])
+
+PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic)
+
+PlusMinus_Classic_df <- PlusMinus_Classic_df %>%
+  mutate(Players = rownames(PlusMinus_Classic_df)) %>%
+  arrange(Players) %>%
+  select(Players, PlusMinus_Classic)
+  
+rownames(PlusMinus_Classic_df) <- NULL
+
 ```
 
-```{r}
-barplot(PM_C, las=3)
+```{r Graficos}
+ggplot(PlusMinus_Classic_df, aes(x=Players, y=PlusMinus_Classic, fill=Players)) +
+  geom_bar(stat="identity") + theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+#util para grupos pequeños de jugadores, por ejemplo equipos o maximos
 
-table(PM_C)
+t<-table(PlusMinus_Classic); t
+
+plot(density(t))
+
+ggplot(PlusMinus_Classic_df, aes(x = PlusMinus_Classic)) +
+  stat_function(
+    fun = dnorm, 
+    args = with(PlusMinus_Classic_df, c(mean = mean(PlusMinus_Classic), 
+                                      sd = sd(PlusMinus_Classic)))
+  ) + scale_x_continuous("Más/Menos clásico")
 ```
 
 # PARTE 4: Modelar
 
-Variable outcome: PM
+Variable outcome: PlusMinus
 
 ```{r}
-names(df_dummys)
-mod1 <- lm(PM ~ . -SeasonGame -quarter -lineups -stint_times, data=df_dummys)
+summary(df_dummys)
+
+mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_time, data=df_dummys)
 summary(mod1)
 
-mod2 <- lm(PM ~ Anna * Diego, data=df_dummys)
+mod2 <- lm(PlusMinus/stint_time ~ . -SeasonGame -quarter -lineup, data=df_dummys)
 summary(mod2)
+
+mod3 <- lm(PlusMinus*stint_time ~ . -SeasonGame -quarter -lineup, data=df_dummys)
+summary(mod3)
 ```
 
 
+# PARTE 5: HeatMap Correlaciones Jugadores
+Primero vamos a preparar los datos con la estructura que necesitamos para crear el heatmap:
 
+```{r}
+match_firstplayer <- match(players, names(df_dummys_PlusMinus)) %>%
+            na.omit() %>%
+            min()
+n <- dim(df_dummys_PlusMinus)[2]
+
+correlations <- cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n]))
+```
+
+
+```{r}
+corrplot(correlations, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+
+col<- colorRampPalette(c("red", "white", "blue"))(20)
+heatmap(x = correlations, col = col, symm = TRUE)
+```
+
+# PARTE 6: Variance Inflation Factor (VIF)
+
+```{r eval=FALSE, include=TRUE}
+vif()
+
+```
+
+Tenemos pocos casos. Y por eso, tenemos dos o más variables predictoras en el modelo que están altamente (o perfectamente) correlacionadas.

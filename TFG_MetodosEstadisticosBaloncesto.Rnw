@@ -143,7 +143,7 @@ Para que podamos entender a que nos referimos en este trabajo, es necesario comp
 
 \begin{itemize}
 
-\item Puntos: Acumulaci√≥n de canastas encestadas multiplicadas por su valor, que cada  jugador y/o equipo realiza durante el partido
+\item Puntos: Acumulaci√≥n de tiros encestadas multiplicadas por su valor, que cada  jugador y/o equipo realiza durante el partido
 \item Minutos: N√∫mero de minutos que el jugador est√° en pista
 \item Falta: Acci√≥n en la que un defensor bloquea el avance de su rival sin tener control de bal√≥n o de manera no reglamentaria (empujar, agarrar...)
 \item P√©rdidas de bal√≥n: cuando un equipo pierde el control del bal√≥n y pasa a ser del equipo rival.
@@ -269,10 +269,10 @@ De este an√°lisis, es frecuente encontrar variantes: mapa de calor del equipo, m
 \begin{itemize}
 \item MIN (\emph{Minutes}): Minutos totales jugados
 \item PTS (\emph{Points}): Puntos totales realizados
-\item 2FGA (\emph{2-point Field Goals Attempted}): N√∫mero de canastas de 2 puntos intentadas
-\item 2FGM (\emph{2-point Field Goals Made}): N√∫mero de canastas de 2 puntos anotadas
-\item 3FGA (\emph{3-point Field Goals Attempted}): N√∫mero de canastas de 3 puntos ("triples") intentadas
-\item 3FGM (\emph{3-point Field Goals Made}): N√∫mero de canastas de 3 puntos ("triples") anotadas
+\item 2FGA (\emph{2-point Field Goals Attempted}): N√∫mero de tiros de 2 puntos intentadas
+\item 2FGM (\emph{2-point Field Goals Made}): N√∫mero de tiros de 2 puntos anotadas
+\item 3FGA (\emph{3-point Field Goals Attempted}): N√∫mero de tiros de 3 puntos ("triples") intentadas
+\item 3FGM (\emph{3-point Field Goals Made}): N√∫mero de tiros de 3 puntos ("triples") anotadas
 \item FTA (\emph{Free Throws Attempted}): N√∫mero de tiros libres intentados
 \item FTM (\emph{Free Throws Made}): N√∫mero de tiros libres anotados
 \end{itemize}
@@ -289,6 +289,24 @@ library(ggplot2)
 
 library(here)
 library(tidyverse)
+
+library(tidyr)
+library(dplyr)
+library(chron)                 # Para CHR_to_seconds
+library(stringr)               # Para str_pad
+library(lubridate)
+library(reshape)
+library(tidyselect)
+
+library(corrplot)
+library(RColorBrewer)
+library("colorspace")
+library(graphics)
+library(rpart)
+
+library(ggplot2)
+
+library(car)                   # VIF
 @
 
 <<Datos>>=
@@ -312,7 +330,7 @@ pbp_bad <- pbp_2018 %>%
 pbp_bad %>%
   select(season, game_code, play_number, play_type, away_player4, away_player5)
     
-## Soluci√≥n
+## SoluciÛn
 source(here("R", "fix-lineups.R"))
 
 ## Function fix_lineups() only takes data from a single game,
@@ -327,7 +345,7 @@ pbp_2018_fixed %>%
   sum()
 @
 
-\subsubsection{MAS/MENOS Cl√°sico}
+\subsubsection{Categorizaci√≥n y edici√≥n de BBDD}
     
 <<>>=
 df <- pbp_2018_fixed
@@ -336,27 +354,327 @@ df <- pbp_2018_fixed
 players <- df %>% 
   select(matches("player_name")) %>%
   arrange(player_name) %>% 
-  unique
+  unique() %>% 
+  drop_na()
+
+players <- players$player_name
+#players <- sub(", ", "_", players)
 
 num_players <- dim(players)[1]    # Numero de jugadores
 unique(df$play_type)              # Tipos de acciones
     
 names(df)                         # Variables BBDD
-    
-df_pbp <- df %>% 
-  select(season, game_code, quarter, points_home, points_away, matches("_player[1-5]"))
-    
-df_pbp$PM_Home <- df_pbp$points_home - df_pbp$points_away
-df_pbp$PM_Away <- -df_pbp$PM_Home
 
-names(df_pbp)                     # Variables finales BBDD
-@
-      
-      
-\subsubsection{MAS/MENOS AJUSTADO, \emph{APM}}
+df_pbp <- df %>% 
+  select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]")) 
+
+## Como elimino todos los espacios del df de unas columnas determinadas??
+x <- sub(", ", "_", df_pbp$home_player1)
+y <- sub(" ", "_", x)
     
-<<>>=
-      
+names(df_pbp)
 @
+
+\subsection{Modificar variable tiempo} 
+
+Para facilitar los calculos con el tiempo, se va a pasar los mm:ss a segundos. 
+
+\begin{itemize}
+\item CHR_to_seconds: Para pasar la variable tiempo que nos llega como chracter a segundos.
+\item Print_MS: Que nos devolver√° los segundos a formato mm:SS (se har√° servir m√°s adelante)
+
+\end{itemize}
+
+<<>>=
+CHR_to_seconds <- function(x){
+  a <- as.POSIXct(x, tz = '', format = "%H:%M:%S", usetz = FALSE)
+  tms <- secondss(format(a, "%H:%M:%S"))
+  s <- period_to_seconds(hms(tms))
+  return(s)
+}
+
+Print_MS <- function(x){
+  t <- seconds_to_period(x)
+  sprintf('%02d:%02d:%02d', t@hour, minute(t), second(t))
+}
+
+#df_pbp$seconds <- CHR_to_seconds(df_pbp$seconds)
+@
+
+\subsection{Lista Jugadores-Equipo}
+
+<<>>=
+TP_home <- df_pbp %>%
+  select(c(contains("home_"))) %>%
+  unique()
+
+TP_away <- df_pbp %>%
+  select(c(contains("away_"))) %>%
+  unique()
+
+CBIND_MultipleCol_n <- function(data,col,n){
+  d <- unlist(data[col])
+  x <- cbind(rep(d, n))
+  y <- unlist(data[-1])
+
+  res <- cbind(x, y)
+  rownames(res) <- NULL
+  
+  res <- unique(res)
+  
+  return(res)
+}
+
+TeamPlayers_home <- CBIND_MultipleCol_n(TP_home, 1, 5)
+TeamPlayers_away <- CBIND_MultipleCol_n(TP_away, 1, 5)
+
+TeamPlayers <- rbind(TeamPlayers_home, TeamPlayers_away) %>%
+  as.data.frame() %>%
+  `colnames<-`(c("Team", "Player")) %>%
+  arrange(Team) %>%
+  unique()
+
+Players_Sorted_byTeam <- TeamPlayers$Player
+@
+
+
+\subsection{Lineups}
+
+Se crea variable \emph{lineups} que recoge los quintetos de ambos equipos en pista.
+
+<<>>=
+Lineups_PasteSort <- function(x) {
+  paste(sort(x), collapse = " - ")
+}
+
+lineup_home <- df_pbp %>% select(contains("home_p"))
+lineup_away <- df_pbp %>% select(contains("away_p"))
+lineups     <- cbind(lineup_home, lineup_away)
+
+lineup_home_sorted <- apply(lineup_home, 1, Lineups_PasteSort)
+lineup_away_sorted <- apply(lineup_away, 1, Lineups_PasteSort)
+lineups_sorted     <- apply(lineups, 1, Lineups_PasteSort)
+
+#lineups
+df_lineups_sorted <- df_pbp %>%
+  mutate(lineup = lineups_sorted,
+    lineup_home = lineup_home_sorted,
+    lineup_away = lineup_away_sorted
+  ) %>% select(-contains("_player"))
+
+@
+
+\subsection{MERGE Temporada+game_code}
+
+Se modifica variable \emph{game_code} para que quede categorizada con el mismo numero de caracteres. Y unimos \emph{Season} y \emph{Game_Code} para tener una variable identificadora del partido.
+
+<<>>=
+df_merged <- df_lineups_sorted %>%
+  mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
+                     quarter   = paste0("Q", quarter)) %>%
+  unite("SeasonGame", c("season", "game_code"))
+@
+
+\subsection{Quintetos (Stints)}
+
+Queremos obtener un df con los quintetos identificados cada vez que se produce un cambio. Se dejaran aquellos que esten duplicados ya que es necesario diferenciarlos para posteriormente poder hacer el M·s/Menos correctamente. 
+
+<<>>=
+df_stints <- df_merged %>%
+  arrange(SeasonGame) %>%
+  mutate(StintChanged = (lineup != lag(lineup)),
+         StintChanged = replace_na(StintChanged, TRUE),
+         stint        = cumsum(StintChanged))
+
+df_reduced <- df_stints %>%
+  mutate(StintRemove  = (stint == lead(stint)),
+         StintRemove  = replace_na(StintRemove, FALSE)) %>%
+  filter(StintRemove != TRUE)
+@
+
+
+\subsection{M·s/Menos}
+
+Obtenemos el M·s/Menos segun cada stint. Se tendr· en cuenta el cambio de partido.
+Adem·s, esta variable estar· hecha con HOME como referÈncia, pero eso no hace ninguna diferencia estadÌstica importante en nuestro resultado final.
+
+<<>>=
+PlusMinus_function <- function(h,a){
+  (h-lag(h))-(a-lag(a))
+}
+
+#Home como referencia
+df_PlusMinus <- df_reduced %>%
+  group_by(SeasonGame) %>%
+  mutate(
+    stint_seconds = ifelse(is.na(lag(seconds)), seconds, seconds - lag(seconds)),
+    PlusMinus  = ifelse(is.na(lag(seconds)), points_home - points_away,
+                       PlusMinus_function(points_home, points_away))
+  ) %>% ungroup()
+
+df_PlusMinus_reduced <- df_PlusMinus %>% 
+  select(c(SeasonGame, quarter, lineup, lineup_home, lineup_away, stint_seconds, PlusMinus)) 
+
+#Eliminar stints duplicados
+df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>% 
+  group_by(SeasonGame, quarter, lineup, lineup_home, lineup_away) %>% 
+  summarise(
+    stint_seconds = sum(stint_seconds),
+    PlusMinus  = sum(PlusMinus) ) %>% 
+  ungroup() %>%
+  as.data.frame()
+@
+
+\subsection{PARTE 2: Dummys Jugadores}
+
+<<>>=
+# Vector con todos los nombres de los jugadores:
+length(players)
+
+df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_home", 
+                                       split = "-")
+df_dummys_A <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_away", 
+                                       split = "-") %>% 
+                  mutate(across(starts_with("lineup_away_"), function(x) -x))
+
+Remove_firsts_chars_colnames <- function(data, char){
+  num_char <- nchar(char)+1
+  substring(names(data), num_char)
+}
+
+COL_From <- function(data, first_col){
+  last_col = ncol(data)
+  colnames(data[first_col:last_col])
+}
+
+COL_to <- function(data, first_col, char){
+  last_col = ncol(data)
+  Remove_firsts_chars_colnames(data[first_col:last_col], char)
+}
+
+#Primera columna con el nombre de un jugador
+match <- match(paste0("lineup_away_", players), names(df_dummys_A)) %>%
+            na.omit() %>%
+            min()
+
+match = 8
+
+#nombre columnas sin primeras palabras:
+col_to_A <- COL_to(df_dummys_A, match, "lineup_away_")
+col_to_H <- COL_to(df_dummys_H, match, "lineup_home_")
+
+df_dummys_A <- df_dummys_A %>% rename_at(vars(COL_From(df_dummys_A,match)), function(x) col_to_A)
+df_dummys_H <- df_dummys_H %>% rename_at(vars(COL_From(df_dummys_H,match)), function(x) col_to_H)
+
+#Juntar los dos DF:
+df_dummys_A[df_dummys_A == 0] <- NA
+df_dummys_H[df_dummys_H == 0] <- NA
+
+df_dummys <- coalesce(df_dummys_H,df_dummys_A)
+df_dummys[is.na(df_dummys)] <- 0
+
+df_dummys <- df_dummys %>% select(-c(starts_with("lineup_"))) %>% ungroup()
+@
+
+Ahora mismo tenemos un DF con el PlusMinus con HOME como referencia (si es positivo, ganaban HOME. Si es Negativo ganaban AWAY). Luego tenemos variables "dummys" con 1 si estaban jugando como HOME, -1 si estaban jugando como AWAY y 0 si no estaban en pista.
+
+\section{PARTE 3: PlusMinus por stint (PlusMinus CLASSIC)}
+
+<<>>=
+df_dummys_PlusMinus <- df_dummys %>%
+  group_by(SeasonGame, quarter, lineup, stint_seconds) %>%
+  mutate(across(matches(players), function(x) x*PlusMinus)) %>%
+  select(-c(PlusMinus)) %>%
+  ungroup()
+
+### MasMenos de los mismos lineups (sin tener en cuenta SeasonGame o Quarter):
+
+df_dummys_PlusMinus_2 <- df_dummys_PlusMinus %>% select(-c(SeasonGame, quarter))
+
+PlusMinus_Lineups <- aggregate(. ~ lineup, df_dummys_PlusMinus_2, sum, na.rm = TRUE) %>%
+                     mutate(stint_seconds = Print_MS(stint_seconds))
+
+PlusMinus_Classic <- colSums(PlusMinus_Lineups[3:ncol(PlusMinus_Lineups)])
+
+PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic)
+
+PlusMinus_Classic_df <- PlusMinus_Classic_df %>%
+  mutate(Players = rownames(PlusMinus_Classic_df)) %>%
+  arrange(Players) %>%
+  select(Players, PlusMinus_Classic)
+  
+rownames(PlusMinus_Classic_df) <- NULL
+@
+
+Gr·ficos:
+<<>>=
+ggplot(PlusMinus_Classic_df, aes(x=Players, y=PlusMinus_Classic, fill=Players)) +
+  geom_bar(stat="identity")+theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+## Este ˙til para grupos pequeÒos de jugadores. Quizas seria util aÒadir variable equipo y hacer lo mismo pero por equipos.
+
+t<-table(PlusMinus_Classic); t
+
+plot(density(t))
+
+ggplot(PlusMinus_Classic_df, aes(x = PlusMinus_Classic)) +
+  stat_function(
+    fun = dnorm, 
+    args = with(PlusMinus_Classic_df, c(mean = mean(PlusMinus_Classic), 
+                                      sd = sd(PlusMinus_Classic)))
+  ) + scale_x_continuous("M·s/Menos cl·sico")
+@
+
+\section{PARTE $: Modelar}
+
+<<>>=
+summary(df_dummys)
+
+df_dummys2 <- df_dummys
+
+df_dummys2$stint_seconds[df_dummys2$stint_seconds == 0] <- NA 
+##Porque hay stints con 0 seconds??
+
+df_dummys2 <- df_dummys2 %>% drop_na()
+
+mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_seconds, data=df_dummys2)
+summary(mod1)
+
+mod2 <- lm(PlusMinus/stint_seconds ~ . -SeasonGame -quarter -lineup, data=df_dummys2)
+summary(mod2)
+
+mod3 <- lm(PlusMinus/stint_seconds ~ . +lag(PlusMinus) -SeasonGame -quarter -lineup, 
+           data=df_dummys2)
+summary(mod3)
+@
+
+\section{PARTE 5: HeatMap Correlaciones Jugadores}
+
+Primero vamos a preparar los datos con la estructura que necesitamos para crear el heatmap:
+
+<<>>=
+match_firstplayer <- match(players, names(df_dummys_PlusMinus)) %>%
+            na.omit() %>%
+            min()
+n <- dim(df_dummys_PlusMinus)[2]
+
+correlations <- cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n]))
+correlations <- cor(df_dummys_PlusMinus[,match_firstplayer:n])
+@
+
+<<>>=
+corrplot(correlations, type = "upper", tl.col = "black", tl.srt = 45)
+
+col<- colorRampPalette(c("red", "white", "blue"))(20)
+heatmap(x = correlations, col = col, symm = TRUE)
+@
+
+\section{PARTE 6: Variance Inflation Factor (VIF)}
+<<>>=
+#vif(mod2)
+@
+
 
 \end{document}
