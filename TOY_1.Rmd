@@ -337,8 +337,8 @@ heatmap(x = correlations, col = col, symm = TRUE)
 
 # PARTE 6: Variance Inflation Factor (VIF)
 
-```{r eval=FALSE, include=TRUE}
-vif()
+```{r}
+
 
 ```
 

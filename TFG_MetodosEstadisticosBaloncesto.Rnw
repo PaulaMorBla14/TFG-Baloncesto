@@ -252,44 +252,12 @@ De este análisis, es frecuente encontrar variantes: mapa de calor del equipo, m
 
 \clearpage
 
-\addcontentsline{toc}{section}{Referencias}
-
-\begin{thebibliography}{X}
-	\bibitem{RAPM} \textsc{Joseph Sill}, \textit{Improved NBA Adjusted +/- Using Regularization and Out-of-Sample Testing}, PDF, 6 Marzo 2010.
-	
-	\bibitem{HappyGH} \textsc{Happy Git}, \textit{Let’s Git started}, url: \url{https://happygitwithr.com/index.html}, .
-\end{thebibliography}
-
-\clearpage
-
-\section{Annexo}
-
-\subsection{Descripción de las variables} \label{sec:Annexo1}
-
-\begin{itemize}
-\item MIN (\emph{Minutes}): Minutos totales jugados
-\item PTS (\emph{Points}): Puntos totales realizados
-\item 2FGA (\emph{2-point Field Goals Attempted}): Número de tiros de 2 puntos intentadas
-\item 2FGM (\emph{2-point Field Goals Made}): Número de tiros de 2 puntos anotadas
-\item 3FGA (\emph{3-point Field Goals Attempted}): Número de tiros de 3 puntos ("triples") intentadas
-\item 3FGM (\emph{3-point Field Goals Made}): Número de tiros de 3 puntos ("triples") anotadas
-\item FTA (\emph{Free Throws Attempted}): Número de tiros libres intentados
-\item FTM (\emph{Free Throws Made}): Número de tiros libres anotados
-\end{itemize}
-
-\clearpage
-
-\subsection{Código R} \label{sec:Annexo2}
-
-<<Paquetes>>=
+<<include=FALSE, echo=FALSE>>=
 library(readr)
-
 library(dplyr)
 library(ggplot2)
-
 library(here)
 library(tidyverse)
-
 library(tidyr)
 library(dplyr)
 library(chron)                 # Para CHR_to_seconds
@@ -297,60 +265,92 @@ library(stringr)               # Para str_pad
 library(lubridate)
 library(reshape)
 library(tidyselect)
-
 library(corrplot)
 library(RColorBrewer)
 library("colorspace")
 library(graphics)
 library(rpart)
-
 library(ggplot2)
-
 library(car)                   # VIF
-@
 
-<<Datos>>=
-pbp2018 <- read.csv(file="pbp2018.csv", head=TRUE, sep=",")
-names(pbp2018)
-@
+#ERROR SOLUCION
+pbp_2008 <- read_csv("pbp2008.csv")
 
-Se encontraron errores en la extracción de las alineaciones. Corrección:
-
-<<Datos Arreglados echo=TRUE, eval=TRUE>>=
-pbp_2018 <- read_csv("pbp2018.csv")
-    
 ## Check how many rows are affected by this
-bad_lineups <- pbp_2018 %>%
+bad_lineups <- pbp_2008 %>%
   select(matches("_player[1-5]")) %>%
   apply(1, function(x) max(table(x)) > 1)
 
-pbp_bad <- pbp_2018 %>%
+pbp_bad <- pbp_2008 %>%
   filter(bad_lineups)
     
 pbp_bad %>%
   select(season, game_code, play_number, play_type, away_player4, away_player5)
     
-## Soluci�n
+## Solucion
 source(here("R", "fix-lineups.R"))
 
 ## Function fix_lineups() only takes data from a single game,
 ## so I split the data and apply the function to each splitted data frame.
+pbp_2008_fixed <- split(pbp_2008, factor(pbp_2008$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2009 <- read_csv("pbp2009.csv")
+pbp_2009_fixed <- split(pbp_2009, factor(pbp_2009$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2010 <- read_csv("pbp2010.csv")
+pbp_2010_fixed <- split(pbp_2010, factor(pbp_2010$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2011 <- read_csv("pbp2011.csv")
+pbp_2011_fixed <- split(pbp_2011, factor(pbp_2011$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2012 <- read_csv("pbp2012.csv")
+pbp_2012_fixed <- split(pbp_2012, factor(pbp_2012$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2013 <- read_csv("pbp2013.csv")
+pbp_2013_fixed <- split(pbp_2013, factor(pbp_2013$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2014 <- read_csv("pbp2014.csv")
+pbp_2014_fixed <- split(pbp_2014, factor(pbp_2014$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2015 <- read_csv("pbp2015.csv")
+pbp_2015_fixed <- split(pbp_2015, factor(pbp_2015$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2017 <- read_csv("pbp2017.csv")
+pbp_2017_fixed <- split(pbp_2017, factor(pbp_2017$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2018 <- read_csv("pbp2018.csv")
 pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
-  map_df(fix_lineups)
+  map_df(fix_lineups) 
 
-## Check that this has been fixed
-pbp_2018_fixed %>%
-  select(matches("_player[1-5]")) %>%
-  apply(1, function(x) max(table(x)) > 1) %>%
-  sum()
-@
+pbd_datos_fixed <- rbind(pbp_2008_fixed, pbp_2009_fixed, pbp_2010_fixed, pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
 
-\subsubsection{Categorización y edición de BBDD}
-    
-<<>>=
-df <- pbp_2018_fixed
 
-# Lista de jugadores:
+#CATEGORIZACION BBDD
+df <- pbd_datos_fixed
+N_df <- dim(df)[1] # Numero de jugadas
+M_df <- dim(df)[2] # Numero de variables
+
+df_fact <- df %>%
+  select(season, game_code, team_code, player_name, team_name) %>%
+  mutate(season = as.factor(season),
+         team_code = as.factor(team_code),
+         player_name = as.factor(player_name),
+         team_name = as.factor(team_name))
+
+num_teams <- length(levels(df_fact$team_name)) # Numero de equipos
+
+factor_names <- c('season', 'game_code', 'team_code')
+df[,factor_names] <- lapply(df[,factor_names] , factor)
+
 players <- df %>% 
   select(matches("player_name")) %>%
   arrange(player_name) %>% 
@@ -358,34 +358,11 @@ players <- df %>%
   drop_na()
 
 players <- players$player_name
-#players <- sub(", ", "_", players)
-
-num_players <- dim(players)[1]    # Numero de jugadores
-unique(df$play_type)              # Tipos de acciones
-    
-names(df)                         # Variables BBDD
+num_players <- length(players)   # Numero de jugadores
 
 df_pbp <- df %>% 
-  select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]")) 
+  select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]"))
 
-## Como elimino todos los espacios del df de unas columnas determinadas??
-x <- sub(", ", "_", df_pbp$home_player1)
-y <- sub(" ", "_", x)
-    
-names(df_pbp)
-@
-
-\subsection{Modificar variable tiempo} 
-
-Para facilitar los calculos con el tiempo, se va a pasar los mm:ss a segundos. 
-
-\begin{itemize}
-\item CHR_to_seconds: Para pasar la variable tiempo que nos llega como chracter a segundos.
-\item Print_MS: Que nos devolverá los segundos a formato mm:SS (se hará servir más adelante)
-
-\end{itemize}
-
-<<>>=
 CHR_to_seconds <- function(x){
   a <- as.POSIXct(x, tz = '', format = "%H:%M:%S", usetz = FALSE)
   tms <- secondss(format(a, "%H:%M:%S"))
@@ -398,12 +375,6 @@ Print_MS <- function(x){
   sprintf('%02d:%02d:%02d', t@hour, minute(t), second(t))
 }
 
-#df_pbp$seconds <- CHR_to_seconds(df_pbp$seconds)
-@
-
-\subsection{Lista Jugadores-Equipo}
-
-<<>>=
 TP_home <- df_pbp %>%
   select(c(contains("home_"))) %>%
   unique()
@@ -435,14 +406,7 @@ TeamPlayers <- rbind(TeamPlayers_home, TeamPlayers_away) %>%
   unique()
 
 Players_Sorted_byTeam <- TeamPlayers$Player
-@
 
-
-\subsection{Lineups}
-
-Se crea variable \emph{lineups} que recoge los quintetos de ambos equipos en pista.
-
-<<>>=
 Lineups_PasteSort <- function(x) {
   paste(sort(x), collapse = " - ")
 }
@@ -462,24 +426,11 @@ df_lineups_sorted <- df_pbp %>%
     lineup_away = lineup_away_sorted
   ) %>% select(-contains("_player"))
 
-@
-
-\subsection{MERGE Temporada+game_code}
-
-Se modifica variable \emph{game_code} para que quede categorizada con el mismo numero de caracteres. Y unimos \emph{Season} y \emph{Game_Code} para tener una variable identificadora del partido.
-
-<<>>=
 df_merged <- df_lineups_sorted %>%
   mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
                      quarter   = paste0("Q", quarter)) %>%
   unite("SeasonGame", c("season", "game_code"))
-@
 
-\subsection{Quintetos (Stints)}
-
-Queremos obtener un df con los quintetos identificados cada vez que se produce un cambio. Se dejaran aquellos que esten duplicados ya que es necesario diferenciarlos para posteriormente poder hacer el M�s/Menos correctamente. 
-
-<<>>=
 df_stints <- df_merged %>%
   arrange(SeasonGame) %>%
   mutate(StintChanged = (lineup != lag(lineup)),
@@ -490,15 +441,7 @@ df_reduced <- df_stints %>%
   mutate(StintRemove  = (stint == lead(stint)),
          StintRemove  = replace_na(StintRemove, FALSE)) %>%
   filter(StintRemove != TRUE)
-@
 
-
-\subsection{M�s/Menos}
-
-Obtenemos el M�s/Menos segun cada stint. Se tendr� en cuenta el cambio de partido.
-Adem�s, esta variable estar� hecha con HOME como refer�ncia, pero eso no hace ninguna diferencia estad�stica importante en nuestro resultado final.
-
-<<>>=
 PlusMinus_function <- function(h,a){
   (h-lag(h))-(a-lag(a))
 }
@@ -523,14 +466,8 @@ df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>%
     PlusMinus  = sum(PlusMinus) ) %>% 
   ungroup() %>%
   as.data.frame()
-@
 
-\subsection{PARTE 2: Dummys Jugadores}
-
-<<>>=
-# Vector con todos los nombres de los jugadores:
-length(players)
-
+#14:10
 df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
                                        select_columns = "lineup_home", 
                                        split = "-")
@@ -576,13 +513,7 @@ df_dummys <- coalesce(df_dummys_H,df_dummys_A)
 df_dummys[is.na(df_dummys)] <- 0
 
 df_dummys <- df_dummys %>% select(-c(starts_with("lineup_"))) %>% ungroup()
-@
 
-Ahora mismo tenemos un DF con el PlusMinus con HOME como referencia (si es positivo, ganaban HOME. Si es Negativo ganaban AWAY). Luego tenemos variables "dummys" con 1 si estaban jugando como HOME, -1 si estaban jugando como AWAY y 0 si no estaban en pista.
-
-\section{PARTE 3: PlusMinus por stint (PlusMinus CLASSIC)}
-
-<<>>=
 df_dummys_PlusMinus <- df_dummys %>%
   group_by(SeasonGame, quarter, lineup, stint_seconds) %>%
   mutate(across(matches(players), function(x) x*PlusMinus)) %>%
@@ -606,31 +537,8 @@ PlusMinus_Classic_df <- PlusMinus_Classic_df %>%
   select(Players, PlusMinus_Classic)
   
 rownames(PlusMinus_Classic_df) <- NULL
-@
 
-Gr�ficos:
-<<>>=
-ggplot(PlusMinus_Classic_df, aes(x=Players, y=PlusMinus_Classic, fill=Players)) +
-  geom_bar(stat="identity")+theme_minimal() + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-## Este �til para grupos peque�os de jugadores. Quizas seria util a�adir variable equipo y hacer lo mismo pero por equipos.
-
-t<-table(PlusMinus_Classic); t
-
-plot(density(t))
-
-ggplot(PlusMinus_Classic_df, aes(x = PlusMinus_Classic)) +
-  stat_function(
-    fun = dnorm, 
-    args = with(PlusMinus_Classic_df, c(mean = mean(PlusMinus_Classic), 
-                                      sd = sd(PlusMinus_Classic)))
-  ) + scale_x_continuous("M�s/Menos cl�sico")
-@
-
-\section{PARTE $: Modelar}
-
-<<>>=
-summary(df_dummys)
+t<-table(PlusMinus_Classic)
 
 df_dummys2 <- df_dummys
 
@@ -640,41 +548,60 @@ df_dummys2$stint_seconds[df_dummys2$stint_seconds == 0] <- NA
 df_dummys2 <- df_dummys2 %>% drop_na()
 
 mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_seconds, data=df_dummys2)
-summary(mod1)
-
 mod2 <- lm(PlusMinus/stint_seconds ~ . -SeasonGame -quarter -lineup, data=df_dummys2)
-summary(mod2)
-
 mod3 <- lm(PlusMinus/stint_seconds ~ . +lag(PlusMinus) -SeasonGame -quarter -lineup, 
            data=df_dummys2)
-summary(mod3)
-@
 
-\section{PARTE 5: HeatMap Correlaciones Jugadores}
-
-Primero vamos a preparar los datos con la estructura que necesitamos para crear el heatmap:
-
-<<>>=
 match_firstplayer <- match(players, names(df_dummys_PlusMinus)) %>%
             na.omit() %>%
             min()
 n <- dim(df_dummys_PlusMinus)[2]
 
 correlations <- cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n]))
-correlations <- cor(df_dummys_PlusMinus[,match_firstplayer:n])
 @
 
-<<>>=
-corrplot(correlations, type = "upper", tl.col = "black", tl.srt = 45)
 
-col<- colorRampPalette(c("red", "white", "blue"))(20)
-heatmap(x = correlations, col = col, symm = TRUE)
-@
+\section{Análisis y métodos}
 
-\section{PARTE 6: Variance Inflation Factor (VIF)}
-<<>>=
-#vif(mod2)
-@
+\subsection{Descripción de la base de datos}
+
+En este estudio vamos a analizar los datos de todas las jugadas registradas en partidos oficiales de la temporada 2018 de la Liga Nacional de ACB para buscar el Más/Menos Ajustado. Tenemos un total de $N=$ \Sexpr{N_df} jugadas, y \Sexpr{num_players} jugadores en \Sexpr{num_teams} equipos.
+
+Esta base de datos contenia mucha información (\Sexpr{M_df} variables), por lo que hemos seleccionado nuestras variables de interés: season, game_code, quarter, seconds, points_home, 
+
+
+
+
+
+
+\addcontentsline{toc}{section}{Referencias}
+
+\begin{thebibliography}{X}
+	\bibitem{RAPM} \textsc{Joseph Sill}, \textit{Improved NBA Adjusted +/- Using Regularization and Out-of-Sample Testing}, PDF, 6 Marzo 2010.
+	
+	\bibitem{HappyGH} \textsc{Happy Git}, \textit{Let’s Git started}, url: \url{https://happygitwithr.com/index.html}, .
+\end{thebibliography}
+
+\clearpage
+
+\section{Annexo}
+
+\subsection{Descripción de las variables} \label{sec:Annexo1}
+
+\begin{itemize}
+\item MIN (\emph{Minutes}): Minutos totales jugados
+\item PTS (\emph{Points}): Puntos totales realizados
+\item 2FGA (\emph{2-point Field Goals Attempted}): Número de tiros de 2 puntos intentadas
+\item 2FGM (\emph{2-point Field Goals Made}): Número de tiros de 2 puntos anotadas
+\item 3FGA (\emph{3-point Field Goals Attempted}): Número de tiros de 3 puntos ("triples") intentadas
+\item 3FGM (\emph{3-point Field Goals Made}): Número de tiros de 3 puntos ("triples") anotadas
+\item FTA (\emph{Free Throws Attempted}): Número de tiros libres intentados
+\item FTM (\emph{Free Throws Made}): Número de tiros libres anotados
+\end{itemize}
+
+\clearpage
+
+\subsection{Code} \label{sec:Annexo2}
 
 
 \end{document}
