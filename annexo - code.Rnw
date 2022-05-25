@@ -1,0 +1,130 @@
+\documentclass[paper=a4, fontsize=9pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[a4paper]{geometry}
+\geometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+\setlength{\parskip}{2mm}
+
+\usepackage{lipsum}
+
+\usepackage[spanish]{babel}										
+\usepackage[protrusion=true,expansion=true]{microtype}		    % Better typography
+\usepackage{amsmath,amsfonts,amsthm}					                % Math packages
+\usepackage[pdftex]{graphicx}									                % Enable pdflatex
+\usepackage[svgnames]{xcolor}									                % Enabling colors by their 'svgnames'
+\usepackage[hang, small, labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}											  	                % Converts .eps to .pdf
+\usepackage{subfig}												  	                % Subfigures
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{booktabs}											  	                % Nicer tables
+\usepackage{fix-cm}												  	                % Custom fontsizes
+\usepackage{hyperref}                                         % Link Clicks
+\usepackage{filecontents}
+
+
+
+%opening
+\title{Métodos estadísticos aplicados al baloncesto}
+\subtitle{Solución de los errores en las bases de datos}
+\author{Paula Moreno Blazquez}
+\date{Enero 2022}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+
+\clearpage
+
+En este documento Annexo al Trabajo encontraremos como se solucionó un problema de lectura de la base de datos:
+
+<<>>=
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(here)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(chron)                 # Para CHR_to_seconds
+library(stringr)               # Para str_pad
+library(lubridate)
+library(reshape)
+library(tidyselect)
+library(corrplot)
+library(RColorBrewer)
+library("colorspace")
+library(graphics)
+library(rpart)
+library(ggplot2)
+library(car)                   # VIF
+
+#ERROR SOLUCION
+pbp_2008 <- read_csv("pbp2008.csv")
+
+## Check how many rows are affected by this
+bad_lineups <- pbp_2008 %>%
+  select(matches("_player[1-5]")) %>%
+  apply(1, function(x) max(table(x)) > 1)
+
+pbp_bad <- pbp_2008 %>%
+  filter(bad_lineups)
+    
+pbp_bad %>%
+  select(season, game_code, play_number, play_type, away_player4, away_player5)
+    
+## Solucion
+source(here("R", "fix-lineups.R"))
+
+## Function fix_lineups() only takes data from a single game,
+## so I split the data and apply the function to each splitted data frame.
+pbp_2008_fixed <- split(pbp_2008, factor(pbp_2008$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2009 <- read_csv("pbp2009.csv")
+pbp_2009_fixed <- split(pbp_2009, factor(pbp_2009$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2010 <- read_csv("pbp2010.csv")
+pbp_2010_fixed <- split(pbp_2010, factor(pbp_2010$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2011 <- read_csv("pbp2011.csv")
+pbp_2011_fixed <- split(pbp_2011, factor(pbp_2011$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2012 <- read_csv("pbp2012.csv")
+pbp_2012_fixed <- split(pbp_2012, factor(pbp_2012$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2013 <- read_csv("pbp2013.csv")
+pbp_2013_fixed <- split(pbp_2013, factor(pbp_2013$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2014 <- read_csv("pbp2014.csv")
+pbp_2014_fixed <- split(pbp_2014, factor(pbp_2014$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2015 <- read_csv("pbp2015.csv")
+pbp_2015_fixed <- split(pbp_2015, factor(pbp_2015$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2017 <- read_csv("pbp2017.csv")
+pbp_2017_fixed <- split(pbp_2017, factor(pbp_2017$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2018 <- read_csv("pbp2018.csv")
+pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbd_datos_fixed <- rbind(pbp_2008_fixed, pbp_2009_fixed, pbp_2010_fixed, pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
+
+
+df <- pbd_datos_fixed
+@
+
+
+
+
+\end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.14)  24 MAY 2022 02:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.14)  26 MAY 2022 00:58
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -677,18 +677,59 @@ LaTeX Font Info:    Font shape `T1/aer/b/it' in size <14.4> not available
 [9
 
 ]
+LaTeX Font Info:    Trying to load font information for T1+aett on input line 2
+61.
+(C:\Users\paula\AppData\Local\Programs\MiKTeX\tex/latex/ae\t1aett.fd
+File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `aett' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Trying to load font information for TS1+aett on input line 
+285.
+(C:/PROGRA~1/R/R-41~1.3/share/texmf/tex/latex\ts1aett.fd
+File: ts1aett.fd 
+)
+LaTeX Font Info:    Font shape `TS1/aett/m/n' in size <10> not available
+(Font)              Font shape `TS1/cmtt/m/n' tried instead on input line 285.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: TS1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+[10
+
+] [11] [12
+
+] [13
+
+]
+LaTeX Font Info:    Font shape `TS1/aett/m/sl' in size <10> not available
+(Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 447.
+
+[14] [15]
+Package textcomp Info: Symbol \textasciigrave not provided by
+(textcomp)             font family aett in TS1 encoding.
+(textcomp)             Default family used instead on input line 570.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+Package textcomp Info: Symbol \textasciigrave not provided by
+(textcomp)             font family aett in TS1 encoding.
+(textcomp)             Default family used instead on input line 570.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.264 ...tras variables de interés: season, game_
-                                                  code, quarter, seconds, po...
- 
+l.602 \textbf{MERGE Temporada+game_code}
+                                         
 Here is how much of TeX's memory you used:
- 17231 strings out of 478582
- 286818 string characters out of 2844344
- 715700 words of memory out of 3000000
- 34546 multiletter control sequences out of 15000+600000
- 544687 words of font info for 496 fonts, out of 8000000 for 9000
+ 17351 strings out of 478582
+ 288508 string characters out of 2844344
+ 717700 words of memory out of 3000000
+ 34606 multiletter control sequences out of 15000+600000
+ 550621 words of font info for 527 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,15n,77p,1078b,535s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 68i,15n,77p,1078b,536s stack positions out of 10000i,1000n,20000p,200000b,80000s
+
 !  ==> Fatal error occurred, no output PDF file produced!
