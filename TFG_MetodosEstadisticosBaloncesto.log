@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.14)  26 MAY 2022 00:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.14)  26 MAY 2022 02:13
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -485,7 +485,10 @@ File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 LaTeX Warning: Unused global option(s):
     [paper,fontsize].
 
-No file TFG_MetodosEstadisticosBaloncesto.aux.
+(TFG_MetodosEstadisticosBaloncesto.aux
+LaTeX Info: Redefining \. on input line 25.
+LaTeX Info: Redefining \% on input line 25.
+)
 \openout1 = `TFG_MetodosEstadisticosBaloncesto.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
@@ -597,6 +600,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 33.
 LaTeX Info: Redefining \pageref on input line 33.
 LaTeX Info: Redefining \nameref on input line 33.
+(TFG_MetodosEstadisticosBaloncesto.out) (TFG_MetodosEstadisticosBaloncesto.out)
 \@outlinefile=\write4
 \openout4 = `TFG_MetodosEstadisticosBaloncesto.out'.
 
@@ -618,12 +622,17 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 {C:/Users/paula/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2
 
-]
+] (TFG_MetodosEstadisticosBaloncesto.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+LaTeX Font Info:    Font shape `T1/aer/b/it' in size <10> not available
+(Font)              Font shape `T1/aer/bx/it' tried instead on input line 16.
+)
 \tf@toc=\write5
 \openout5 = `TFG_MetodosEstadisticosBaloncesto.toc'.
 
 [3]
-<imagenes/GitHub-Logo.png, id=23, 3854.4pt x 2168.1pt>
+<imagenes/GitHub-Logo.png, id=148, 3854.4pt x 2168.1pt>
 File: imagenes/GitHub-Logo.png Graphic file (type png)
 <use imagenes/GitHub-Logo.png>
 Package pdftex.def Info: imagenes/GitHub-Logo.png  used on input line 73.
@@ -631,7 +640,7 @@ Package pdftex.def Info: imagenes/GitHub-Logo.png  used on input line 73.
 [4
 
  <./imagenes/GitHub-Logo.png>]
-<imagenes/historia_baloncesto.jpg, id=34, 737.75626pt x 496.85625pt>
+<imagenes/historia_baloncesto.jpg, id=156, 737.75626pt x 496.85625pt>
 File: imagenes/historia_baloncesto.jpg Graphic file (type jpg)
 <use imagenes/historia_baloncesto.jpg>
 Package pdftex.def Info: imagenes/historia_baloncesto.jpg  used on input line 1
@@ -646,16 +655,12 @@ Missing character: There is no é in font cmr10!
 LaTeX Warning: Command \' invalid in math mode on input line 170.
 
 Missing character: There is no é in font cmr10!
-
-LaTeX Warning: Hyper reference `sec:Annexo1' on page 6 undefined on input line 
-173.
-
-<imagenes/BoxScore1962.jpg, id=45, 401.5pt x 301.125pt>
+<imagenes/BoxScore1962.jpg, id=163, 401.5pt x 301.125pt>
 File: imagenes/BoxScore1962.jpg Graphic file (type jpg)
 <use imagenes/BoxScore1962.jpg>
 Package pdftex.def Info: imagenes/BoxScore1962.jpg  used on input line 184.
 (pdftex.def)             Requested size: 193.47948pt x 145.1127pt.
-<imagenes/BoxScore2022.jpg, id=46, 538.4115pt x 492.33937pt>
+<imagenes/BoxScore2022.jpg, id=164, 538.4115pt x 492.33937pt>
 File: imagenes/BoxScore2022.jpg Graphic file (type jpg)
 <use imagenes/BoxScore2022.jpg>
 Package pdftex.def Info: imagenes/BoxScore2022.jpg  used on input line 191.
@@ -663,7 +668,7 @@ Package pdftex.def Info: imagenes/BoxScore2022.jpg  used on input line 191.
 [6
 
 ]
-<imagenes/PBP_RM.png, id=57, 402.75468pt x 575.14874pt>
+<imagenes/PBP_RM.png, id=172, 402.75468pt x 575.14874pt>
 File: imagenes/PBP_RM.png Graphic file (type png)
 <use imagenes/PBP_RM.png>
 Package pdftex.def Info: imagenes/PBP_RM.png  used on input line 207.
@@ -707,29 +712,43 @@ Package microtype Info: Loading generic protrusion settings for font family
 LaTeX Font Info:    Font shape `TS1/aett/m/sl' in size <10> not available
 (Font)              Font shape `TS1/cmtt/m/sl' tried instead on input line 447.
 
-[14] [15]
-Package textcomp Info: Symbol \textasciigrave not provided by
-(textcomp)             font family aett in TS1 encoding.
-(textcomp)             Default family used instead on input line 570.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-Package textcomp Info: Symbol \textasciigrave not provided by
-(textcomp)             font family aett in TS1 encoding.
-(textcomp)             Default family used instead on input line 570.
-! Missing $ inserted.
-<inserted text> 
-                $
-l.602 \textbf{MERGE Temporada+game_code}
-                                         
+[14] [15] (TFG_MetodosEstadisticosBaloncesto.aux
+LaTeX Info: Redefining \. on input line 25.
+LaTeX Info: Redefining \% on input line 25.
+)
+Package rerunfilecheck Info: File `TFG_MetodosEstadisticosBaloncesto.out' has n
+ot changed.
+(rerunfilecheck)             Checksum: AB46602AABF0720D44281D21EA642D7B;4118.
+ ) 
 Here is how much of TeX's memory you used:
- 17351 strings out of 478582
- 288508 string characters out of 2844344
- 717700 words of memory out of 3000000
- 34606 multiletter control sequences out of 15000+600000
- 550621 words of font info for 527 fonts, out of 8000000 for 9000
+ 17403 strings out of 478582
+ 289644 string characters out of 2844344
+ 718520 words of memory out of 3000000
+ 34635 multiletter control sequences out of 15000+600000
+ 553534 words of font info for 535 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,15n,77p,1078b,536s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ <C:\Users\paula\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcst
+1000.pk> <C:\Users\paula\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
+0\tctt1000.pk><C:/Users/paula/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmb10.pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/fonts/type1
+/public/amsfonts/cm/cmbxti10.pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/paula/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/paula/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/paula/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/p
+aula/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:
+/Users/paula/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.
+pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsltt10.pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/public/amsfonts/cm/cmti10.pfb><C:/Users/paula/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmti9.pfb><C:/Users/paula/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on TFG_MetodosEstadisticosBaloncesto.pdf (15 pages, 1221837 byte
+s).
+PDF statistics:
+ 301 PDF objects out of 1000 (max. 8388607)
+ 49 named destinations out of 1000 (max. 500000)
+ 127206 words of extra memory for PDF output out of 128383 (max. 10000000)
 
-!  ==> Fatal error occurred, no output PDF file produced!
