@@ -28,7 +28,10 @@ dummys_fun <- function(pbd_datos_fixed){
   num_players <- length(players)   # Numero de jugadores
   
   df_pbp <- df %>% 
-    select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]"))
+    arrange(season, game_code, quarter, seconds) %>%
+    select(season, game_code, quarter, seconds, points_home, points_away, 
+           home_team, away_team, matches("_player[1-5]")) %>%
+    ungroup()
   
 source(here("R", "CHR_to_seconds_fun.R"))
 source(here("R", "Print_MS_fun.R"))
