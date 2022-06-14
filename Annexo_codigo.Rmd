@@ -16,7 +16,7 @@ knitr::opts_chunk$set(eval=FALSE)
 
 ## Abstract
 
-Este es un documento Annexo al Trabajo *Métodos estadísticos aplicados al baloncesto* donde encontraremos el código usado para realizar el estudio.
+Este es un documento Annexo al Trabajo *Métodos estadísticos aplicados al baloncesto* donde encontraremos el código usado para realizar el estudio. 
 
 # Paquetes
 
