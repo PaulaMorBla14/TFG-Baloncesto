@@ -1,0 +1,801 @@
+---
+title: "Métodos estadísticos aplicados al baloncesto"
+subtitle: "Annexo: código del trabajo"
+author: "Paula Moreno Blazquez"
+date: 'Enero 2022'
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval=FALSE)
+```
+
+## Abstract
+
+Este es un documento Annexo al Trabajo *Métodos estadísticos aplicados al baloncesto* donde encontraremos el código usado para realizar el estudio.
+
+# Paquetes
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(here)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(tibble)
+library(chron)                 # Para CHR_to_seconds
+library(stringr)               # Para str_pad
+library(lubridate)
+library(reshape)
+library(tidyselect)
+library(corrplot)
+library(RColorBrewer)
+library("colorspace")
+library(graphics)
+library(rpart)
+library(ggplot2)
+library(car)                   # VIF
+```
+
+# Datos
+
+```{r}
+pbp_2008 <- read_csv("pbp2008.csv")
+
+## Check how many rows are affected by this
+bad_lineups <- pbp_2008 %>%
+  select(matches("_player[1-5]")) %>%
+  apply(1, function(x) max(table(x)) > 1)
+
+pbp_bad <- pbp_2008 %>%
+  filter(bad_lineups)
+    
+pbp_bad %>%
+  select(season, game_code, play_number, play_type, away_player4, away_player5)
+```
+
+## Solución para el error de lectura de los datos
+
+Cuando haciamos la primera lectura de los datos, nos dimos cuenta que se produciona errores, como por ejemplo que se nos duplicaban jugadores en el mismo quinteto, o que nos aparecian `NA`s.
+
+Para solucionar estos errores creamos una función llamada `fix-lineups.R` [(código)](#annexo)y la aplicamos a todos nuestros datos.
+
+```{r}
+source(here("R", "fix-lineups.R"))
+
+## Function fix_lineups() only takes data from a single game,
+## so I split the data and apply the function to each splitted data frame.
+pbp_2008_fixed <- split(pbp_2008, factor(pbp_2008$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2009 <- read_csv("pbp2009.csv")
+pbp_2009_fixed <- split(pbp_2009, factor(pbp_2009$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2010 <- read_csv("pbp2010.csv")
+pbp_2010_fixed <- split(pbp_2010, factor(pbp_2010$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2011 <- read_csv("pbp2011.csv")
+pbp_2011_fixed <- split(pbp_2011, factor(pbp_2011$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2012 <- read_csv("pbp2012.csv")
+pbp_2012_fixed <- split(pbp_2012, factor(pbp_2012$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2013 <- read_csv("pbp2013.csv")
+pbp_2013_fixed <- split(pbp_2013, factor(pbp_2013$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2014 <- read_csv("pbp2014.csv")
+pbp_2014_fixed <- split(pbp_2014, factor(pbp_2014$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2015 <- read_csv("pbp2015.csv")
+pbp_2015_fixed <- split(pbp_2015, factor(pbp_2015$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2017 <- read_csv("pbp2017.csv")
+pbp_2017_fixed <- split(pbp_2017, factor(pbp_2017$game_code)) %>%
+  map_df(fix_lineups) 
+
+pbp_2018 <- read_csv("pbp2018.csv")
+pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
+  map_df(fix_lineups)
+
+pbp <- rbind(pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
+
+summary(pbp[1:18])
+```
+
+# Categorización y edición BBDD
+
+En esta parte del código hemos categorizado las variables según su características y empezado a trabajar con nuestra base de datos.
+
+Para empezar, hemos hecho un subset con nuestras variables de interés y hemos combinado las variables `players`} para crear los quintetos que se encuentran en ese momento en pista, teniendo en cuenta los jugadores que participan como Locales (*locals*) y los que juegan como visitantes (*away*).
+
+A continuación hemos creado la variables que hace referencia al Más/Menos y que es nuestra variable de interés (`PlusMinus`).
+
+Para finalizar hemos creado una variable categorica para cada jugador, donde el $1$ significará que está en pista como jugador local, el $-1$ que está en pista como jugador visitante y el $0$ que no está en pista.
+
+Este paso requiere de bastante tiempo ya que tenemos un total de 924 jugadores, por eso hemos creado una función que engloba todo esto para reducir código y vamos a ejecutarlo una única vez para exportarlos en archivos .csv y trabajar a partir de ellos.
+
+Al final del proceso, hemos obtenido una base de datos con todos los lineups de todos los partidos con su respectivo PlusMinus y las "dummies" de los jugadores.
+
+## Función `dummys_fun`
+
+Se puede encontrar toda la función completa en el Annexo.
+
+```{r}
+factor_names <- c('season', 'game_code', 'team_code', 'play_number', 'play_type')
+pbd_datos_fixed[,factor_names] <- lapply(pbd_datos_fixed[,factor_names] , factor)
+  
+summary(pbd_datos_fixed[1:18])
+```
+
+
+```{r}
+df <- pbd_datos_fixed
+N_df <- dim(df)[1] # Numero de jugadas
+M_df <- dim(df)[2] # Numero de variables
+
+df_fact <- df %>%
+  select(season, game_code, team_code, player_name, team_name) %>%
+  mutate(season = as.factor(season),
+         team_code = as.factor(team_code),
+         player_name = as.factor(player_name),
+         team_name = as.factor(team_name))
+
+num_teams <- length(levels(df_fact$team_name)) # Numero de equipos
+
+# Lista de jugadores:
+players <- df %>% 
+  select(matches("player_name")) %>%
+  arrange(player_name) %>% 
+  unique() %>% 
+  drop_na()
+
+players <- players$player_name
+num_players <- length(players)   # Numero de jugadores
+
+df_pbp <- df %>% 
+  select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]"))
+```
+
+### Modificar variable tiempo
+
+Para facilitar los calculos con el tiempo, se va a pasar los mm:ss a segundos. 
+
+- CHR\_to\_seconds: Para pasar la variable tiempo que nos llega como chracter a segundos.
+- Print\_MS: Que nos devolverá los segundos a formato mm:SS (se hará servir más adelante)
+
+```{r}
+CHR_to_seconds <- function(x){
+  a <- as.POSIXct(x, tz = '', format = "%H:%M:%S", usetz = FALSE)
+  tms <- secondss(format(a, "%H:%M:%S"))
+  s <- period_to_seconds(hms(tms))
+  return(s)
+}
+
+Print_MS <- function(x){
+  t <- seconds_to_period(x)
+  sprintf('%02d:%02d:%02d', t@hour, minute(t), second(t))
+}
+```
+
+### Lista Jugadores-Equipo
+
+```{r}
+TP_home <- df_pbp %>%
+  select(c(contains("home_"))) %>%
+  unique()
+
+TP_away <- df_pbp %>%
+  select(c(contains("away_"))) %>%
+  unique()
+
+CBIND_MultipleCol_n <- function(data,col,n){
+  d <- unlist(data[col])
+  x <- cbind(rep(d, n))
+  y <- unlist(data[-1])
+
+  res <- cbind(x, y)
+  rownames(res) <- NULL
+  
+  res <- unique(res)
+  
+  return(res)
+}
+
+TeamPlayers_home <- CBIND_MultipleCol_n(TP_home, 1, 5)
+TeamPlayers_away <- CBIND_MultipleCol_n(TP_away, 1, 5)
+
+TeamPlayers <- rbind(TeamPlayers_home, TeamPlayers_away) %>%
+  as.data.frame() %>%
+  `colnames<-`(c("Team", "Player")) %>%
+  arrange(Team) %>%
+  unique()
+
+Players_Sorted_byTeam <- TeamPlayers$Player
+```
+
+### Lineups
+
+Se crea variable `lineups` que recoge los quintetos de ambos equipos en pista.
+
+```{r}
+Lineups_PasteSort <- function(x) {
+  paste(sort(x), collapse = " - ")
+}
+
+lineup_home <- df_pbp %>% select(contains("home_p"))
+lineup_away <- df_pbp %>% select(contains("away_p"))
+lineups     <- cbind(lineup_home, lineup_away)
+
+lineup_home_sorted <- apply(lineup_home, 1, Lineups_PasteSort)
+lineup_away_sorted <- apply(lineup_away, 1, Lineups_PasteSort)
+lineups_sorted     <- apply(lineups, 1, Lineups_PasteSort)
+
+#lineups
+df_lineups_sorted <- df_pbp %>%
+  mutate(lineup = lineups_sorted,
+    lineup_home = lineup_home_sorted,
+    lineup_away = lineup_away_sorted
+  ) %>% select(-contains("_player"))
+```
+
+### MERGE Temporada + game_code
+
+Se modifica variable *game\_code* para que quede categorizada con el mismo numero de caracteres. Y unimos *Season* y *Game\_Code* para tener una variable identificadora del partido.
+
+```{r}
+df_merged <- df_lineups_sorted %>%
+  mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
+                     quarter   = paste0("Q", quarter)) %>%
+  unite("SeasonGame", c("season", "game_code"))
+```
+
+### Quintetos (*Stints*)
+
+Queremos obtener un df con los quintetos identificados cada vez que se produce un cambio. Se dejaran aquellos que esten duplicados ya que es necesario diferenciarlos para posteriormente poder hacer el Mas/Menos correctamente. 
+
+```{r}
+df_stints <- df_merged %>%
+  arrange(SeasonGame) %>%
+  mutate(StintChanged = (lineup != lag(lineup)),
+         StintChanged = replace_na(StintChanged, TRUE),
+         stint        = cumsum(StintChanged))
+
+df_reduced <- df_stints %>%
+  mutate(StintRemove  = (stint == lead(stint)),
+         StintRemove  = replace_na(StintRemove, FALSE)) %>%
+  filter(StintRemove != TRUE)
+```
+
+### Más/Menos
+
+Obtenemos el Mas/Menos segun cada stint. Se tendrá en cuenta el cambio de partido.
+Además, esta variable estara hecha con HOME como referencia, pero eso no hace ninguna diferencia estadística importante en nuestro resultado final.
+
+```{r}
+PlusMinus_function <- function(h,a){
+  (h-lag(h))-(a-lag(a))
+}
+
+#Home como referencia
+df_PlusMinus <- df_reduced %>%
+  group_by(SeasonGame) %>%
+  mutate(
+    stint_seconds = ifelse(is.na(lag(seconds)), seconds, seconds - lag(seconds)),
+    PlusMinus  = ifelse(is.na(lag(seconds)), points_home - points_away,
+                       PlusMinus_function(points_home, points_away))
+  ) %>% ungroup()
+
+df_PlusMinus_reduced <- df_PlusMinus %>% 
+  select(c(SeasonGame, quarter, lineup, lineup_home, lineup_away, stint_seconds, PlusMinus)) 
+
+#Eliminar stints duplicados
+df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>% 
+  group_by(SeasonGame, quarter, lineup, lineup_home, lineup_away) %>% 
+  summarise(
+    stint_seconds = sum(stint_seconds),
+    PlusMinus  = sum(PlusMinus) ) %>% 
+  ungroup() %>%
+  as.data.frame()
+```
+
+### Dummys Jugadores
+
+```{r}
+df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_home", 
+                                       split = "-")
+df_dummys_A <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                       select_columns = "lineup_away", 
+                                       split = "-") %>% 
+                  mutate(across(starts_with("lineup_away_"), function(x) -x))
+
+Remove_firsts_chars_colnames <- function(data, char){
+  num_char <- nchar(char)+1
+  substring(names(data), num_char)
+}
+
+COL_From <- function(data, first_col){
+  last_col = ncol(data)
+  colnames(data[first_col:last_col])
+}
+
+COL_to <- function(data, first_col, char){
+  last_col = ncol(data)
+  Remove_firsts_chars_colnames(data[first_col:last_col], char)
+}
+
+#Primera columna con el nombre de un jugador
+match <- match(paste0("lineup_away_", players), names(df_dummys_A)) %>%
+            na.omit() %>%
+            min()
+
+#match = 8
+
+#nombre columnas sin primeras palabras:
+col_to_A <- COL_to(df_dummys_A, match, "lineup_away_")
+col_to_H <- COL_to(df_dummys_H, match, "lineup_home_")
+
+df_dummys_A <- df_dummys_A %>% rename_at(vars(COL_From(df_dummys_A,match)), function(x) col_to_A)
+df_dummys_H <- df_dummys_H %>% rename_at(vars(COL_From(df_dummys_H,match)), function(x) col_to_H)
+
+#Juntar los dos DF:
+df_dummys_A[df_dummys_A == 0] <- NA
+df_dummys_H[df_dummys_H == 0] <- NA
+
+df_dummys <- coalesce(df_dummys_H,df_dummys_A)
+df_dummys[is.na(df_dummys)] <- 0
+
+df_dummys <- df_dummys %>% select(-c(starts_with("lineup_"))) %>% ungroup()
+```
+
+Ahora mismo tenemos un DF con el PlusMinus con HOME como referencia (si es positivo, ganaban HOME. Si es Negativo ganaban AWAY). Luego tenemos variables "dummys" con $1$ si estaban jugando como HOME, $-1$ si estaban jugando como AWAY y $0$ si no estaban en pista.
+
+# Exportar y cargar los datos
+
+Seleccionamos a partir de 2011 porque la variable "seconds" esta mal definida en los años anteriores, ya que no son segundos sino minutos y por lo tanto hay varias acciones del partido en el mismo momento exacto en el marcador del tiempo, cosa que no puede ser posible por incoherencia. Por lo tanto, tenemos un total de 5 temporadas con XXX jugadas.
+
+```{r}
+source(here("R", "dummys_fun.R"))
+
+df_dummys_2011 <- dummys_fun(pbp_2011_fixed)
+df_dummys_2012 <- dummys_fun(pbp_2012_fixed)
+df_dummys_2013 <- dummys_fun(pbp_2013_fixed)
+df_dummys_2014 <- dummys_fun(pbp_2014_fixed)
+df_dummys_2015 <- dummys_fun(pbp_2015_fixed)
+df_dummys_2017 <- dummys_fun(pbp_2017_fixed)
+df_dummys_2018 <- dummys_fun(pbp_2018_fixed)
+
+write.csv(df_dummys_2011,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2011.csv", row.names = FALSE)
+write.csv(df_dummys_2012,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2012.csv", row.names = FALSE)
+write.csv(df_dummys_2013,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2013.csv", row.names = FALSE)
+write.csv(df_dummys_2014,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2014.csv", row.names = FALSE)
+write.csv(df_dummys_2015,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2015.csv", row.names = FALSE)
+write.csv(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2017.csv", row.names = FALSE)
+write.csv(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.csv", row.names = FALSE)
+```
+
+```{r}
+#dummys_2011 <- read_csv("Dummys/dummys_2011.csv") #PROBLEMAS
+#dummys_2012 <- read_csv("Dummys/dummys_2012.csv") #PROBLEMAS
+dummys_2013 <- read_csv("Dummys/dummys_2013.csv")
+dummys_2014 <- read_csv("Dummys/dummys_2014.csv")
+dummys_2015 <- read_csv("Dummys/dummys_2015.csv")
+dummys_2017 <- read_csv("Dummys/dummys_2017.csv")
+dummys_2018 <- read_csv("Dummys/dummys_2018.csv")
+
+N_rows <- nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017)+nrow(dummys_2018)
+```
+
+# Jugadores
+
+Una vez tenemos la base de datos, hemos trabajado para obtener un vector con todos los jugadores de todas las temporadas.
+
+```{r}
+#players_2011 <- colnames(dummys_2011)[-c(1:5)]
+#players_2012 <- colnames(dummys_2012)[-c(1:5)]
+players_2013 <- colnames(dummys_2013)[-c(1:5)]
+players_2014 <- colnames(dummys_2014)[-c(1:5)]
+players_2015 <- colnames(dummys_2015)[-c(1:5)]
+players_2017 <- colnames(dummys_2017)[-c(1:5)]
+players_2018 <- colnames(dummys_2018)[-c(1:5)]
+
+players <- data.frame("player" = c(players_2013, players_2014, players_2015, players_2017, players_2018)) %>%
+  arrange(player) %>%
+  unique()
+
+players_vec <- players$player
+```
+
+
+```{r}
+df_dummys <- dplyr::bind_rows(dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
+  mutate_all(~replace(., is.na(.), 0))
+
+#Check stints_seconds=0
+df_dummys %>%
+select(stint_seconds) %>%
+  apply(1, function(x) x < 1) %>%
+  sum()
+
+df_dummys<- df_dummys[df_dummys$stint_seconds != 0, ]
+
+#Check
+is.na(df_dummys) %>% sum()
+
+#Check stints_seconds=0
+nrow(df_dummys) != N_rows
+```
+
+# PlusMinus por stint (*PlusMinus CLASSIC*)
+
+```{r}
+df_dummys_PlusMinus <- df_dummys %>%
+  group_by(SeasonGame, quarter) %>%
+  mutate(across(matches(players_vec), function(x) x*PlusMinus)) %>%
+  select(-c(PlusMinus)) %>%
+  ungroup()
+
+### MasMenos de los mismos lineups (sin tener en cuenta SeasonGame o Quarter):
+df_dummys_PlusMinus_2 <- df_dummys_PlusMinus %>% select(-c(SeasonGame, quarter))
+
+source(here("R", "Print_MS_fun.R"))
+
+#combinar mismos stints
+PlusMinus_Lineups <- df_dummys_PlusMinus_2 %>%
+                     mutate(stint_seconds = Print_MS(stint_seconds))
+
+PlusMinus_Classic <- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
+
+PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic) %>%
+  tibble::rownames_to_column(var="Players") %>%
+  arrange(Players) %>%
+  select(Players, PlusMinus_Classic)
+  
+t<-table(PlusMinus_Classic)
+```
+
+# Modelar
+
+```{r}
+mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_seconds, data=df_dummys)
+sum1  <- summary(mod1)
+coef1 <- as.data.frame(summary(mod1)$coefficients) %>%
+  arrange(Estimate)
+  
+mod2 <- lm(PlusMinus/stint_seconds ~ . -SeasonGame -quarter -lineup, data=df_dummys)
+sum2  <- summary(mod2)
+coef2 <- as.data.frame(summary(mod2)$coefficients) %>%
+  arrange(Estimate)
+
+mod3 <- lm(PlusMinus/stint_seconds ~ . +lag(PlusMinus) -SeasonGame -quarter -lineup, 
+           data=df_dummys)
+sum3  <- summary(mod3)
+coef3 <- as.data.frame(summary(mod3)$coefficients) %>%
+  arrange(Estimate)
+
+
+#match_firstplayer <- match(players, names(df_dummys_PlusMinus)) %>%
+#            na.omit() %>%
+#            min()
+
+match_firstplayer <- 5
+n <- dim(df_dummys_PlusMinus)[2]
+
+correlations <- round(cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n])), 5)
+```
+
+# Ridge
+
+```{r}
+
+```
+
+
+
+# Annexo
+
+## Función 1: `fix-lineups.R`
+
+```{r}
+fix_lineups <- function(pbp) {
+  game_code <- unique(pbp$game_code)
+  season <- unique(pbp$season)
+
+  stopifnot(
+    length(game_code) == 1 & length(season) == 1
+  )
+
+  starters_names <- pbp %>%
+    select(matches("_player[1-5]")) %>%
+    .[1, ] %>%
+    as.matrix() %>%
+    t() %>%
+    .[, 1]
+
+  players_in <- pbp$player_name[pbp$play_type == "IN"]
+  players_out <- pbp$player_name[pbp$play_type == "OUT"]
+
+  lineups <- vector("list", length(players_in) + 1)
+  lineups[[1]] <- starters_names
+  for (i in 2:length(lineups)) {
+    starters_names[starters_names == players_out[i - 1]] <- players_in[i - 1]
+    lineups[[i]] <- starters_names
+  }
+  lineups_as_list <- lapply(
+    lineups,
+    function(x) as.data.frame(t(x), stringsAsFactors = FALSE)
+  )
+
+  # Find number of times a lineup should be repeated in pbp
+  in_idx <- c(which(pbp$play_type == "IN"), nrow(pbp))
+  n_times <- c(in_idx[1], dplyr::lead(in_idx) - in_idx)
+  n_times <- n_times[-length(n_times)]
+
+
+  lineups_df <- purrr::map2_df(lineups_as_list, as.list(n_times),
+    function(df, n) df[rep(1, n),]) %>%
+    tibble::as_tibble()
+  col_names <- c(paste0("home_player", 1:5),
+    paste0("away_player", 1:5))
+  colnames(lineups_df) <- col_names
+
+  # Add column with all players on the court
+  lineups_df$lineups <- purrr::pmap_chr(lineups_df, paste, sep = " - ")
+
+  pbp_clean <- pbp %>%
+    select(-matches("_player[1-5]"), -lineups)
+
+  dplyr::bind_cols(pbp_clean, lineups_df) %>%
+    fix_ft_lineups()
+}
+
+fix_ft_lineups <- function(pbp) {
+  # Find the time when fts are being shot
+  ft_secs <- pbp$seconds[pbp$play_type == "FTA" | pbp$play_type == "FTM"]
+  # Filter only the events during those times
+  ft_events <- pbp[pbp$seconds %in% ft_secs,]
+
+  ft_stints <- split(ft_events, ft_events$seconds)
+
+  ft_lineups <- purrr::map_df(ft_stints, get_ft_lineup)
+
+  pbp2 <- pbp %>%
+    dplyr::left_join(ft_lineups, by = c("season", "game_code", "play_number"))
+
+  # TODO: Perhaps a more elegant solution by replacing as a whole matrix?
+  idx <- which(pbp2$lineups.x != pbp2$lineups.y)
+  pbp2$home_player1.x[idx] <- pbp2$home_player1.y[idx]
+  pbp2$home_player2.x[idx] <- pbp2$home_player2.y[idx]
+  pbp2$home_player3.x[idx] <- pbp2$home_player3.y[idx]
+  pbp2$home_player4.x[idx] <- pbp2$home_player4.y[idx]
+  pbp2$home_player5.x[idx] <- pbp2$home_player5.y[idx]
+  pbp2$away_player1.x[idx] <- pbp2$away_player1.y[idx]
+  pbp2$away_player2.x[idx] <- pbp2$away_player2.y[idx]
+  pbp2$away_player3.x[idx] <- pbp2$away_player3.y[idx]
+  ## NOTE Here was the problem: there was a typo, used 5 instead of 4
+  pbp2$away_player4.x[idx] <- pbp2$away_player4.y[idx]
+  pbp2$away_player5.x[idx] <- pbp2$away_player5.y[idx]
+  pbp2$lineups.x[idx] <- pbp2$lineups.y[idx]
+
+  # Remove the .x that resulted when we merged the two data frames
+  col_names <- stringr::str_remove(colnames(pbp2), ".x")
+  colnames(pbp2) <- col_names
+  pbp_final <- pbp2 %>%
+    dplyr::select(-dplyr::ends_with(".y"))
+
+  pbp_final
+}
+
+get_ft_lineup <- function(ft_stint) {
+    # Filter lineup columns with identifying season, game_code and play_number
+    player_col_names <- c(paste0("home_player", 1:5),
+                          paste0("away_player", 1:5))
+    id_col_names <- c("season", "game_code", "play_number")
+    col_names <- c(id_col_names, player_col_names, "lineups")
+    lineup_df <- ft_stint[, col_names]
+
+    # Get the lineup when the free throw stint started
+    initial_lineup <- lineup_df[1, -(1:3)]
+    # Place the initial lineup in all events of the free throw stint
+    lineup_df[, -(1:3)] <- initial_lineup[rep(1, nrow(ft_stint)),]
+
+    lineup_df
+}
+```
+
+## Función 2: `dummys_fun.R`
+
+```{r}
+dummys_fun <- function(pbd_datos_fixed){
+  factor_names <- c('season', 'game_code', 'team_code', 'play_number', 'play_type')
+  pbd_datos_fixed[,factor_names] <- lapply(pbd_datos_fixed[,factor_names] , factor)
+  
+  summary(pbd_datos_fixed[1:18])
+  
+  #CATEGORIZACION BBDD
+  df <- pbd_datos_fixed
+  N_df <- dim(df)[1] # Numero de jugadas
+  M_df <- dim(df)[2] # Numero de variables
+  
+  df_fact <- df %>%
+    select(season, game_code, team_code, player_name, team_name) %>%
+    mutate(season = as.factor(season),
+           team_code = as.factor(team_code),
+           player_name = as.factor(player_name),
+           team_name = as.factor(team_name))
+  
+  num_teams <- length(levels(df_fact$team_name)) # Numero de equipos
+  
+  players <- df %>% 
+    select(matches("player_name")) %>%
+    arrange(player_name) %>% 
+    unique() %>% 
+    drop_na()
+  
+  players <- players$player_name
+  num_players <- length(players)   # Numero de jugadores
+  
+  df_pbp <- df %>% 
+    arrange(season, game_code, quarter, seconds) %>%
+    select(season, game_code, quarter, seconds, points_home, points_away, 
+           home_team, away_team, matches("_player[1-5]")) %>%
+    ungroup()
+  
+source(here("R", "CHR_to_seconds_fun.R"))
+source(here("R", "Print_MS_fun.R"))
+  
+  
+  TP_home <- df_pbp %>%
+  select(c(contains("home_"))) %>%
+  unique()
+  
+  TP_away <- df_pbp %>%
+    select(c(contains("away_"))) %>%
+    unique()
+  
+  CBIND_MultipleCol_n <- function(data,col,n){
+    d <- unlist(data[col])
+    x <- cbind(rep(d, n))
+    y <- unlist(data[-1])
+    
+    res <- cbind(x, y)
+    rownames(res) <- NULL
+    
+    res <- unique(res)
+    
+    return(res)
+  }
+  
+  TeamPlayers_home <- CBIND_MultipleCol_n(TP_home, 1, 5)
+  TeamPlayers_away <- CBIND_MultipleCol_n(TP_away, 1, 5)
+  
+  TeamPlayers <- rbind(TeamPlayers_home, TeamPlayers_away) %>%
+    as.data.frame() %>%
+    `colnames<-`(c("Team", "Player")) %>%
+    arrange(Team) %>%
+    unique()
+  
+  Players_Sorted_byTeam <- TeamPlayers$Player
+  
+  Lineups_PasteSort <- function(x) {
+    paste(sort(x), collapse = " - ")
+  }
+  
+  lineup_home <- df_pbp %>% select(contains("home_p"))
+  lineup_away <- df_pbp %>% select(contains("away_p"))
+  lineups     <- cbind(lineup_home, lineup_away)
+  
+  lineup_home_sorted <- apply(lineup_home, 1, Lineups_PasteSort)
+  lineup_away_sorted <- apply(lineup_away, 1, Lineups_PasteSort)
+  lineups_sorted     <- apply(lineups, 1, Lineups_PasteSort)
+  
+  #lineups
+  df_lineups_sorted <- df_pbp %>%
+    mutate(lineup = lineups_sorted,
+           lineup_home = lineup_home_sorted,
+           lineup_away = lineup_away_sorted
+    ) %>% select(-contains("_player"))
+  
+  df_merged <- df_lineups_sorted %>%
+    mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
+           quarter   = paste0("Q", quarter)) %>%
+    unite("SeasonGame", c("season", "game_code"))
+  
+  df_stints <- df_merged %>%
+    arrange(SeasonGame) %>%
+    mutate(StintChanged = (lineup != lag(lineup)),
+           StintChanged = replace_na(StintChanged, TRUE),
+           stint        = cumsum(StintChanged))
+  
+  df_reduced <- df_stints %>%
+    mutate(StintRemove  = (stint == lead(stint)),
+           StintRemove  = replace_na(StintRemove, FALSE)) %>%
+    filter(StintRemove != TRUE)
+  
+  PlusMinus_function <- function(h,a){
+    (h-lag(h))-(a-lag(a))
+  }
+  
+  #Home como referencia
+  df_PlusMinus <- df_reduced %>%
+    group_by(SeasonGame) %>%
+    mutate(
+      stint_seconds = ifelse(is.na(lag(seconds)), seconds, seconds - lag(seconds)),
+      PlusMinus  = ifelse(is.na(lag(seconds)), points_home - points_away,
+                          PlusMinus_function(points_home, points_away))
+    ) %>% ungroup()
+  
+  df_PlusMinus_reduced <- df_PlusMinus %>% 
+    select(c(SeasonGame, quarter, lineup, lineup_home, lineup_away, stint_seconds, PlusMinus)) 
+
+  #Eliminar stints duplicados
+  df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>% 
+    group_by(SeasonGame, quarter, lineup, lineup_home, lineup_away) %>% 
+    summarise(
+      stint_seconds = sum(stint_seconds),
+      PlusMinus  = sum(PlusMinus) ) %>% 
+    ungroup() %>%
+    as.data.frame()
+  
+  #10min
+  df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                         select_columns = "lineup_home", 
+                                         split = "-")
+  df_dummys_A <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
+                                         select_columns = "lineup_away", 
+                                         split = "-") %>% 
+    mutate(across(starts_with("lineup_away_"), function(x) -x))
+  
+  Remove_firsts_chars_colnames <- function(data, char){
+    num_char <- nchar(char)+1
+    substring(names(data), num_char)
+  }
+  
+  COL_From <- function(data, first_col){
+    last_col = ncol(data)
+    colnames(data[first_col:last_col])
+  }
+  
+  COL_to <- function(data, first_col, char){
+    last_col = ncol(data)
+    Remove_firsts_chars_colnames(data[first_col:last_col], char)
+  }
+  
+  #Primera columna con el nombre de un jugador
+  match <- match(paste0("lineup_away_", players), names(df_dummys_A)) %>%
+    na.omit() %>%
+    min()
+  
+  #match = 8
+  
+  #nombre columnas sin primeras palabras:
+  col_to_A <- COL_to(df_dummys_A, match, "lineup_away_")
+  col_to_H <- COL_to(df_dummys_H, match, "lineup_home_")
+  
+  df_dummys_A <- df_dummys_A %>% rename_at(vars(COL_From(df_dummys_A,match)), function(x) col_to_A)
+  df_dummys_H <- df_dummys_H %>% rename_at(vars(COL_From(df_dummys_H,match)), function(x) col_to_H)
+  
+  #Juntar los dos DF:
+  df_dummys_A[df_dummys_A == 0] <- NA
+  df_dummys_H[df_dummys_H == 0] <- NA
+  
+  df_dummys <- coalesce(df_dummys_H,df_dummys_A)
+  df_dummys[is.na(df_dummys)] <- 0
+  
+  df_dummys <- df_dummys %>% select(-c(starts_with("lineup_"))) %>% ungroup()
+}
+```
+
