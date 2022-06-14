@@ -39,9 +39,9 @@
 
 \begin{abstract}
 
-Hoy en día, el deporte es un hobby muy popular por todo el mundo. Des de pequeños, los niños practican algún tipo de deporte, especialmente aquellos que son de equipo. Eso nos lleva a querer saber más del deporte, más detalles, más información. Nos entra la curiosidad de "¿quién es el mejor jugador?", "Qué equipo es mejor?", o incluso intentar prevenir qué equipo ganará según sus resultados anteriores. Y gracias a los avances tecnológicos e informáticos, cada vez se nos facilita más poder seguir un deporte des de casa, ver la estadística de los deportistas e incluso hay plataformas o juegos que nos permiten ser, de manera virtual, managers de los clubs y, por lo tanto, nos facilitan mucha información que antes era más difícil de saber.
+Hoy en día, el deporte es un hobby muy popular por todo el mundo. Desde pequeños, los niños practican algún tipo de deporte, especialmente aquellos que son de equipo. Eso nos lleva a querer saber más del deporte, más detalles, más información. Nos entra la curiosidad de "¿quién es el mejor jugador?", "Qué equipo es mejor?", o incluso intentar prevenir qué equipo ganará según sus resultados anteriores. Y gracias a los avances tecnológicos e informáticos, cada vez se nos facilita más poder seguir un deporte desde casa, ver la estadística de los deportistas e incluso hay plataformas o juegos que nos permiten ser, de manera virtual, managers de los clubs y, por lo tanto, nos facilitan mucha información que antes era más difícil de saber.
 
-Eso hace que, de manera progresiva, también mejore el estudio y el análisis de cada deporte, y cada vez sea más específica para cada deporte, implementando nuevos recursos para mejorar los resultados. Pero, ¿son lo suficientemente eficaces los análisis que se realizan actualmente en Europa? ¿O dichos análisis estan anticuados y requieren de una actualización?
+Eso hace que, de manera progresiva, también mejore el estudio y el análisis de cada deporte, y cada vez sea más específica para cada deporte, implementando nuevos recursos para mejorar los resultados. Pero, ¿son lo suficientemente eficaces los análisis que se realizan actualmente en Europa? ¿O dichos análisis están anticuados y requieren de una actualización?
 
 \end{abstract}
 
@@ -56,83 +56,39 @@ Eso hace que, de manera progresiva, también mejore el estudio y el análisis de
 
 \section{Introducción}
 
-En este trabajo estudiaremos más a fondo el Baloncesto, el segundo deporte más popular de Europa (solo superado por el futbol), y el cual tengo interés personal, ya que lo practico des de los 4 años.
+En este trabajo estudiaremos más a fondo el Baloncesto, el segundo deporte más popular de Europa (solo superado por el futbol), y el cual tengo interés personal, ya que lo practico desde los 4 años.
 
-Esta idea de estudio surgió del constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y des de entonces nunca se ha modificado.
+Esta idea de estudio surgió del constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y desde entonces nunca se ha modificado.
 
 Es por eso que, considero que actualmente los análisis que se hacen de este deporte necesitan una actualización significativa para llegar a informar de todos aquellos datos que hoy en día si se pueden recoger gracias a los avances tecnológicos, y de los cuales no se analizan por falta de dinero o porque se consideran poco relevantes.
 
 El objetivo principal de este estudio es mejorar los análisis que se elaboran de cada partido, para poder encontrar una variable respuesta que nos diga que aportación al equipo tiene cada jugador personalmente, disminuyendo la diferencia de pesos que hay actualmente entre las aportaciones ofensivas y las aportaciones defensivas.
 
 Este documento se estructura de la siguiente manera: a continuación, se realizará una breve explicación de los recursos informáticos que se han utilizado para realizar este estudio, seguidamente se explicará brevemente los conceptos de baloncesto que son necesarios para entender los tecnicismos del trabajo y se presentaran posibles análisis que se realizan. Finalmente, se describirá la base de datos con la que se ha trabajado y sus variables, y también se explicará en profundidad el análisis que se desarrollará en este trabajo, el Más/Menos Ajustado (\emph{Adjusted Plus/Minus, APM}). En la sección de resultados presentaremos la resolución del análisis y finalmente discutiremos, en la sección de conclusiones, los resultados obtenidos.
-
-\section{¿Qué es GitHub?}
-
-\begin{wrapfigure}{r}{0.25\textwidth} %this figure will be at the right
-    \centering
-    \includegraphics[width=0.25\textwidth]{imagenes/GitHub-Logo.png}
-\end{wrapfigure}
-
-GitHub es una plataforma de alojamiento, propiedad de Microsoft, que ofrece a los desarrolladores la posibilidad de crear repositorios de código y guardarlos en la nube de forma segura, usando un sistema de control de versiones, llamado Git.
-
-Como he comentado, facilita la organización de proyectos y permite la colaboración de varios desarrolladores en tiempo real. Es decir, nos permite centralizar el contenido del repositorio para poder colaborar con los otros miembros de nuestro grupo des de varios dispositivos.
-
-GitHub está basada en el sistema de control de versiones distribuidas de Git, por lo que se puede contar con sus funciones y herramientas, aunque GitHub ofrece varias opciones adicionales y su interfaz es mucho más fácil de manejar, por lo que no es absolutamente necesario que las personas que lo utilizan tengan un gran conocimiento técnico.
-
-\subsection{Ventajas}
-
-Hay un gran número de razones por las que GitHub es una gran opción para el control y gestión de proyectos de código. Como por ejemplo:
-  
-  \begin{itemize}
-
-\item GitHub permite que alojemos proyectos en repositorios de forma gratuita
-\item Los repositorios son públicos por defecto. Sin embargo, GitHub te permite también alojar tus proyectos de manera privada
-\item Puedes crear y compartir páginas web estáticas con GitHub Pages
-\item Facilita compartir tus proyectos de una forma mucho más fácil y crear un portafolio
-\item Te permite colaborar para mejorar los proyectos de otros y a otros mejorar o aportar a los tuyos
-\item Ayuda reducir significativamente los errores humanos y escribir tu código más rápido con GitHub Copilot
-\item Te da control de versiones, una herramienta muy útil.
-
-\end{itemize}
-
-\subsection{¿Qué es el control de versiones?}
-
-Se le llama control de versiones a la administración de los cambios que se realizan sobre los elementos o la configuración de algún proyecto. En otras palabras, el control de versiones sirve para conocer y autorizar los cambios que hagan los colaboradores en tu proyecto, guardando información extra de qué están, incluyendo los cambios y cuándo se hicieron. Este control comienza con una versión básica del documento y luego va guardando los cambios que se hagan a lo largo del proyecto.
-
-El control de versiones es una herramienta muy valiosa, pues con ella puedes tener acceso a las versiones anteriores de tu proyecto si es que en algún momento no llega a funcionar de forma correcta.
-
-\subsection{¿Qué es Git?}
-
-Git es un software de control de versiones diseñado por Linus Torvalds, pensando en la eficiencia, la confiabilidad y compatibilidad del mantenimiento de versiones de aplicaciones cuando estas tienen un gran número de archivos de código fuente.
-
-\subsubsection{Diferencias Git vs GitHub}
-
-Entonces, ¿qué diferencia a Git de GitHub? La principal diferencia es que Git es un sistema que permite establecer un control de versiones, mientras que GitHub es una plataforma que ofrece un grupo de funciones que facilitan el uso de Git y la colaboración en tiempo real, así como el almacenamiento en la nube.
-
 \section{El baloncesto}
 
 \subsection{Historia y reglas básicas}
 
 \begin{wrapfigure}{r}{0.3\linewidth}
-    \centering
-    \includegraphics[width=0.3\textwidth]{imagenes/historia_baloncesto.jpg}
-    \label{fig:hist_bskb}
+\centering
+\includegraphics[width=0.3\textwidth]{imagenes/historia_baloncesto.jpg}
+\label{fig:hist_bskb}
 \end{wrapfigure}
 
 El baloncesto es un deporte de equipo que se originó en 1891, por James Naismith, profesor de educación física en la escuela YMCA de Springfield, Massachusetts, Estados Unidos.
 
-James buscaba idear un deporte que sus alumnos pudieran practicar bajo techo, pues los duros inviernos en Massachusetts dificultaban la realización de ejercicio al aire libre, por lo que inventó el baloncesto utilizando unas cajas de melocotones y unos balones. 
+James buscaba idear un deporte que sus alumnos pudieran practicar bajo techo, pues los duros inviernos en Massachusetts dificultaban la realización de ejercicio al aire libre, por lo que inventó el baloncesto utilizando unas cajas de melocotones y unos balones.
 
 Con el paso de los años, este deporte, que empezó como actividad de colegio, ha ido evolucionando mucho, añadiendo más reglas, conceptos nuevos, límites de números de jugadores, se ha determinado tiempos de juego, las canastas tienen un valor distinto según la distancia, etc.
 
 Actualmente, las normas más básicas de este deporte son:
-  
+
 \begin{itemize}
 
-  \item En las ligas superiores, hay un total de 4 cuartos de 10 minutos y pueden estar en pista 5 jugadores por equipo.
-  \item No te puedes desplazar con la pelota en las manos, es obligatorio botar con una mano (si no será una infracción y conllevará la perdida de pelota y saque de banda del equipo rival).
-  \item Cada jugador puede realizar hasta un total de 5 faltas, que será penalizado con un saque de banda o con un tiro libre (dependerá de la situación). El jugador que realiza 5 faltas será expulsado del partido.
-  \item El objetivo es encestar el máximo de puntos posibles, teniendo en cuenta que pueden sumar 1, 2 o 3 puntos, según la distancia.
+\item En las ligas superiores, hay un total de 4 cuartos de 10 minutos y pueden estar en pista 5 jugadores por equipo.
+\item No te puedes desplazar con la pelota en las manos, es obligatorio botar con una mano (si no será una infracción y conllevará la perdida de pelota y saque de banda del equipo rival).
+\item Cada jugador puede realizar hasta un total de 5 faltas, que será penalizado con un saque de banda o con un tiro libre (dependerá de la situación). El jugador que ejecuta 5 faltas será expulsado del partido.
+\item El objetivo es encestar el máximo de puntos posibles, teniendo en cuenta que pueden sumar 1, 2 o 3 puntos, según la distancia.
 
 \end{itemize}
 
@@ -144,7 +100,7 @@ Para que podamos entender a que nos referimos en este trabajo, es necesario comp
 
 \begin{itemize}
 
-\item Puntos: Acumulación de tiros encestadas multiplicadas por su valor, que cada  jugador y/o equipo realiza durante el partido
+\item Puntos: Acumulación de tiros encestados multiplicados por su valor, que cada jugador y/o equipo realiza durante el partido
 \item Minutos: Número de minutos que el jugador está en pista
 \item Falta: Acción en la que un defensor bloquea el avance de su rival sin tener control de balón o de manera no reglamentaria (empujar, agarrar...)
 \item Pérdidas de balón: cuando un equipo pierde el control del balón y pasa a ser del equipo rival.
@@ -161,16 +117,16 @@ Viendo la gran cantidad de datos que se pueden extraer de cada partido (y de cad
 
 \subsection{Boxscore}
 
-El primer análisis que se hizo fue un \emph{Box Score} (Caja de puntuación) donde se recopilaba únicamente los puntos de cada jugador según el valor de esta y las faltas realizadas. Posteriormente, se fue mejorando añadiendo conceptos como rebotes, tapones, perdidas de balón, recuperaciones de balón... Y se añadió el estadístico (que acutalmente es por defecto) que se realiza a partir de todos estos datos: \emph{Valoración} (en inglés PIR, \emph{Performance Index Rating}) que engloba todo lo básico que pasa en el partido de manera individual y que, cuanto más positivo, mejor. Este estadístico se calcula utilizando la siguiente fórmula:
-  
+El primer análisis que se hizo fue un \emph{Box Score} (Caja de puntuación) donde se recopilaba únicamente los puntos de cada jugador según el valor de esta y las faltas realizadas. Posteriormente, se fue mejorando añadiendo conceptos como rebotes, tapones, pérdidas de balón, recuperaciones de balón... Y se añadió el estadístico (que actualmente es por defecto) que se hace a partir de todos estos datos: \emph{Valoración} (en inglés PIR, \emph{Performance Index Rating}) que engloba todo lo básico que pasa en el partido de manera individual y que, cuanto más positivo, mejor. Este estadístico se calcula utilizando la siguiente fórmula:
+
 \begin{equation} \label{eq1}
-  \begin{split}
-  PIR = & (Puntos + Rebotes + Asistencias + Robos + Tapones + Faltas Recibidas) - \\
-  & (Tiros de Campo Fallados + Tiros Libres Fallados + Tapones Recibidos + Pérdidas + Faltas Realizadas)
-  \end{split}
+\begin{split}
+PIR = & (Puntos + Rebotes + Asistencias + Robos + Tapones + Faltas Recibidas) - \\
+& (Tiros de Campo Fallados + Tiros Libres Fallados + Tapones Recibidos + Pérdidas + Faltas Realizadas)
+\end{split}
 \end{equation}
 
-\centerline{(en el \hyperref[sec:Annexo1]{Annexo 1} encontraréis la descripción de cada variable)}
+\centerline{(en el \hyperref[sec:Anexo1]{Anexo 1} encontraréis la descripción de cada variable)}
 
 \vspace{0.2cm}
 
@@ -203,18 +159,18 @@ Por lo que, para el desarrollo temporal del partido y para conocer cierta inform
 \subsection{Play-by-play}
 
 \begin{wrapfigure}{r}{0.4\linewidth}
-    \centering
-    \includegraphics[width=0.4\textwidth]{imagenes/PBP_RM.png}
-    \captionsetup{width=.9\linewidth}
-    \captionof{figure}{\emph{Play by play} del partido de la Euroliga de Real Madrid contra LDLC Asvel, del 17 de Marzo del 2022. Se lee de abajo hacia arriba.}
-    \label{fig:PBP_RM}
+\centering
+\includegraphics[width=0.4\textwidth]{imagenes/PBP_RM.png}
+\captionsetup{width=.9\linewidth}
+\captionof{figure}{\emph{Play by play} del partido de la Euroliga de Real Madrid contra LDLC Asvel, del 17 de Marzo del 2022. Se lee de abajo hacia arriba.}
+\label{fig:PBP_RM}
 \end{wrapfigure}
 
-Este tipo de recogida de información se creo para solucionar el problema que teniamos con el \emph{Box Score}. Los datos de \emph{Play-by-Play (PBP)} han sido la fuente principal de muchas estadísticas avanzadas, como el más-menos ajustado, que se desarrollará en este trabajo.
+Este tipo de recogida de información se creó para solucionar el problema que teníamos con el \emph{Box Score}. Los datos de \emph{Play-by-Play (PBP)} han sido la fuente principal de muchas estadísticas avanzadas, como el más-menos ajustado, que se desarrollará en este trabajo.
 
 \emph{Play-by-Play} proporciona una transcripción del juego en un formato de eventos individuales. Los datos típicos de jugada por jugada deben tener la siguiente información:
-  
-  \begin{itemize}
+
+\begin{itemize}
 \item El tiempo de la posesión
 \item El jugador que inició la posesión (en caso de robo o rebote defensivo)
 \item El jugador contrario que inició la posesión (en caso de un tiro fallado o pérdida de balón), incluida la ubicación en el piso desde donde se realizó el tiro y algunos otros identificadores únicos que usamos para clasificar el tipo de posesión.
@@ -226,30 +182,83 @@ Este tipo de análisis se inicializaron en 2007 para la Euroliga (principal comp
 
 \subsection{Shot-charts}
 
-Este tipo de análisis es de los más visuales, ya que se realiza de una manera muy sencilla: se tiene como plantilla el dibujo de una pista de baloncesto de manera vectorial, y se va colocando cada tiro realizado en la posición del tiro, el jugador y si se encesta o no. De forma general se hace escribiendo el número del jugador en la posición des de donde se ejecuta el tiro, y si encesta, se hace un círculo alrededor del número.
+Este tipo de análisis es de los más visuales, ya que se realiza de una manera muy sencilla: se tiene como plantilla el dibujo de una pista de baloncesto de manera vectorial, y se va colocando cada tiro realizado en la posición del tiro, el jugador y si se encesta o no. De forma general se hace escribiendo el número del jugador en la posición desde donde se ejecuta el tiro, y si encesta, se hace un círculo alrededor del número.
 
-El \emph{Shot-Charts}, proporciona un output visual muy fácil de interpretar, ya que es se parece a un mapa de calor y, por lo tanto, podemos observar de una manera muy rápida des de que zonas de la pista es más efectivo el equipo y/o el jugador.
+El \emph{Shot-Charts}, proporciona un output visual muy fácil de interpretar, ya que es se parece a un mapa de calor y, por lo tanto, podemos observar de una manera muy rápida desde que zonas de la pista es más efectivo el equipo y/o el jugador.
 
 Una vez realizado, podemos obtener con facilidad el porcentaje de acierto del equipo y/o el jugador, o incluso, determinar el porcentaje de acierto por zonas.
 
 De este análisis, es frecuente encontrar variantes: mapa de calor del equipo, mapa de porcentajes de aciertos por zonas de la pista...
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\linewidth]{imagenes/shot_chart_1.png}
+\captionof{figure}{\emph{Shot-Chart} del partido de la Euroliga del Fenerbahce Istanbul contra Olympiacos Piraeus, del 21 de Mayo del 2021.}
+\label{fig:SC_FO}
+\end{figure}
+
+
 \subsection{Graphic Stats}
 
+Este tipo de análisis es más moderno y se centra en un único equipo o (más frecuentemente) en un jugador, y se visualiza sus números de manera muy visual y con mucho carácter para marketing y fáciles de compartir en redes sociales.
 
+Básicamente, consiste en, de manera creativa y con un diseño moderno, enseñar los números que ha realizado dicho jugador. Normalmente, se visualiza puntos, rebotes y asistencias o si no también se suele mostrar el porcentaje de acierto en los diferentes tiros, conjuntamente con una o varias fotografías del jugador.
+
+La información de este tipo de análisis viene obtenida de alguna de los anteriores tipos, por lo tanto, aunque se considera un análisis deportivo, es más bien una representación gráfica y visual de los datos destacados del jugador o del equipo.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\linewidth]{imagenes/GraphicStat.jpg}
+\captionof{figure}{\emph{Graphic Stats} de Ante Zizic, jugador de Maccabi Tel Aviv en el partido del contra el FC Barcelona del 30 de Marzo de 2021.}
+\label{fig:GS_AZ}
+\end{figure}
 
 
 \clearpage
 
 \section{Estadístico Más/Menos (\emph{Plus/Minus})}
 
-\subsection{Normal Plus Minus, PM}
+Como ya hemos comentado, el Más/Menos ($+/-$, $\pm$) es una estadística deportiva utilizada para medir el impacto de un jugador en el juego. Conforme se ha ido conociendo y estudiando más este estaístico, se ha revelado que tiene fallas o que no es tan preciso, por lo que confiar únicamente en el Más/Menos es un gran error, por eso se han desarrollado y han tratado de reducir estas fallas para intentar obtener resultados más precisos con respecto al impacto de un jugador. Actualmente, se están publicando diferentes tipos de métricas sobre el Más/Menos:
+
+\subsection{Plus Minus, PM}
+
+Este es el estadístico original que está representado por la diferencia entre la puntuación total de su equipo y la de su oponente cuando el jugador está en el juego. Se basa únicamente en la información del marcador de baloncesto tradicional; no se incluyen datos \emph{play-by-play} ni datos de cuadro de puntuación no tradicionales (como mates o robos).
+
+Fueron Los Montreal Canadiens de la NHL (hockey sobre hielo) el primer equipo en medir el más-menos de sus jugadores, comenzando en algún momento de la década de 1950. Aunque es estadístico fue pionero en el hockey, se ha utilizado en otros deportes y áreas de la vida, llegando al mundo del baloncesto por los Houston Rockets de la NBA, que lo utilizaron por primera vez una versión modificada de la estadística, que ayudó a revelar la efectividad no anunciada de Shane Battier, quien anotó muy poco. Ahora es de uso regular en toda la NBA. 
+
+Se calcula de la diguiente manera:
+
+$$PM_i = PointsTeam - PointsOpponent$$
 
 \subsection{Adjusted Plus Minus, APM}
+
+Plus-Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
 
 \subsection{Regularized Adjusted Plus/Minus, RAPM}
 
 \subsection{Real Plus-Minus, RPM}
+
+\subsection{Otros tipos de métricas basados en el Más/Menos}
+
+\begin{itemize}
+\item Defensive Plus-Minus aka DPM
+\item Net Plus-Minus aka Roland Rating
+\item Adjusted Plus-Minus aka APM por Wayne Winston and Jeff Sagarin
+\item Statistical Plus-Minus aka SPM por Dan Rosenbaum
+\item Regularized Adjusted Plus-Minus aka RAPM por Joe Sill
+\item Real Plus-Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
+\item Box Plus-Minus aka BPM por Daniel Myers
+\item Player Tracking Plus-Minus aka PT-PM
+\item Estimated Plus-Minus aka EPM por Taylor Snarr
+\item Player Impact Plus-Minus aka PIPM por Jacob Goldstein
+\item CARMELO, por FiveThirtyEight
+\item RAPTOR, por FiveThirtyEight
+\item LEBRON, por Tim Cranjis, Krishna Narsu
+\item Daily Plus-Minus aka DPM o DARKO por Kostya Medvedovsky
+\item Individual Player Value aka IPV por Talking Practice Blog
+\item Augmented Box Plus-Minus aka AuPM por Ben Taylor
+\item Daily Updated Ranking of Individual Performance aka DRIP por Nathan Walker
+\end{itemize}
 
 (explicar cada concepto y su manera de calcularlo o en base a que se calcula)
 
@@ -257,291 +266,5 @@ Tabla de diferencias ?
 
 \clearpage
 
-\begin{Schunk}
-\begin{Soutput}
-# A tibble: 26,477 x 6
-   season game_code play_number play_type away_player4 away_player5
-    <dbl>     <dbl>       <dbl> <chr>     <chr>        <chr>       
- 1   2008         2          48 IN        BLU, DAVID   BLU, DAVID  
- 2   2008         2          49 IN        BLU, DAVID   BLU, DAVID  
- 3   2008         2          50 OUT       BLU, DAVID   BLU, DAVID  
- 4   2008         2          51 OUT       BLU, DAVID   BLU, DAVID  
- 5   2008         2          52 OUT       BLU, DAVID   BLU, DAVID  
- 6   2008         2          53 CPF       BLU, DAVID   BLU, DAVID  
- 7   2008         2          54 RPF       BLU, DAVID   BLU, DAVID  
- 8   2008         2          55 FTM       BLU, DAVID   BLU, DAVID  
- 9   2008         2          56 FTM       BLU, DAVID   BLU, DAVID  
-10   2008         2          57 TOV       BLU, DAVID   BLU, DAVID  
-# ... with 26,467 more rows
-\end{Soutput}
-\begin{Soutput}
-  season        game_code      play_number      team_code    
- 2008:92923   93     :  611   4      :  185   BAR    : 5632  
-              100    :  606   295    :  185   OLY    : 5555  
-              149    :  602   3      :  183   PAR    : 5431  
-              96     :  599   2      :  182   PAN    : 5381  
-              80     :  590   155    :  181   BAS    : 5068  
-              165    :  590   203    :  181   (Other):65085  
-              (Other):89325   (Other):91826   NA's   :  771  
- player_name          play_type     time_remaining       quarter     
- Length:92923       IN     : 9401   Length:92923      Min.   :1.000  
- Class :character   OUT    : 9400   Class1:hms        1st Qu.:2.000  
- Mode  :character   DRB    : 8316   Class2:difftime   Median :3.000  
-                    RPF    : 7876   Mode  :numeric    Mean   :2.564  
-                    CPF    : 7389                     3rd Qu.:4.000  
-                    FTM    : 5729                     Max.   :5.000  
-                    (Other):44812                                    
-  points_home     points_away     play_info            seconds    
- Min.   : 0.00   Min.   : 0.00   Length:92923       Min.   :  60  
- 1st Qu.:11.00   1st Qu.:10.00   Class :character   1st Qu.: 660  
- Median :22.00   Median :19.00   Mode  :character   Median :1260  
- Mean   :22.89   Mean   :21.07                      Mean   :1278  
- 3rd Qu.:34.00   3rd Qu.:31.00                      3rd Qu.:1860  
- Max.   :75.00   Max.   :69.00                      Max.   :2700  
-                                                                  
-  home_team          away_team            home          team_name        
- Length:92923       Length:92923       Mode :logical   Length:92923      
- Class :character   Class :character   FALSE:45714     Class :character  
- Mode  :character   Mode  :character   TRUE :46438     Mode  :character  
-                                       NA's :771                         
-                                                                         
-                                                                         
-                                                                         
-  last_ft           and1        
- Mode :logical   Mode :logical  
- FALSE:89829     FALSE:92484    
- TRUE :3094      TRUE :439      
-\end{Soutput}
-\begin{Soutput}
-[1] 2072
-\end{Soutput}
-\end{Schunk}
 
 
-\section{Análisis y métodos}
-
-\subsection{Descripción de la base de datos}
-
-En este estudio vamos a analizar los datos de todas las jugadas registradas en partidos oficiales de la temporada 2018 de la Liga Nacional de ACB para buscar el Más/Menos Ajustado. Tenemos un total de $N=$ 92923 jugadas, y 361 jugadores en 25 equipos.
-
-
-
-
-
-
-
-\addcontentsline{toc}{section}{Referencias}
-
-\begin{thebibliography}{X}
-	\bibitem{RAPM} \textsc{Joseph Sill}, \textit{Improved NBA Adjusted +/- Using Regularization and Out-of-Sample Testing}, PDF, 6 Marzo 2010.
-	
-	\bibitem{HappyGH} \textsc{Happy Git}, \textit{Let’s Git started}, url: \url{https://happygitwithr.com/index.html}, .
-\end{thebibliography}
-
-\clearpage
-
-\section{Annexo}
-
-\subsection{Descripción de las variables} \label{sec:Annexo1}
-
-\begin{itemize}
-\item MIN (\emph{Minutes}): Minutos totales jugados
-\item PTS (\emph{Points}): Puntos totales realizados
-\item 2FGA (\emph{2-point Field Goals Attempted}): Número de tiros de 2 puntos intentadas
-\item 2FGM (\emph{2-point Field Goals Made}): Número de tiros de 2 puntos anotadas
-\item 3FGA (\emph{3-point Field Goals Attempted}): Número de tiros de 3 puntos ("triples") intentadas
-\item 3FGM (\emph{3-point Field Goals Made}): Número de tiros de 3 puntos ("triples") anotadas
-\item FTA (\emph{Free Throws Attempted}): Número de tiros libres intentados
-\item FTM (\emph{Free Throws Made}): Número de tiros libres anotados
-\end{itemize}
-
-\clearpage
-
-\subsection{Code}
-
-\textbf{Datos}
-
-\begin{Schunk}
-\begin{Sinput}
-> library(readr)
-> library(dplyr)
-> library(ggplot2)
-> library(here)
-> library(tidyverse)
-> library(tidyr)
-> library(dplyr)
-> library(chron)                 # Para CHR_to_seconds
-> library(stringr)               # Para str_pad
-> library(lubridate)
-> library(reshape)
-> library(tidyselect)
-> library(corrplot)
-> library(RColorBrewer)
-> library("colorspace")
-> library(graphics)
-> library(rpart)
-> library(ggplot2)
-> library(car)                   # VIF
-> #ERROR SOLUCION
-> pbp_2008 <- read_csv("pbp2008.csv")
-> ## Check how many rows are affected by this
-> bad_lineups <- pbp_2008 %>%
-+   select(matches("_player[1-5]")) %>%
-+   apply(1, function(x) max(table(x)) > 1)
-> pbp_bad <- pbp_2008 %>%
-+   filter(bad_lineups)
-> pbp_bad %>%
-+   select(season, game_code, play_number, play_type, away_player4, away_player5)
-\end{Sinput}
-\begin{Soutput}
-# A tibble: 26,477 x 6
-   season game_code play_number play_type away_player4 away_player5
-    <dbl>     <dbl>       <dbl> <chr>     <chr>        <chr>       
- 1   2008         2          48 IN        BLU, DAVID   BLU, DAVID  
- 2   2008         2          49 IN        BLU, DAVID   BLU, DAVID  
- 3   2008         2          50 OUT       BLU, DAVID   BLU, DAVID  
- 4   2008         2          51 OUT       BLU, DAVID   BLU, DAVID  
- 5   2008         2          52 OUT       BLU, DAVID   BLU, DAVID  
- 6   2008         2          53 CPF       BLU, DAVID   BLU, DAVID  
- 7   2008         2          54 RPF       BLU, DAVID   BLU, DAVID  
- 8   2008         2          55 FTM       BLU, DAVID   BLU, DAVID  
- 9   2008         2          56 FTM       BLU, DAVID   BLU, DAVID  
-10   2008         2          57 TOV       BLU, DAVID   BLU, DAVID  
-# ... with 26,467 more rows
-\end{Soutput}
-\begin{Sinput}
-> ## Solucion
-> source(here("R", "fix-lineups.R"))
-> ## Function fix_lineups() only takes data from a single game,
-> ## so I split the data and apply the function to each splitted data frame.
-> pbp_2008_fixed <- split(pbp_2008, factor(pbp_2008$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2009 <- read_csv("pbp2009.csv")
-> pbp_2009_fixed <- split(pbp_2009, factor(pbp_2009$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2010 <- read_csv("pbp2010.csv")
-> pbp_2010_fixed <- split(pbp_2010, factor(pbp_2010$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2011 <- read_csv("pbp2011.csv")
-> pbp_2011_fixed <- split(pbp_2011, factor(pbp_2011$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2012 <- read_csv("pbp2012.csv")
-> pbp_2012_fixed <- split(pbp_2012, factor(pbp_2012$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2013 <- read_csv("pbp2013.csv")
-> pbp_2013_fixed <- split(pbp_2013, factor(pbp_2013$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2014 <- read_csv("pbp2014.csv")
-> pbp_2014_fixed <- split(pbp_2014, factor(pbp_2014$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2015 <- read_csv("pbp2015.csv")
-> pbp_2015_fixed <- split(pbp_2015, factor(pbp_2015$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2017 <- read_csv("pbp2017.csv")
-> pbp_2017_fixed <- split(pbp_2017, factor(pbp_2017$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbp_2018 <- read_csv("pbp2018.csv")
-> pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
-+   map_df(fix_lineups) 
-> pbd_datos_fixed <- pbp_2008_fixed
-> factor_names <- c('season', 'game_code', 'team_code', 'play_number', 'play_type')
-> pbd_datos_fixed[,factor_names] <- lapply(pbd_datos_fixed[,factor_names] , factor)
-> summary(pbd_datos_fixed[1:18])
-\end{Sinput}
-\begin{Soutput}
-  season        game_code      play_number      team_code    
- 2008:92923   93     :  611   4      :  185   BAR    : 5632  
-              100    :  606   295    :  185   OLY    : 5555  
-              149    :  602   3      :  183   PAR    : 5431  
-              96     :  599   2      :  182   PAN    : 5381  
-              80     :  590   155    :  181   BAS    : 5068  
-              165    :  590   203    :  181   (Other):65085  
-              (Other):89325   (Other):91826   NA's   :  771  
- player_name          play_type     time_remaining       quarter     
- Length:92923       IN     : 9401   Length:92923      Min.   :1.000  
- Class :character   OUT    : 9400   Class1:hms        1st Qu.:2.000  
- Mode  :character   DRB    : 8316   Class2:difftime   Median :3.000  
-                    RPF    : 7876   Mode  :numeric    Mean   :2.564  
-                    CPF    : 7389                     3rd Qu.:4.000  
-                    FTM    : 5729                     Max.   :5.000  
-                    (Other):44812                                    
-  points_home     points_away     play_info            seconds    
- Min.   : 0.00   Min.   : 0.00   Length:92923       Min.   :  60  
- 1st Qu.:11.00   1st Qu.:10.00   Class :character   1st Qu.: 660  
- Median :22.00   Median :19.00   Mode  :character   Median :1260  
- Mean   :22.89   Mean   :21.07                      Mean   :1278  
- 3rd Qu.:34.00   3rd Qu.:31.00                      3rd Qu.:1860  
- Max.   :75.00   Max.   :69.00                      Max.   :2700  
-                                                                  
-  home_team          away_team            home          team_name        
- Length:92923       Length:92923       Mode :logical   Length:92923      
- Class :character   Class :character   FALSE:45714     Class :character  
- Mode  :character   Mode  :character   TRUE :46438     Mode  :character  
-                                       NA's :771                         
-                                                                         
-                                                                         
-                                                                         
-  last_ft           and1        
- Mode :logical   Mode :logical  
- FALSE:89829     FALSE:92484    
- TRUE :3094      TRUE :439      
-\end{Soutput}
-\end{Schunk}
-
-\textbf{Categorización y edición de BBDD}
-
-\begin{Schunk}
-\begin{Sinput}
-> #CATEGORIZACION BBDD
-> df <- pbd_datos_fixed
-> N_df <- dim(df)[1] # Numero de jugadas
-> M_df <- dim(df)[2] # Numero de variables
-> df_fact <- df %>%
-+   select(season, game_code, team_code, player_name, team_name) %>%
-+   mutate(season = as.factor(season),
-+          team_code = as.factor(team_code),
-+          player_name = as.factor(player_name),
-+          team_name = as.factor(team_name))
-> num_teams <- length(levels(df_fact$team_name)) # Numero de equipos
-> # Lista de jugadores:
-> players <- df %>% 
-+   select(matches("player_name")) %>%
-+   arrange(player_name) %>% 
-+   unique() %>% 
-+   drop_na()
-> players <- players$player_name
-> num_players <- length(players)   # Numero de jugadores
-> df_pbp <- df %>% 
-+   select(season, game_code, quarter, seconds, points_home, points_away, home_team, away_team, matches("_player[1-5]"))
-\end{Sinput}
-\end{Schunk}
-
-textbf{Modificar variable tiempo} 
-
-Para facilitar los calculos con el tiempo, se va a pasar los mm:ss a segundos. 
-
-\begin{itemize}
-\item CHR\_to\_seconds: Para pasar la variable tiempo que nos llega como chracter a segundos.
-\item Print\_MS: Que nos devolverá los segundos a formato mm:SS (se hará servir más adelante)
-
-\end{itemize}
-
-\begin{Schunk}
-\begin{Sinput}
-> CHR_to_seconds <- function(x){
-+   a <- as.POSIXct(x, tz = '', format = "%H:%M:%S", usetz = FALSE)
-+   tms <- secondss(format(a, "%H:%M:%S"))
-+   s <- period_to_seconds(hms(tms))
-+   return(s)
-+ }
-> Print_MS <- function(x){
-+   t <- seconds_to_period(x)
-+   sprintf('%02d:%02d:%02d', t@hour, minute(t), second(t))
-+ }
-\end{Sinput}
-\end{Schunk}
-
-\textbf{Lista Jugadores-Equipo}
-
-
-\end{document}

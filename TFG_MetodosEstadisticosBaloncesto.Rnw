@@ -191,7 +191,7 @@ De este análisis, es frecuente encontrar variantes: mapa de calor del equipo, m
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.6\linewidth]{imagenes/shot_chart_1.png}
+\includegraphics[width=.5\linewidth]{imagenes/shot_chart_1.png}
 \captionof{figure}{\emph{Shot-Chart} del partido de la Euroliga del Fenerbahce Istanbul contra Olympiacos Piraeus, del 21 de Mayo del 2021.}
 \label{fig:SC_FO}
 \end{figure}
@@ -207,7 +207,7 @@ La información de este tipo de análisis viene obtenida de alguna de los anteri
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.6\linewidth]{imagenes/GraphicStat.jpg}
+\includegraphics[width=.5\linewidth]{imagenes/GraphicStat.jpg}
 \captionof{figure}{\emph{Graphic Stats} de Ante Zizic, jugador de Maccabi Tel Aviv en el partido del contra el FC Barcelona del 30 de Marzo de 2021.}
 \label{fig:GS_AZ}
 \end{figure}
@@ -217,13 +217,47 @@ La información de este tipo de análisis viene obtenida de alguna de los anteri
 
 \section{Estadístico Más/Menos (\emph{Plus/Minus})}
 
-\subsection{Normal Plus Minus, PM}
+Como ya hemos comentado, el Más/Menos ($+/-$, $\pm$) es una estadística deportiva utilizada para medir el impacto de un jugador en el juego. Conforme se ha ido conociendo y estudiando más este estaístico, se ha revelado que tiene fallas o que no es tan preciso, por lo que confiar únicamente en el Más/Menos es un gran error, por eso se han desarrollado y han tratado de reducir estas fallas para intentar obtener resultados más precisos con respecto al impacto de un jugador. Actualmente, se están publicando diferentes tipos de métricas sobre el Más/Menos:
+
+\subsection{Plus Minus, PM}
+
+Este es el estadístico original que está representado por la diferencia entre la puntuación total de su equipo y la de su oponente cuando el jugador está en el juego. Se basa únicamente en la información del marcador de baloncesto tradicional; no se incluyen datos \emph{play-by-play} ni datos de cuadro de puntuación no tradicionales (como mates o robos).
+
+Fueron Los Montreal Canadiens de la NHL (hockey sobre hielo) el primer equipo en medir el más-menos de sus jugadores, comenzando en algún momento de la década de 1950. Aunque es estadístico fue pionero en el hockey, se ha utilizado en otros deportes y áreas de la vida, llegando al mundo del baloncesto por los Houston Rockets de la NBA, que lo utilizaron por primera vez una versión modificada de la estadística, que ayudó a revelar la efectividad no anunciada de Shane Battier, quien anotó muy poco. Ahora es de uso regular en toda la NBA. 
+
+Se calcula de la diguiente manera:
+
+$$PM_i = PointsTeam - PointsOpponent$$
 
 \subsection{Adjusted Plus Minus, APM}
+
+Plus-Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
 
 \subsection{Regularized Adjusted Plus/Minus, RAPM}
 
 \subsection{Real Plus-Minus, RPM}
+
+\subsection{Otros tipos de métricas basados en el Más/Menos}
+
+\begin{itemize}
+\item Defensive Plus-Minus aka DPM
+\item Net Plus-Minus aka Roland Rating
+\item Adjusted Plus-Minus aka APM por Wayne Winston and Jeff Sagarin
+\item Statistical Plus-Minus aka SPM por Dan Rosenbaum
+\item Regularized Adjusted Plus-Minus aka RAPM por Joe Sill
+\item Real Plus-Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
+\item Box Plus-Minus aka BPM por Daniel Myers
+\item Player Tracking Plus-Minus aka PT-PM
+\item Estimated Plus-Minus aka EPM por Taylor Snarr
+\item Player Impact Plus-Minus aka PIPM por Jacob Goldstein
+\item CARMELO, por FiveThirtyEight
+\item RAPTOR, por FiveThirtyEight
+\item LEBRON, por Tim Cranjis, Krishna Narsu
+\item Daily Plus-Minus aka DPM o DARKO por Kostya Medvedovsky
+\item Individual Player Value aka IPV por Talking Practice Blog
+\item Augmented Box Plus-Minus aka AuPM por Ben Taylor
+\item Daily Updated Ranking of Individual Performance aka DRIP por Nathan Walker
+\end{itemize}
 
 (explicar cada concepto y su manera de calcularlo o en base a que se calcula)
 
@@ -314,47 +348,49 @@ df_dummys_2015 <- dummys_fun(pbp_2015_fixed)
 df_dummys_2017 <- dummys_fun(pbp_2017_fixed)
 df_dummys_2018 <- dummys_fun(pbp_2018_fixed)
 
-write.csv(df_dummys_2011,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2011.csv", row.names = FALSE)
-write.csv(df_dummys_2012,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2012.csv", row.names = FALSE)
-write.csv(df_dummys_2013,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2013.csv", row.names = FALSE)
-write.csv(df_dummys_2014,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2014.csv", row.names = FALSE)
-write.csv(df_dummys_2015,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2015.csv", row.names = FALSE)
-#write.csv(df_dummys_2016,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2016.csv", row.names = FALSE)
-write.csv(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2017.csv", row.names = FALSE)
-write.csv(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.csv", row.names = FALSE)
+
+saveRDS(df_dummys_2011,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2011.rds")
+saveRDS(df_dummys_2012,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2012.rds")
+saveRDS(df_dummys_2013,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2013.rds")
+saveRDS(df_dummys_2014,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2014.rds")
+saveRDS(df_dummys_2015,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2015.rds")
+saveRDS(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2017.rds")
+saveRDS(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.rds")
 @
 
 
 <<include=FALSE, echo=FALSE>>=
-#dummys_2011 <- read_csv("Dummys/dummys_2011.csv") #PROBLEMAS
-#dummys_2012 <- read_csv("Dummys/dummys_2012.csv") #PROBLEMAS
-dummys_2013 <- read_csv("Dummys/dummys_2013.csv")
-dummys_2014 <- read_csv("Dummys/dummys_2014.csv")
-dummys_2015 <- read_csv("Dummys/dummys_2015.csv")
-dummys_2017 <- read_csv("Dummys/dummys_2017.csv")
-dummys_2018 <- read_csv("Dummys/dummys_2018.csv")
+dummys_2011 <- readRDS("Dummys/dummys_2011.rds") 
+dummys_2012 <- readRDS("Dummys/dummys_2012.rds")
+dummys_2013 <- readRDS("Dummys/dummys_2013.rds")
+dummys_2014 <- readRDS("Dummys/dummys_2014.rds")
+dummys_2015 <- readRDS("Dummys/dummys_2015.rds")
+dummys_2017 <- readRDS("Dummys/dummys_2017.rds")
+dummys_2018 <- readRDS("Dummys/dummys_2018.rds")
 
-N_rows <- nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017)+nrow(dummys_2018)
+N_rows <- nrow(dummys_2011)+nrow(dummys_2012)+nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017)+nrow(dummys_2018)
 @
 
-<<>>=
-#players_2011 <- colnames(dummys_2011)[-c(1:5)]
-#players_2012 <- colnames(dummys_2012)[-c(1:5)]
+<<include=FALSE, echo=FALSE>>=
+players_2011 <- colnames(dummys_2011)[-c(1:5)]
+players_2012 <- colnames(dummys_2012)[-c(1:5)]
 players_2013 <- colnames(dummys_2013)[-c(1:5)]
 players_2014 <- colnames(dummys_2014)[-c(1:5)]
 players_2015 <- colnames(dummys_2015)[-c(1:5)]
 players_2017 <- colnames(dummys_2017)[-c(1:5)]
 players_2018 <- colnames(dummys_2018)[-c(1:5)]
 
-players <- data.frame("player" = c(players_2013, players_2014, players_2015, players_2017, players_2018)) %>%
+players <- data.frame("player" = c(players_2011, players_2012, players_2013, players_2014, players_2015, players_2017, players_2018)) %>%
   arrange(player) %>%
   unique()
 
 players_vec <- players$player
 num_players <- length(players_vec)
+
+names_duplicated <- lapply(players_vec,agrep,players_vec,value=TRUE)
 @
 
-<<>>=
+<<include=FALSE, echo=FALSE>>=
 df_dummys <- dplyr::bind_rows(dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
   mutate_all(~replace(., is.na(.), 0))
 
