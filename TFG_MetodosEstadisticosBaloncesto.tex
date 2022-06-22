@@ -21,6 +21,10 @@
 \usepackage{fix-cm}												  	                % Custom fontsizes
 \usepackage{hyperref}                                         % Link Clicks
 \usepackage{filecontents}
+\usepackage{lscape}
+\usepackage{booktabs}
+\usepackage{longtable}
+
 
 
 
@@ -37,6 +41,17 @@
 
 \clearpage
 
+\begin{minipage}{.8\textwidth}
+
+\textbf{Agradecimientos}
+
+Este trabajo me ha permitido profundizar más en un mundo que pensaba que conocía bastante bien, y darme cuenta de que no todo lo que ocurre en un partido o en una temporada se ve bien reflejado en los números que hasta ahora conocía. Me ha permitido conocer nuevos métodos de análisis que hasta ahora desconocía y aprender cómo se haría para aplicarlos.
+
+\end{minipage}
+
+
+\clearpage
+
 \begin{abstract}
 
 Hoy en día, el deporte es un hobby muy popular por todo el mundo. Desde pequeños, los niños practican algún tipo de deporte, especialmente aquellos que son de equipo. Eso nos lleva a querer saber más del deporte, más detalles, más información. Nos entra la curiosidad de "¿quién es el mejor jugador?", "Qué equipo es mejor?", o incluso intentar prevenir qué equipo ganará según sus resultados anteriores. Y gracias a los avances tecnológicos e informáticos, cada vez se nos facilita más poder seguir un deporte desde casa, ver la estadística de los deportistas e incluso hay plataformas o juegos que nos permiten ser, de manera virtual, managers de los clubs y, por lo tanto, nos facilitan mucha información que antes era más difícil de saber.
@@ -44,6 +59,9 @@ Hoy en día, el deporte es un hobby muy popular por todo el mundo. Desde pequeñ
 Eso hace que, de manera progresiva, también mejore el estudio y el análisis de cada deporte, y cada vez sea más específica para cada deporte, implementando nuevos recursos para mejorar los resultados. Pero, ¿son lo suficientemente eficaces los análisis que se realizan actualmente en Europa? ¿O dichos análisis están anticuados y requieren de una actualización?
 
 \end{abstract}
+
+\clearpage
+
 
 \pagebreak            
 \newpage              
@@ -56,15 +74,23 @@ Eso hace que, de manera progresiva, también mejore el estudio y el análisis de
 
 \section{Introducción}
 
+
 En este trabajo estudiaremos más a fondo el Baloncesto, el segundo deporte más popular de Europa (solo superado por el futbol), y el cual tengo interés personal, ya que lo practico desde los 4 años.
 
-Esta idea de estudio surgió del constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y desde entonces nunca se ha modificado.
+El análisis estadístico siempre ha estado presente en el baloncesto profesional. Como parte del \emph{staff}\footnote{conjunto de personas que se encargan de gestionar y dirigir el equipo. Normalmente está formado por un entrenador, uno o dos entrenadores ayudantes, y lueg pueden haber delegados, fisioterapeuta, preparador físico, \emph{scouter}...}, te permite conocer las fortalezas (en qué puedes confiar) y las debilidades (en qué debes trabajar) de tu equipo y, por otro lado, te permite conocer mejor a tus rivales, para poder determinar sus puntos fuertes (de lo que debes ser consciente) y también sus debilidades (de lo que sacar provecho). Esto significa que una parte importante del partido se juega antes de empezar, cuando el staff analizan el modo de jugar de sus rivales en los partidos anteriores y a lo largo de la temporada.
+
+Tradicionalmente, hay dos estadísticos que resumen un partido: el \emph{box-score} y el \emph{play-by-play}. Estos dos documentos, junto con la visualización del video del partido, han sido típicamente la fuente de datos para la evaluación de los equipos. 
+
+Pero, como aficionada del baloncesto profesional y como jugadora y entrenadora de baloncesto amater, con el paso de los años me he dado cuenta de que, la mayoria de las veces, estos documentos o estadísticos que comentamos no son del todo fiables. Pierden mucha información relevante o incluso se pueden malinterpretar dependiendo de la situación de la acción.
+
+Por eso surgió este trabajo, por el constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y desde entonces nunca se ha modificado.
 
 Es por eso que, considero que actualmente los análisis que se hacen de este deporte necesitan una actualización significativa para llegar a informar de todos aquellos datos que hoy en día si se pueden recoger gracias a los avances tecnológicos, y de los cuales no se analizan por falta de dinero o porque se consideran poco relevantes.
 
 El objetivo principal de este estudio es mejorar los análisis que se elaboran de cada partido, para poder encontrar una variable respuesta que nos diga que aportación al equipo tiene cada jugador personalmente, disminuyendo la diferencia de pesos que hay actualmente entre las aportaciones ofensivas y las aportaciones defensivas.
 
-Este documento se estructura de la siguiente manera: a continuación, se realizará una breve explicación de los recursos informáticos que se han utilizado para realizar este estudio, seguidamente se explicará brevemente los conceptos de baloncesto que son necesarios para entender los tecnicismos del trabajo y se presentaran posibles análisis que se realizan. Finalmente, se describirá la base de datos con la que se ha trabajado y sus variables, y también se explicará en profundidad el análisis que se desarrollará en este trabajo, el Más/Menos Ajustado (\emph{Adjusted Plus/Minus, APM}). En la sección de resultados presentaremos la resolución del análisis y finalmente discutiremos, en la sección de conclusiones, los resultados obtenidos.
+Este documento se estructura de la siguiente manera: a continuación, se explicará brevemente los conceptos de baloncesto que son necesarios para poner en contexto a los lectores en caso de no conocer el mundo del baloncesto y para entender los tecnicismos del trabajo y se presentaran posibles análisis que se realizan. Finalmente, se describirá la base de datos con la que se ha trabajado y sus variables, y también se explicará en profundidad el análisis que se desarrollará en este trabajo, el Más/Menos Ajustado (\emph{Adjusted Plus/Minus, APM}). En la sección de resultados presentaremos la resolución del análisis y finalmente discutiremos, en la sección de conclusiones, los resultados obtenidos.
+
 \section{El baloncesto}
 
 \subsection{Historia y reglas básicas}
@@ -92,7 +118,7 @@ Actualmente, las normas más básicas de este deporte son:
 
 \end{itemize}
 
-\clearpage
+
 
 \subsection{Conceptos y definiciones básicas del baloncesto:}
 
@@ -110,6 +136,8 @@ Para que podamos entender a que nos referimos en este trabajo, es necesario comp
 \item Tapón: Bloqueo de un tiro en el aire.
 
 \end{itemize}
+
+
 
 \section{Posibles análisis realizables en el baloncesto}
 
@@ -136,15 +164,15 @@ Posteriormente, se añadió la variable "Más/Menos" (\emph{P/M, Plus/Minus}) qu
 \centering
 \begin{minipage}{.5\textwidth}
 \centering
-\captionsetup{width=.8\linewidth}
-\includegraphics[width=.8\linewidth]{imagenes/BoxScore1962.jpg}
+\captionsetup{width=.7\linewidth}
+\includegraphics[width=.6\linewidth]{imagenes/BoxScore1962.jpg}
 \captionof{figure}{Boxscore del partido de la NBA de Philadelphia Warriors contra New York Knicks, del 2 de Marzo de 1962}
 \label{fig:BoxScore1962}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
 \centering
-\captionsetup{width=.8\linewidth}
-\includegraphics[width=.7\linewidth]{imagenes/BoxScore2022.jpg}
+\captionsetup{width=.6\linewidth}
+\includegraphics[width=.5\linewidth]{imagenes/BoxScore2022.jpg}
 \captionof{figure}{Boxscore del partido de la Euroliga de Real Madrid contra FC Barcelona, del 11 de Febrero del 2022}
 \label{fig:BoxScore2022}
 \end{minipage}
@@ -155,13 +183,12 @@ Aunque un \emph{Box Score} es muy útil para realizar análisis básicos, ya que
 Por lo que, para el desarrollo temporal del partido y para conocer cierta información de equipo que piden entrenadores y clubs, no nos sirve (como por ejemplo la eficacia de los quintetos, el desarrollo del marcador o de cualquier otra variable del equipo entero durante un tiempo determinado del partido, etc.)
 
 
-
 \subsection{Play-by-play}
 
-\begin{wrapfigure}{r}{0.4\linewidth}
+\begin{wrapfigure}{r}{0.3\linewidth}
 \centering
-\includegraphics[width=0.4\textwidth]{imagenes/PBP_RM.png}
-\captionsetup{width=.9\linewidth}
+\includegraphics[width=0.3\textwidth]{imagenes/PBP_RM.png}
+\captionsetup{width=.8\linewidth}
 \captionof{figure}{\emph{Play by play} del partido de la Euroliga de Real Madrid contra LDLC Asvel, del 17 de Marzo del 2022. Se lee de abajo hacia arriba.}
 \label{fig:PBP_RM}
 \end{wrapfigure}
@@ -220,7 +247,7 @@ La información de este tipo de análisis viene obtenida de alguna de los anteri
 
 Como ya hemos comentado, el Más/Menos ($+/-$, $\pm$) es una estadística deportiva utilizada para medir el impacto de un jugador en el juego. Conforme se ha ido conociendo y estudiando más este estaístico, se ha revelado que tiene fallas o que no es tan preciso, por lo que confiar únicamente en el Más/Menos es un gran error, por eso se han desarrollado y han tratado de reducir estas fallas para intentar obtener resultados más precisos con respecto al impacto de un jugador. Actualmente, se están publicando diferentes tipos de métricas sobre el Más/Menos:
 
-\subsection{Plus Minus, PM}
+\subsection{Plus/Minus, PM}
 
 Este es el estadístico original que está representado por la diferencia entre la puntuación total de su equipo y la de su oponente cuando el jugador está en el juego. Se basa únicamente en la información del marcador de baloncesto tradicional; no se incluyen datos \emph{play-by-play} ni datos de cuadro de puntuación no tradicionales (como mates o robos).
 
@@ -230,33 +257,42 @@ Se calcula de la diguiente manera:
 
 $$PM_i = PointsTeam - PointsOpponent$$
 
-\subsection{Adjusted Plus Minus, APM}
+\subsection{Adjusted Plus/Minus, APM}
 
-Plus-Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
+Plus/Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
 
 \subsection{Regularized Adjusted Plus/Minus, RAPM}
 
-\subsection{Real Plus-Minus, RPM}
+El \emph{Adjusted Plus/Minus} convencional, aunque mejora respecto el \emph{Plus/Minus} clásico, todavia hace un mal trabajo al predecir el resultado de los juegos futuros, particularmente cuando se tiene menos de una temporada de datos. Por eso, para mejorarlo se añaden regularizaciones para compensar estas deficiencias, y mejora en gran medida la precisión, y las calificaciones más-menos de algunos jugadores cambian drásticamente.
+
+Con "Regularized Adjusted Plus-Minus" (RAPM), el objetivo es proporcionar resultados más precisos mediante el empleo de una técnica especial llamada "regresión de cresta" (también conocida como regularización). Reduce significativamente los errores estándar en el más-menos ajustado (APM).
+
+La mejora con RAPM es una técnica bayesiana en la que los datos se combinan con creencias teóricas sobre rangos de datos amplios y razonables para los parámetros a fin de producir modelos más precisos. Eso es lo que hace la regresión de cresta.
+
+RAPM es aproximadamente el doble de preciso que un APM usando regresión estándar y usando 3 años de datos, donde la ponderación de los últimos años de datos y el límite de minutos del jugador de referencia también se han optimizado cuidadosamente.
+
+
+\subsection{Real Plus/Minus, RPM}
 
 \subsection{Otros tipos de métricas basados en el Más/Menos}
 
 \begin{itemize}
-\item Defensive Plus-Minus aka DPM
-\item Net Plus-Minus aka Roland Rating
-\item Adjusted Plus-Minus aka APM por Wayne Winston and Jeff Sagarin
-\item Statistical Plus-Minus aka SPM por Dan Rosenbaum
-\item Regularized Adjusted Plus-Minus aka RAPM por Joe Sill
-\item Real Plus-Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
-\item Box Plus-Minus aka BPM por Daniel Myers
-\item Player Tracking Plus-Minus aka PT-PM
-\item Estimated Plus-Minus aka EPM por Taylor Snarr
-\item Player Impact Plus-Minus aka PIPM por Jacob Goldstein
+\item Defensive Plus/Minus aka DPM
+\item Net Plus/Minus aka Roland Rating
+\item Adjusted Plus/Minus aka APM por Wayne Winston and Jeff Sagarin
+\item Statistical Plus/Minus aka SPM por Dan Rosenbaum
+\item Regularized Adjusted Plus/Minus aka RAPM por Joe Sill
+\item Real Plus/Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
+\item Box Plus/Minus aka BPM por Daniel Myers
+\item Player Tracking Plus/Minus aka PT-PM
+\item Estimated Plus/Minus aka EPM por Taylor Snarr
+\item Player Impact Plus/Minus aka PIPM por Jacob Goldstein
 \item CARMELO, por FiveThirtyEight
 \item RAPTOR, por FiveThirtyEight
 \item LEBRON, por Tim Cranjis, Krishna Narsu
-\item Daily Plus-Minus aka DPM o DARKO por Kostya Medvedovsky
+\item Daily Plus/Minus aka DPM o DARKO por Kostya Medvedovsky
 \item Individual Player Value aka IPV por Talking Practice Blog
-\item Augmented Box Plus-Minus aka AuPM por Ben Taylor
+\item Augmented Box Plus/Minus aka AuPM por Ben Taylor
 \item Daily Updated Ranking of Individual Performance aka DRIP por Nathan Walker
 \end{itemize}
 
@@ -266,5 +302,293 @@ Tabla de diferencias ?
 
 \clearpage
 
+\section{Análisis y métodos}
+
+\subsection{Descripción de la base de datos}
+
+
+
+
+\begin{Schunk}
+\begin{Sinput}
+> source(here("R", "fix-lineups.R"))
+> ## Function fix_lineups() only takes data from a single game,
+> ## so I split the data and apply the function to each splitted data frame.
+> pbp_2008 <- read_csv("pbp2008.csv")
+> pbp_2008_fixed <- split(pbp_2008, factor(pbp_2008$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2009 <- read_csv("pbp2009.csv")
+> pbp_2009_fixed <- split(pbp_2009, factor(pbp_2009$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2010 <- read_csv("pbp2010.csv")
+> pbp_2010_fixed <- split(pbp_2010, factor(pbp_2010$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2011 <- read_csv("pbp2011.csv")
+> pbp_2011_fixed <- split(pbp_2011, factor(pbp_2011$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2012 <- read_csv("pbp2012.csv")
+> pbp_2012_fixed <- split(pbp_2012, factor(pbp_2012$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2013 <- read_csv("pbp2013.csv")
+> pbp_2013_fixed <- split(pbp_2013, factor(pbp_2013$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2014 <- read_csv("pbp2014.csv")
+> pbp_2014_fixed <- split(pbp_2014, factor(pbp_2014$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2015 <- read_csv("pbp2015.csv")
+> pbp_2015_fixed <- split(pbp_2015, factor(pbp_2015$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2017 <- read_csv("pbp2017.csv")
+> pbp_2017_fixed <- split(pbp_2017, factor(pbp_2017$game_code)) %>%
++   map_df(fix_lineups) 
+> pbp_2018 <- read_csv("pbp2018.csv")
+> pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
++   map_df(fix_lineups)
+> pbp <- rbind(pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> data_fixed <- pbp_2011_fixed
+> data_subset <- as.data.frame(data_fixed) %>%
++   select(contains(c("home_player", "away_player"))) %>%
++   arrange(home_player1)
+> WRONG <- c("ABRINES, ALEJANDRO", "ACIK, TUTKU", "AGRAVANIS, DIMITRIS", "ALFRED", "AMAGOU, PAPE", "ANDUSIC, DANILO", "ANDRIC, MIHAJILO", "ANTETOKOUNMPO, ATHANASIOS", "BOST, DEMARQUIS", "BREMER, ERNEST", "BREMER, J.R.", "CARTER, JOSHUA", "CHARALAMPOPOULOS, V.", "DJEDOVIC, NIHAD", "FISCHER, D\'OR", "FISCHER, LUCAS", "GORDON, JAMONT", "JANNING, MATTHEW",  "JAWAI, NATHAN", "KATSIVELIS, DIMITRIS", "KHRYAPA, VICTOR", "KHVOSTOV, DIMITRIY", "LIDEKA, TAUTVYDAS", "LIKHODEI, VALERII", "LIMA, AUGUSTO", "LOJESKI, MATTHEW", "MANTZARIS, EVANGELOS", "MAVROKEFALIDES, LOUKAS", "McCALEBB, BO", "McLEAN, JAMEL", "MONYA, SERGEY", "NELSON, DeMARCUS", "NGUIRANE, MAODO MALICK", "REYNOLDS, J.R.", "RIVERS, K.C.", "RIVERS, KELVIN", "SLAUGHTER, A.J.", "SOLUADE, MORAYONINUOLUWA", "STRAWBERRY, D.J.", "THOMAS, MALCOM", "VASILIADIS, KOSTAS", "VIALTSEV, EGOR", "VIGGIANO, JEFFREY", "VORONOV, EUGENY", "WANAMAKER, BRADLEY", "WHITE, D.J.", "WHITE, DJ", "XANTHOPOULOS, VAISSILIS", "YUTTSEVEN, OMER FARUK")
+> RIGHT <- c("ABRINES, ALEX", "AÇIK, TUTKU", "AGRAVANIS, DIMITRIOS", "LUCAS, JAMON ALFRED", "AMAGOU, PAPE PHILIPPE", "ANDJUSIC, DANILO", "ANDRIC, MIHAJLO", "ANTETOKOUMPO, THANASIS", "BOST, DEE", "BREMER, JR", "BREMER, JR", "CARTER, JOSH", "CHARALAMPOPOULOS, VASILIS", "DEDOVIC, NIHAD", "FISCHER, DOR", "FISCHER, LUKE", "GORDON, JAMON", "JANNING, MATT", "JAWAI, NATE", "KATSIVELIS, DIMITRIOS", "KHRYAPA, VIKTOR", "KHVOSTOV, DIMITRY", "LYDEKA, TAUTVYDAS", "LIKHODEY, VALERIY", "LIMA, AUGUSTO CESAR", "LOJESKI, MATT", "MANTZARIS, VANGELIS", "MAVROKEFALIDIS, LOUKAS", "MCCALEBB, BO", "MCLEAN, JAMEL", "MONIA, SERGEY", "NELSON, DEMARCUS", "NGUIRANE, MAODO", "REYNOLDS, JR", "RIVERS, KC", "RIVERS, KC", "SLAUGHTER, AJ", "SOLUADE, MO", "STRAWBERRY, DJ", "THOMAS, MALCOLM", "VASILEIADIS, KOSTAS", "VYALTSEV, EGOR", "VIGIIANO, JEFF", "VORONOV, EVGENY", "WANAMAKER, BRAD", "WHITE, JAMES", "WHITE, JAMES", "XANTHOPOULOS, VASILIS", "YURTSEVEN, OMER")
+> players_with_errors <- data.frame("wrong"=WRONG, 
++                                   "right"=RIGHT)
+> data_subset_head <- head(data_subset)
+> #Numero de errores
+> source(here("R", "errors_fun.R"))
+> ERRORS_totals <- errors_fun(data_subset, players_with_errors)
+> 
+> #Limpieza errores
+> 
+> 
+> 
+> 
+> #Check
+> #errors_fun(data_clean, players_with_errors) > 0
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> source(here("R", "dummys_fun.R"))
+> df_dummys_2011 <- dummys_fun(pbp_2011_fixed)
+> df_dummys_2012 <- dummys_fun(pbp_2012_fixed)
+> df_dummys_2013 <- dummys_fun(pbp_2013_fixed)
+> df_dummys_2014 <- dummys_fun(pbp_2014_fixed)
+> df_dummys_2015 <- dummys_fun(pbp_2015_fixed)
+> df_dummys_2017 <- dummys_fun(pbp_2017_fixed)
+> df_dummys_2018 <- dummys_fun(pbp_2018_fixed)
+> saveRDS(df_dummys_2011,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2011.rds")
+> saveRDS(df_dummys_2012,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2012.rds")
+> saveRDS(df_dummys_2013,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2013.rds")
+> saveRDS(df_dummys_2014,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2014.rds")
+> saveRDS(df_dummys_2015,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2015.rds")
+> saveRDS(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2017.rds")
+> saveRDS(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.rds")
+> saveRDS(pbp,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\pbp.rds")
+> saveRDS(pbp_2011_fixed,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\pbp_2011_fixed.rds")
+\end{Sinput}
+\end{Schunk}
+
+
+\begin{Schunk}
+\begin{Sinput}
+> dummys_2011 <- readRDS("Dummys/dummys_2011.rds") 
+> dummys_2012 <- readRDS("Dummys/dummys_2012.rds")
+> dummys_2013 <- readRDS("Dummys/dummys_2013.rds")
+> dummys_2014 <- readRDS("Dummys/dummys_2014.rds")
+> dummys_2015 <- readRDS("Dummys/dummys_2015.rds")
+> dummys_2017 <- readRDS("Dummys/dummys_2017.rds")
+> dummys_2018 <- readRDS("Dummys/dummys_2018.rds")
+> pbp <- readRDS("Dummys/pbp.rds")
+> pbp_2011_fixed <- readRDS("Dummys/pbp_2011_fixed.rds")
+> N_rows <- nrow(dummys_2011)+nrow(dummys_2012)+nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017)+nrow(dummys_2018)
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> players_2011 <- colnames(dummys_2011)[-c(1:5)]
+> players_2012 <- colnames(dummys_2012)[-c(1:5)]
+> players_2013 <- colnames(dummys_2013)[-c(1:5)]
+> players_2014 <- colnames(dummys_2014)[-c(1:5)]
+> players_2015 <- colnames(dummys_2015)[-c(1:5)]
+> players_2017 <- colnames(dummys_2017)[-c(1:5)]
+> players_2018 <- colnames(dummys_2018)[-c(1:5)]
+> players <- data.frame("player" = c(players_2011, players_2012, players_2013, players_2014, players_2015, players_2017, players_2018)) %>%
++   arrange(player) %>%
++   unique()
+> players_vec <- players$player
+> num_players <- length(players_vec)
+\end{Sinput}
+\end{Schunk}
+
+En este estudio vamos a analizar los datos de todas las jugadas registradas en partidos oficiales de varias temporadas, empezando en 2011 hasta 2018 (con la excepción de la temporada de 2016 que no hemos podido obtener los datos) de la Liga Nacional de ACB para buscar el Más/Menos Ajustado. Tenemos un total de $N=$ 79872 jugadas, y 1200 jugadores en 7 temporadas.
+
+De las temporadas se ha recogido el \emph{play-by-play} de cada partido de cada temporada, una forma de recoger los datos de manera bastante completa: tenemos la temporada del partido, el código de identificación del partido, el id de la acción, el equipo y el jugador que la realiza, el tipo de acción, el momento exacto del partido en que ocurre (en segundos), el cuarto del partido, el marcador, los jugadores que estan en pista en ese momento... entre otras variables que para este estudio no nos son de interés.
+
+En la siguiente página teneis una muestra de como visualizamos los datos originales. 
+
+\begin{Schunk}
+\begin{Sinput}
+> pbp_subset <- pbp %>%
++   select(season, game_code, play_number, team_code, player_name, quarter, points_home, points_away, seconds, contains(c("home_player", "away_player")))
+> print(xtable(summary(pbp_subset)))
+\end{Sinput}
+\begin{Soutput}
+% latex table generated in R 4.1.3 by xtable 1.8-4 package
+% Wed Jun 22 20:12:51 2022
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlllllllllllllllllll}
+  \hline
+ &     season &   game\_code &  play\_number &  team\_code & player\_name &    quarter &  points\_home &  points\_away &    seconds & home\_player1 & home\_player2 & home\_player3 & home\_player4 & home\_player5 & away\_player1 & away\_player2 & away\_player3 & away\_player4 & away\_player5 \\ 
+  \hline
+X & Min.   :2011   & Min.   :  1.0   & Min.   :  2.0   & Length:873698      & Length:873698      & Min.   :1.000   & Min.   :  0.00   & Min.   :  0.00   & Min.   :   0   & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      & Length:873698      \\ 
+  X.1 & 1st Qu.:2012   & 1st Qu.: 61.0   & 1st Qu.:143.0   & Class :character   & Class :character   & 1st Qu.:2.000   & 1st Qu.: 15.00   & 1st Qu.: 15.00   & 1st Qu.: 662   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   & Class :character   \\ 
+  X.2 & Median :2014   & Median :123.0   & Median :282.0   & Mode  :character   & Mode  :character   & Median :3.000   & Median : 30.00   & Median : 29.00   & Median :1240   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   & Mode  :character   \\ 
+  X.3 & Mean   :2014   & Mean   :123.9   & Mean   :283.4   &  &  & Mean   :2.565   & Mean   : 33.16   & Mean   : 31.35   & Mean   :1254   &  &  &  &  &  &  &  &  &  &  \\ 
+  X.4 & 3rd Qu.:2017   & 3rd Qu.:184.0   & 3rd Qu.:420.0   &  &  & 3rd Qu.:4.000   & 3rd Qu.: 48.00   & 3rd Qu.: 45.00   & 3rd Qu.:1848   &  &  &  &  &  &  &  &  &  &  \\ 
+  X.5 & Max.   :2018   & Max.   :260.0   & Max.   :768.0   &  &  & Max.   :6.000   & Max.   :116.00   & Max.   :111.00   & Max.   :3000   &  &  &  &  &  &  &  &  &  &  \\ 
+   \hline
+\end{tabular}
+\end{table}
+\end{Soutput}
+\end{Schunk}
+
+\begin{landscape}
+
+\begin{Schunk}
+\begin{Sinput}
+> library(xtable)
+> head_pbp <- head(pbp_2011_fixed, n=30)[c(1:5, 8:10, 12:14, 19:28)]
+> print(xtable(head_pbp))
+\end{Sinput}
+% latex table generated in R 4.1.3 by xtable 1.8-4 package
+% Wed Jun 22 20:12:51 2022
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrllrrrrllllllllllll}
+  \hline
+ & season & game\_code & play\_number & team\_code & player\_name & quarter & points\_home & points\_away & seconds & home\_team & away\_team & home\_player1 & home\_player2 & home\_player3 & home\_player4 & home\_player5 & away\_player1 & away\_player2 & away\_player3 & away\_player4 & away\_player5 \\ 
+  \hline
+1 & 2011.00 & 1.00 & 2.00 & NAN & AKINGBALA, AKIN & 1.00 & 0.00 & 2.00 & 22.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  2 & 2011.00 & 1.00 & 3.00 & NAN & BATUM, NICOLAS & 1.00 & 0.00 & 2.00 & 31.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  3 & 2011.00 & 1.00 & 4.00 & NAN & AKINGBALA, AKIN & 1.00 & 0.00 & 2.00 & 37.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  4 & 2011.00 & 1.00 & 5.00 & CTU & MARCONATO, DENIS & 1.00 & 0.00 & 2.00 & 37.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  5 & 2011.00 & 1.00 & 6.00 & CTU &  & 1.00 & 0.00 & 2.00 & 52.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  6 & 2011.00 & 1.00 & 8.00 & NAN & AKINGBALA, AKIN & 1.00 & 0.00 & 2.00 & 66.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  7 & 2011.00 & 1.00 & 9.00 & NAN & BATUM, NICOLAS & 1.00 & 0.00 & 2.00 & 69.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  8 & 2011.00 & 1.00 & 10.00 & CTU & MICOV, VLADIMIR & 1.00 & 0.00 & 2.00 & 82.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  9 & 2011.00 & 1.00 & 11.00 & CTU & LEUNEN, MAARTEN & 1.00 & 0.00 & 2.00 & 84.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  10 & 2011.00 & 1.00 & 12.00 & CTU & MARCONATO, DENIS & 1.00 & 0.00 & 2.00 & 96.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  11 & 2011.00 & 1.00 & 13.00 & NAN & AKINGBALA, AKIN & 1.00 & 0.00 & 2.00 & 96.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  12 & 2011.00 & 1.00 & 14.00 & NAN & SHULER, JAMAL & 1.00 & 0.00 & 4.00 & 111.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  13 & 2011.00 & 1.00 & 15.00 & CTU & MICOV, VLADIMIR & 1.00 & 0.00 & 4.00 & 117.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  14 & 2011.00 & 1.00 & 16.00 & NAN & LINEHAN, JOHN & 1.00 & 0.00 & 4.00 & 117.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  15 & 2011.00 & 1.00 & 17.00 & CTU & MICOV, VLADIMIR & 1.00 & 0.00 & 4.00 & 117.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  16 & 2011.00 & 1.00 & 18.00 & NAN & LINEHAN, JOHN & 1.00 & 0.00 & 4.00 & 117.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  17 & 2011.00 & 1.00 & 20.00 & NAN & SHULER, JAMAL & 1.00 & 0.00 & 4.00 & 132.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  18 & 2011.00 & 1.00 & 21.00 & NAN & SAMNICK, VICTOR & 1.00 & 0.00 & 4.00 & 133.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  19 & 2011.00 & 1.00 & 22.00 & CTU & MARCONATO, DENIS & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  20 & 2011.00 & 1.00 & 23.00 & NAN & SHULER, JAMAL & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  21 & 2011.00 & 1.00 & 24.00 & CTU & ORTNER, BENJAMIN & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & MARCONATO, DENIS & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  22 & 2011.00 & 1.00 & 25.00 & CTU & MARCONATO, DENIS & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  23 & 2011.00 & 1.00 & 26.00 & CTU & MICOV, VLADIMIR & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  24 & 2011.00 & 1.00 & 27.00 & NAN & SAMNICK, VICTOR & 1.00 & 0.00 & 4.00 & 135.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  25 & 2011.00 & 1.00 & 28.00 & NAN & SAMNICK, VICTOR & 1.00 & 0.00 & 4.00 & 143.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  26 & 2011.00 & 1.00 & 29.00 & NAN & SAMNICK, VICTOR & 1.00 & 0.00 & 4.00 & 149.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  27 & 2011.00 & 1.00 & 30.00 & CTU & MICOV, VLADIMIR & 1.00 & 3.00 & 4.00 & 152.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  28 & 2011.00 & 1.00 & 31.00 & CTU & ORTNER, BENJAMIN & 1.00 & 3.00 & 4.00 & 155.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  29 & 2011.00 & 1.00 & 32.00 & NAN & BATUM, NICOLAS & 1.00 & 3.00 & 4.00 & 170.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+  30 & 2011.00 & 1.00 & 33.00 & NAN & LINEHAN, JOHN & 1.00 & 3.00 & 4.00 & 169.00 & Bennet Cantu & SLUC Nancy & MICOV, VLADIMIR & LEUNEN, MAARTEN & ORTNER, BENJAMIN & MAZZARINO, NICOLAS & CINCIARINI, ANDREA & AKINGBALA, AKIN & SHULER, JAMAL & LINEHAN, JOHN & SAMNICK, VICTOR & BATUM, NICOLAS \\ 
+   \hline
+\end{tabular}
+\end{table}\end{Schunk}
+
+\end{landscape}
+
+\begin{Schunk}
+\begin{Sinput}
+> df_dummys <- dplyr::bind_rows(dummys_2011, dummys_2012, dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
++   mutate_all(~replace(., is.na(.), 0))
+> df_dummys<- df_dummys[df_dummys$stint_seconds != 0, ]
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> df_dummys_PlusMinus <- df_dummys %>%
++   group_by(SeasonGame, quarter) %>%
++   mutate(across(matches(players_vec), function(x) x*PlusMinus)) %>%
++   select(-c(PlusMinus)) %>%
++   ungroup()
+> ### MasMenos de los mismos lineups (sin tener en cuenta SeasonGame o Quarter):
+> df_dummys_PlusMinus_2 <- df_dummys_PlusMinus %>% select(-c(SeasonGame, quarter))
+> source(here("R", "Print_MS_fun.R"))
+> #combinar mismos stints
+> PlusMinus_Lineups <- df_dummys_PlusMinus_2 %>%
++                      mutate(stint_seconds = Print_MS(stint_seconds))
+> PlusMinus_Classic <- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
+> PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic) %>%
++   tibble::rownames_to_column(var="Players") %>%
++   arrange(desc(PlusMinus_Classic)) %>%
++   select(Players, PlusMinus_Classic)
+\end{Sinput}
+\end{Schunk}
+
+
+\begin{Schunk}
+\begin{Sinput}
+> print(xtable(head(PlusMinus_Classic_df, n=10)))
+\end{Sinput}
+% latex table generated in R 4.1.3 by xtable 1.8-4 package
+% Wed Jun 22 20:13:32 2022
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlr}
+  \hline
+ & Players & PlusMinus\_Classic \\ 
+  \hline
+1 & RODRIGUEZ, SERGIO & 827.00 \\ 
+  2 & TEODOSIC, MILOS & 768.00 \\ 
+  3 & HINES, KYLE & 758.00 \\ 
+  4 & DE COLO, NANDO & 752.00 \\ 
+  5 & FERNANDEZ, RUDY & 744.00 \\ 
+  6 & REYES, FELIPE & 686.00 \\ 
+  7 & VORONTSEVICH, ANDREY & 671.00 \\ 
+  8 & LLULL, SERGIO & 667.00 \\ 
+  9 & CARROLL, JAYCEE & 656.00 \\ 
+  10 & SLOUKAS, KOSTAS & 595.00 \\ 
+   \hline
+\end{tabular}
+\end{table}\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> t<-table(PlusMinus_Classic)
+> plot(t)
+> ggplot(PlusMinus_Classic_df, aes(x = PlusMinus_Classic)) +
++   stat_function(
++     fun = dnorm, 
++     args = with(PlusMinus_Classic_df, c(mean = mean(PlusMinus_Classic), 
++                                       sd = sd(PlusMinus_Classic)))
++   ) + scale_x_continuous("Más/Menos clásico")
+> 
+> 
+\end{Sinput}
+\end{Schunk}
+\includegraphics{TFG_MetodosEstadisticosBaloncesto-013}
+
+\begin{Schunk}
+\begin{Soutput}
+[1] 12000
+\end{Soutput}
+\end{Schunk}
 
 

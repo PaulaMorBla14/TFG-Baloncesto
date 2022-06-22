@@ -21,6 +21,10 @@
 \usepackage{fix-cm}												  	                % Custom fontsizes
 \usepackage{hyperref}                                         % Link Clicks
 \usepackage{filecontents}
+\usepackage{lscape}
+\usepackage{booktabs}
+\usepackage{longtable}
+
 
 
 
@@ -36,6 +40,17 @@
 
 \clearpage
 
+\begin{minipage}{.8\textwidth}
+
+\textbf{Agradecimientos}
+
+Este trabajo me ha permitido profundizar más en un mundo que pensaba que conocía bastante bien, y darme cuenta de que no todo lo que ocurre en un partido o en una temporada se ve bien reflejado en los números que hasta ahora conocía. Me ha permitido conocer nuevos métodos de análisis que hasta ahora desconocía y aprender cómo se haría para aplicarlos.
+
+\end{minipage}
+
+
+\clearpage
+
 \begin{abstract}
 
 Hoy en día, el deporte es un hobby muy popular por todo el mundo. Desde pequeños, los niños practican algún tipo de deporte, especialmente aquellos que son de equipo. Eso nos lleva a querer saber más del deporte, más detalles, más información. Nos entra la curiosidad de "¿quién es el mejor jugador?", "Qué equipo es mejor?", o incluso intentar prevenir qué equipo ganará según sus resultados anteriores. Y gracias a los avances tecnológicos e informáticos, cada vez se nos facilita más poder seguir un deporte desde casa, ver la estadística de los deportistas e incluso hay plataformas o juegos que nos permiten ser, de manera virtual, managers de los clubs y, por lo tanto, nos facilitan mucha información que antes era más difícil de saber.
@@ -43,6 +58,9 @@ Hoy en día, el deporte es un hobby muy popular por todo el mundo. Desde pequeñ
 Eso hace que, de manera progresiva, también mejore el estudio y el análisis de cada deporte, y cada vez sea más específica para cada deporte, implementando nuevos recursos para mejorar los resultados. Pero, ¿son lo suficientemente eficaces los análisis que se realizan actualmente en Europa? ¿O dichos análisis están anticuados y requieren de una actualización?
 
 \end{abstract}
+
+\clearpage
+
 
 \pagebreak            
 \newpage              
@@ -55,15 +73,23 @@ Eso hace que, de manera progresiva, también mejore el estudio y el análisis de
 
 \section{Introducción}
 
+
 En este trabajo estudiaremos más a fondo el Baloncesto, el segundo deporte más popular de Europa (solo superado por el futbol), y el cual tengo interés personal, ya que lo practico desde los 4 años.
 
-Esta idea de estudio surgió del constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y desde entonces nunca se ha modificado.
+El análisis estadístico siempre ha estado presente en el baloncesto profesional. Como parte del \emph{staff}\footnote{conjunto de personas que se encargan de gestionar y dirigir el equipo. Normalmente está formado por un entrenador, uno o dos entrenadores ayudantes, y lueg pueden haber delegados, fisioterapeuta, preparador físico, \emph{scouter}...}, te permite conocer las fortalezas (en qué puedes confiar) y las debilidades (en qué debes trabajar) de tu equipo y, por otro lado, te permite conocer mejor a tus rivales, para poder determinar sus puntos fuertes (de lo que debes ser consciente) y también sus debilidades (de lo que sacar provecho). Esto significa que una parte importante del partido se juega antes de empezar, cuando el staff analizan el modo de jugar de sus rivales en los partidos anteriores y a lo largo de la temporada.
+
+Tradicionalmente, hay dos estadísticos que resumen un partido: el \emph{box-score} y el \emph{play-by-play}. Estos dos documentos, junto con la visualización del video del partido, han sido típicamente la fuente de datos para la evaluación de los equipos. 
+
+Pero, como aficionada del baloncesto profesional y como jugadora y entrenadora de baloncesto amater, con el paso de los años me he dado cuenta de que, la mayoria de las veces, estos documentos o estadísticos que comentamos no son del todo fiables. Pierden mucha información relevante o incluso se pueden malinterpretar dependiendo de la situación de la acción.
+
+Por eso surgió este trabajo, por el constante pensamiento de que los análisis actuales que se hacen en este deporte en Europa son bastante pobres a nivel informativo, puesto que se basan en conceptos muy básicos, y principalmente ofensivos (que vendría a ser el 50\% de un partido). Para que nos hagamos una idea, el estadístico por preferencia es el llamado \emph{Valoración} y que se originó en 1991 (hace 30 años) y desde entonces nunca se ha modificado.
 
 Es por eso que, considero que actualmente los análisis que se hacen de este deporte necesitan una actualización significativa para llegar a informar de todos aquellos datos que hoy en día si se pueden recoger gracias a los avances tecnológicos, y de los cuales no se analizan por falta de dinero o porque se consideran poco relevantes.
 
 El objetivo principal de este estudio es mejorar los análisis que se elaboran de cada partido, para poder encontrar una variable respuesta que nos diga que aportación al equipo tiene cada jugador personalmente, disminuyendo la diferencia de pesos que hay actualmente entre las aportaciones ofensivas y las aportaciones defensivas.
 
-Este documento se estructura de la siguiente manera: a continuación, se realizará una breve explicación de los recursos informáticos que se han utilizado para realizar este estudio, seguidamente se explicará brevemente los conceptos de baloncesto que son necesarios para entender los tecnicismos del trabajo y se presentaran posibles análisis que se realizan. Finalmente, se describirá la base de datos con la que se ha trabajado y sus variables, y también se explicará en profundidad el análisis que se desarrollará en este trabajo, el Más/Menos Ajustado (\emph{Adjusted Plus/Minus, APM}). En la sección de resultados presentaremos la resolución del análisis y finalmente discutiremos, en la sección de conclusiones, los resultados obtenidos.
+Este documento se estructura de la siguiente manera: a continuación, se explicará brevemente los conceptos de baloncesto que son necesarios para poner en contexto a los lectores en caso de no conocer el mundo del baloncesto y para entender los tecnicismos del trabajo y se presentaran posibles análisis que se realizan. Finalmente, se describirá la base de datos con la que se ha trabajado y sus variables, y también se explicará en profundidad el análisis que se desarrollará en este trabajo, el Más/Menos Ajustado (\emph{Adjusted Plus/Minus, APM}). En la sección de resultados presentaremos la resolución del análisis y finalmente discutiremos, en la sección de conclusiones, los resultados obtenidos.
+
 \section{El baloncesto}
 
 \subsection{Historia y reglas básicas}
@@ -91,7 +117,7 @@ Actualmente, las normas más básicas de este deporte son:
 
 \end{itemize}
 
-\clearpage
+
 
 \subsection{Conceptos y definiciones básicas del baloncesto:}
 
@@ -109,6 +135,8 @@ Para que podamos entender a que nos referimos en este trabajo, es necesario comp
 \item Tapón: Bloqueo de un tiro en el aire.
 
 \end{itemize}
+
+
 
 \section{Posibles análisis realizables en el baloncesto}
 
@@ -135,15 +163,15 @@ Posteriormente, se añadió la variable "Más/Menos" (\emph{P/M, Plus/Minus}) qu
 \centering
 \begin{minipage}{.5\textwidth}
 \centering
-\captionsetup{width=.8\linewidth}
-\includegraphics[width=.8\linewidth]{imagenes/BoxScore1962.jpg}
+\captionsetup{width=.7\linewidth}
+\includegraphics[width=.6\linewidth]{imagenes/BoxScore1962.jpg}
 \captionof{figure}{Boxscore del partido de la NBA de Philadelphia Warriors contra New York Knicks, del 2 de Marzo de 1962}
 \label{fig:BoxScore1962}
 \end{minipage}%
 \begin{minipage}{.5\textwidth}
 \centering
-\captionsetup{width=.8\linewidth}
-\includegraphics[width=.7\linewidth]{imagenes/BoxScore2022.jpg}
+\captionsetup{width=.6\linewidth}
+\includegraphics[width=.5\linewidth]{imagenes/BoxScore2022.jpg}
 \captionof{figure}{Boxscore del partido de la Euroliga de Real Madrid contra FC Barcelona, del 11 de Febrero del 2022}
 \label{fig:BoxScore2022}
 \end{minipage}
@@ -154,13 +182,12 @@ Aunque un \emph{Box Score} es muy útil para realizar análisis básicos, ya que
 Por lo que, para el desarrollo temporal del partido y para conocer cierta información de equipo que piden entrenadores y clubs, no nos sirve (como por ejemplo la eficacia de los quintetos, el desarrollo del marcador o de cualquier otra variable del equipo entero durante un tiempo determinado del partido, etc.)
 
 
-
 \subsection{Play-by-play}
 
-\begin{wrapfigure}{r}{0.4\linewidth}
+\begin{wrapfigure}{r}{0.3\linewidth}
 \centering
-\includegraphics[width=0.4\textwidth]{imagenes/PBP_RM.png}
-\captionsetup{width=.9\linewidth}
+\includegraphics[width=0.3\textwidth]{imagenes/PBP_RM.png}
+\captionsetup{width=.8\linewidth}
 \captionof{figure}{\emph{Play by play} del partido de la Euroliga de Real Madrid contra LDLC Asvel, del 17 de Marzo del 2022. Se lee de abajo hacia arriba.}
 \label{fig:PBP_RM}
 \end{wrapfigure}
@@ -219,7 +246,7 @@ La información de este tipo de análisis viene obtenida de alguna de los anteri
 
 Como ya hemos comentado, el Más/Menos ($+/-$, $\pm$) es una estadística deportiva utilizada para medir el impacto de un jugador en el juego. Conforme se ha ido conociendo y estudiando más este estaístico, se ha revelado que tiene fallas o que no es tan preciso, por lo que confiar únicamente en el Más/Menos es un gran error, por eso se han desarrollado y han tratado de reducir estas fallas para intentar obtener resultados más precisos con respecto al impacto de un jugador. Actualmente, se están publicando diferentes tipos de métricas sobre el Más/Menos:
 
-\subsection{Plus Minus, PM}
+\subsection{Plus/Minus, PM}
 
 Este es el estadístico original que está representado por la diferencia entre la puntuación total de su equipo y la de su oponente cuando el jugador está en el juego. Se basa únicamente en la información del marcador de baloncesto tradicional; no se incluyen datos \emph{play-by-play} ni datos de cuadro de puntuación no tradicionales (como mates o robos).
 
@@ -229,33 +256,42 @@ Se calcula de la diguiente manera:
 
 $$PM_i = PointsTeam - PointsOpponent$$
 
-\subsection{Adjusted Plus Minus, APM}
+\subsection{Adjusted Plus/Minus, APM}
 
-Plus-Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
+Plus/Minus ajustado (a menudo abreviado APM) es un análisis de baloncesto que intenta predecir el impacto de un jugador individual en el margen de puntuación de un juego mediante el control del resto de los jugadores en la cancha en un momento dado. La métrica se deriva utilizando datos jugada por jugada para realizar un seguimiento de todas las acciones de finalización de sustitución y posesión. Los Dallas Mavericks lo implementaron por primera vez a principios de la década de 2000 después de que el propietario Mark Cuban encargara a los científicos de datos Jeff Sagarin, Wayne Winston y Dan Rosenbaum, quienes desarrollaron la métrica junto con su conversión WINVAL para ayudar en la determinación del salario de los jugadores.[1] En combinación con otras innovaciones, esto le dio a los Mavericks una de las oficinas centrales más progresistas de la liga en ese momento. Desde la creación de APM, se han creado varias métricas derivadas que intentan mejorar el esqueleto.
 
 \subsection{Regularized Adjusted Plus/Minus, RAPM}
 
-\subsection{Real Plus-Minus, RPM}
+El \emph{Adjusted Plus/Minus} convencional, aunque mejora respecto el \emph{Plus/Minus} clásico, todavia hace un mal trabajo al predecir el resultado de los juegos futuros, particularmente cuando se tiene menos de una temporada de datos. Por eso, para mejorarlo se añaden regularizaciones para compensar estas deficiencias, y mejora en gran medida la precisión, y las calificaciones más-menos de algunos jugadores cambian drásticamente.
+
+Con "Regularized Adjusted Plus-Minus" (RAPM), el objetivo es proporcionar resultados más precisos mediante el empleo de una técnica especial llamada "regresión de cresta" (también conocida como regularización). Reduce significativamente los errores estándar en el más-menos ajustado (APM).
+
+La mejora con RAPM es una técnica bayesiana en la que los datos se combinan con creencias teóricas sobre rangos de datos amplios y razonables para los parámetros a fin de producir modelos más precisos. Eso es lo que hace la regresión de cresta.
+
+RAPM es aproximadamente el doble de preciso que un APM usando regresión estándar y usando 3 años de datos, donde la ponderación de los últimos años de datos y el límite de minutos del jugador de referencia también se han optimizado cuidadosamente.
+
+
+\subsection{Real Plus/Minus, RPM}
 
 \subsection{Otros tipos de métricas basados en el Más/Menos}
 
 \begin{itemize}
-\item Defensive Plus-Minus aka DPM
-\item Net Plus-Minus aka Roland Rating
-\item Adjusted Plus-Minus aka APM por Wayne Winston and Jeff Sagarin
-\item Statistical Plus-Minus aka SPM por Dan Rosenbaum
-\item Regularized Adjusted Plus-Minus aka RAPM por Joe Sill
-\item Real Plus-Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
-\item Box Plus-Minus aka BPM por Daniel Myers
-\item Player Tracking Plus-Minus aka PT-PM
-\item Estimated Plus-Minus aka EPM por Taylor Snarr
-\item Player Impact Plus-Minus aka PIPM por Jacob Goldstein
+\item Defensive Plus/Minus aka DPM
+\item Net Plus/Minus aka Roland Rating
+\item Adjusted Plus/Minus aka APM por Wayne Winston and Jeff Sagarin
+\item Statistical Plus/Minus aka SPM por Dan Rosenbaum
+\item Regularized Adjusted Plus/Minus aka RAPM por Joe Sill
+\item Real Plus/Minus aka RPM por ESPN (basado en el tranajo de Steve Ilardi y Jeremias Engellmann)
+\item Box Plus/Minus aka BPM por Daniel Myers
+\item Player Tracking Plus/Minus aka PT-PM
+\item Estimated Plus/Minus aka EPM por Taylor Snarr
+\item Player Impact Plus/Minus aka PIPM por Jacob Goldstein
 \item CARMELO, por FiveThirtyEight
 \item RAPTOR, por FiveThirtyEight
 \item LEBRON, por Tim Cranjis, Krishna Narsu
-\item Daily Plus-Minus aka DPM o DARKO por Kostya Medvedovsky
+\item Daily Plus/Minus aka DPM o DARKO por Kostya Medvedovsky
 \item Individual Player Value aka IPV por Talking Practice Blog
-\item Augmented Box Plus-Minus aka AuPM por Ben Taylor
+\item Augmented Box Plus/Minus aka AuPM por Ben Taylor
 \item Daily Updated Ranking of Individual Performance aka DRIP por Nathan Walker
 \end{itemize}
 
@@ -265,7 +301,16 @@ Tabla de diferencias ?
 
 \clearpage
 
-<<include=FALSE, echo=FALSE>>=
+\section{Análisis y métodos}
+
+\subsection{Descripción de la base de datos}
+
+<<R setup, include=FALSE, echo=FALSE, eval=TRUE>>=
+library(knitr)
+knitr::opts_chunk$set(cache=TRUE, message = FALSE, warning = FALSE)
+@
+
+<<include=TRUE, echo=FALSE, eval=TRUE>>=
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -286,10 +331,12 @@ library(graphics)
 library(rpart)
 library(ggplot2)
 library(car)                   # VIF
+library(xtable)
+library(kableExtra)
 @
 
 
-<<Datos, echo=FALSE>>=
+<<Datos, include=TRUE, eval=FALSE>>=
 source(here("R", "fix-lineups.R"))
 
 ## Function fix_lineups() only takes data from a single game,
@@ -337,7 +384,35 @@ pbp_2018_fixed <- split(pbp_2018, factor(pbp_2018$game_code)) %>%
 pbp <- rbind(pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
 @
 
-<<include=FALSE, echo=FALSE, eval=FALSE>>=
+<<Datos_Duplicated_Players, include=TRUE, eval=FALSE>>=
+data_fixed <- pbp_2011_fixed
+
+data_subset <- as.data.frame(data_fixed) %>%
+  select(contains(c("home_player", "away_player"))) %>%
+  arrange(home_player1)
+
+WRONG <- c("ABRINES, ALEJANDRO", "ACIK, TUTKU", "AGRAVANIS, DIMITRIS", "ALFRED", "AMAGOU, PAPE", "ANDUSIC, DANILO", "ANDRIC, MIHAJILO", "ANTETOKOUNMPO, ATHANASIOS", "BOST, DEMARQUIS", "BREMER, ERNEST", "BREMER, J.R.", "CARTER, JOSHUA", "CHARALAMPOPOULOS, V.", "DJEDOVIC, NIHAD", "FISCHER, D\'OR", "FISCHER, LUCAS", "GORDON, JAMONT", "JANNING, MATTHEW",  "JAWAI, NATHAN", "KATSIVELIS, DIMITRIS", "KHRYAPA, VICTOR", "KHVOSTOV, DIMITRIY", "LIDEKA, TAUTVYDAS", "LIKHODEI, VALERII", "LIMA, AUGUSTO", "LOJESKI, MATTHEW", "MANTZARIS, EVANGELOS", "MAVROKEFALIDES, LOUKAS", "McCALEBB, BO", "McLEAN, JAMEL", "MONYA, SERGEY", "NELSON, DeMARCUS", "NGUIRANE, MAODO MALICK", "REYNOLDS, J.R.", "RIVERS, K.C.", "RIVERS, KELVIN", "SLAUGHTER, A.J.", "SOLUADE, MORAYONINUOLUWA", "STRAWBERRY, D.J.", "THOMAS, MALCOM", "VASILIADIS, KOSTAS", "VIALTSEV, EGOR", "VIGGIANO, JEFFREY", "VORONOV, EUGENY", "WANAMAKER, BRADLEY", "WHITE, D.J.", "WHITE, DJ", "XANTHOPOULOS, VAISSILIS", "YUTTSEVEN, OMER FARUK")
+RIGHT <- c("ABRINES, ALEX", "AÇIK, TUTKU", "AGRAVANIS, DIMITRIOS", "LUCAS, JAMON ALFRED", "AMAGOU, PAPE PHILIPPE", "ANDJUSIC, DANILO", "ANDRIC, MIHAJLO", "ANTETOKOUMPO, THANASIS", "BOST, DEE", "BREMER, JR", "BREMER, JR", "CARTER, JOSH", "CHARALAMPOPOULOS, VASILIS", "DEDOVIC, NIHAD", "FISCHER, DOR", "FISCHER, LUKE", "GORDON, JAMON", "JANNING, MATT", "JAWAI, NATE", "KATSIVELIS, DIMITRIOS", "KHRYAPA, VIKTOR", "KHVOSTOV, DIMITRY", "LYDEKA, TAUTVYDAS", "LIKHODEY, VALERIY", "LIMA, AUGUSTO CESAR", "LOJESKI, MATT", "MANTZARIS, VANGELIS", "MAVROKEFALIDIS, LOUKAS", "MCCALEBB, BO", "MCLEAN, JAMEL", "MONIA, SERGEY", "NELSON, DEMARCUS", "NGUIRANE, MAODO", "REYNOLDS, JR", "RIVERS, KC", "RIVERS, KC", "SLAUGHTER, AJ", "SOLUADE, MO", "STRAWBERRY, DJ", "THOMAS, MALCOLM", "VASILEIADIS, KOSTAS", "VYALTSEV, EGOR", "VIGIIANO, JEFF", "VORONOV, EVGENY", "WANAMAKER, BRAD", "WHITE, JAMES", "WHITE, JAMES", "XANTHOPOULOS, VASILIS", "YURTSEVEN, OMER")
+           
+players_with_errors <- data.frame("wrong"=WRONG, 
+                                  "right"=RIGHT)
+
+data_subset_head <- head(data_subset)
+
+#Numero de errores
+source(here("R", "errors_fun.R"))
+ERRORS_totals <- errors_fun(data_subset, players_with_errors)
+
+#Limpieza errores
+
+
+
+
+#Check
+#errors_fun(data_clean, players_with_errors) > 0
+@
+
+<<include=TRUE, eval=FALSE>>=
 source(here("R", "dummys_fun.R"))
 
 df_dummys_2011 <- dummys_fun(pbp_2011_fixed)
@@ -356,10 +431,13 @@ saveRDS(df_dummys_2014,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Du
 saveRDS(df_dummys_2015,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2015.rds")
 saveRDS(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2017.rds")
 saveRDS(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.rds")
+
+saveRDS(pbp,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\pbp.rds")
+saveRDS(pbp_2011_fixed,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\pbp_2011_fixed.rds")
 @
 
 
-<<include=FALSE, echo=FALSE>>=
+<<include=TRUE>>=
 dummys_2011 <- readRDS("Dummys/dummys_2011.rds") 
 dummys_2012 <- readRDS("Dummys/dummys_2012.rds")
 dummys_2013 <- readRDS("Dummys/dummys_2013.rds")
@@ -368,10 +446,13 @@ dummys_2015 <- readRDS("Dummys/dummys_2015.rds")
 dummys_2017 <- readRDS("Dummys/dummys_2017.rds")
 dummys_2018 <- readRDS("Dummys/dummys_2018.rds")
 
+pbp <- readRDS("Dummys/pbp.rds")
+pbp_2011_fixed <- readRDS("Dummys/pbp_2011_fixed.rds")
+
 N_rows <- nrow(dummys_2011)+nrow(dummys_2012)+nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017)+nrow(dummys_2018)
 @
 
-<<include=FALSE, echo=FALSE>>=
+<<include=TRUE>>=
 players_2011 <- colnames(dummys_2011)[-c(1:5)]
 players_2012 <- colnames(dummys_2012)[-c(1:5)]
 players_2013 <- colnames(dummys_2013)[-c(1:5)]
@@ -386,19 +467,40 @@ players <- data.frame("player" = c(players_2011, players_2012, players_2013, pla
 
 players_vec <- players$player
 num_players <- length(players_vec)
-
-names_duplicated <- lapply(players_vec,agrep,players_vec,value=TRUE)
 @
 
-<<include=FALSE, echo=FALSE>>=
-df_dummys <- dplyr::bind_rows(dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
+En este estudio vamos a analizar los datos de todas las jugadas registradas en partidos oficiales de varias temporadas, empezando en 2011 hasta 2018 (con la excepción de la temporada de 2016 que no hemos podido obtener los datos) de la Liga Nacional de ACB para buscar el Más/Menos Ajustado. Tenemos un total de $N=$ \Sexpr{N_rows} jugadas, y \Sexpr{num_players} jugadores en 7 temporadas.
+
+De las temporadas se ha recogido el \emph{play-by-play} de cada partido de cada temporada, una forma de recoger los datos de manera bastante completa: tenemos la temporada del partido, el código de identificación del partido, el id de la acción, el equipo y el jugador que la realiza, el tipo de acción, el momento exacto del partido en que ocurre (en segundos), el cuarto del partido, el marcador, los jugadores que estan en pista en ese momento... entre otras variables que para este estudio no nos son de interés.
+
+En la siguiente página teneis una muestra de como visualizamos los datos originales. 
+
+<<>>=
+pbp_subset <- pbp %>%
+  select(season, game_code, play_number, team_code, player_name, quarter, points_home, points_away, seconds, contains(c("home_player", "away_player")))
+
+print(xtable(summary(pbp_subset)))
+@
+
+\begin{landscape}
+
+<<results = tex>>=
+library(xtable)
+head_pbp <- head(pbp_2011_fixed, n=30)[c(1:5, 8:10, 12:14, 19:28)]
+
+print(xtable(head_pbp))
+@
+
+\end{landscape}
+
+<<include=TRUE>>=
+df_dummys <- dplyr::bind_rows(dummys_2011, dummys_2012, dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
   mutate_all(~replace(., is.na(.), 0))
 
 df_dummys<- df_dummys[df_dummys$stint_seconds != 0, ]
 @
 
-
-<<include=FALSE, echo=FALSE>>=
+<<include=TRUE>>=
 df_dummys_PlusMinus <- df_dummys %>%
   group_by(SeasonGame, quarter) %>%
   mutate(across(matches(players_vec), function(x) x*PlusMinus)) %>%
@@ -418,62 +520,169 @@ PlusMinus_Classic <- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
 
 PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic) %>%
   tibble::rownames_to_column(var="Players") %>%
-  arrange(Players) %>%
+  arrange(desc(PlusMinus_Classic)) %>%
   select(Players, PlusMinus_Classic)
-  
+@
+
+
+<<include=TRUE, results=tex>>=
+print(xtable(head(PlusMinus_Classic_df, n=10)))
+@
+
+<<include=TRUE, fig=TRUE>>=
 t<-table(PlusMinus_Classic)
+
+plot(t)
+
+ggplot(PlusMinus_Classic_df, aes(x = PlusMinus_Classic)) +
+  stat_function(
+    fun = dnorm, 
+    args = with(PlusMinus_Classic_df, c(mean = mean(PlusMinus_Classic), 
+                                      sd = sd(PlusMinus_Classic)))
+  ) + scale_x_continuous("Más/Menos clásico")
+
+
+@
+
+<<include=TRUE, echo=FALSE>>=
+memory.limit(size=12000)
 
 mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_seconds, data=df_dummys)
 sum1  <- summary(mod1)
 coef1 <- as.data.frame(summary(mod1)$coefficients) %>%
   arrange(Estimate)
-  
+@
+
+
+<<include=TRUE, echo=FALSE>>=
 mod2 <- lm(PlusMinus/stint_seconds ~ . -SeasonGame -quarter -lineup, data=df_dummys)
 sum2  <- summary(mod2)
 coef2 <- as.data.frame(summary(mod2)$coefficients) %>%
   arrange(Estimate)
+@
 
+
+<<include=TRUE, echo=FALSE, eval=TRUE>>=
 mod3 <- lm(PlusMinus/stint_seconds ~ . +lag(PlusMinus) -SeasonGame -quarter -lineup, 
            data=df_dummys)
 sum3  <- summary(mod3)
 coef3 <- as.data.frame(summary(mod3)$coefficients) %>%
   arrange(Estimate)
+@
 
+<<>>=
+head(coef1, n=50)
 
-#match_firstplayer <- match(players, names(df_dummys_PlusMinus)) %>%
-#            na.omit() %>%
-#            min()
+head(coef2, n=50)
 
+head(coef3, n=50)
+@
+
+(añadir texto del script "modelosdatos")
+
+<<include=TRUE, echo=FALSE>>=
 match_firstplayer <- 5
 n <- dim(df_dummys_PlusMinus)[2]
 
-correlations <- round(cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n])), 5)
+x <- model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n])
+correlations <- round(cor(x), 5)
+
+corrplot(correlations, type = "upper", tl.col = "black", tl.srt = 90, tl.cex = 0.2)
+
+col<- colorRampPalette(c("red", "white", "blue"))(20)
+#heatmap(x = correlations, col = col, symm = TRUE)
 @
 
-\textbf{RIDGE!!}
+\textbf{Ridge Adjusted Plus/Minus}
+
+<<Ridge_1A, include=TRUE, echo=TRUE, eval=FALSE>>=
+match_firstplayer <- 6
+n <- dim(df_dummys)[2]
+
+y <- df_dummys$PlusMinus
+@
 
 
+<<Ridge_1B, include=TRUE, echo=TRUE, eval=FALSE>>=
+library(glmnet)
+grid <- 10^seq(10, -2, length=100)
+ridge.mod <- glmnet(x, y, alpha=0, lambda=grid)
+
+dim(coef(ridge.mod))
+@
+
+Hemos optado por implementar la función sobre  valores que van desde $\lambda = 10^{10}$ hasta $\lambda = 10^{−2}$, cubriendo el rango completo de escenarios desde el modelo nulo que contiene solo la intersección, hasta el ajuste de mínimos cuadrados. 
+
+Asociado con cada valor de $\lambda$ hay un vector de \emph{ridge regression coefficients}, almacenados en una matriz. En este caso se trata de una matriz de $1201x100$, con 1201 filas (una para cada predictor más un intercepto) y 100 columnas (una para cada valor de $\lambda$).
+
+Esperamos que las estimaciones de los coeficientes sean mucho mas pequeñas cuando se usa un valor grande de $\lambda$, en comparación con cuando se usa un valor pequeño de $\lambda$. 
+
+<<Ridge_1B, include=TRUE, echo=TRUE, eval=FALSE>>=
+#Ejemplo para lambda=11497.57
+ridge.mod$lambda[50]
+coef(ridge.mod)[, 50]
+
+sqrt(sum(coef(ridge.mod)[-1, 50]^2))
+predict(ridge.mod, s=50, type="coefficients")
+@
+
+Para encontrar la mejor lambda para nuestro caso:
+
+<<Ridge_2, include=TRUE, echo=FALSE, eval=FALSE>>=
+set.seed(1)
+
+train <- sample(1:nrow(x), nrow(x)/2)
+test <- (-train)
+y.test <- y[test]
+
+ridge.mod <- glmnet(x[train, ], y[train], alpha=0, 
+                    lambda=grid, thresh=1e-12)
+ridge.pred <- predict(ridge.mod, s=4, newx=x[test, ])
+#mean((ridge.pred - y.test)^2)
+
+#mean((mean(y[train]) - y.test)^2)
+
+ridge.pred <- predict(ridge.mod, s=1e10, newx=x[test, ])
+#mean((ridge.pred - y.test)^2)
+
+ridge.pred <- predict(ridge.mod, s=0, newx=x[test, ], exact=T, x=x[train, ], y = y[train])
+#mean((ridge.pred - y.test)^2)
+@
 
 
-
-\section{Análisis y métodos}
-
-\subsection{Descripción de la base de datos}
-
-En este estudio vamos a analizar los datos de todas las jugadas registradas en partidos oficiales de la temporada 2018 de la Liga Nacional de ACB para buscar el Más/Menos Ajustado. Tenemos un total de $N=$ \Sexpr{N_rows} jugadas, y \Sexpr{num_players} jugadores de 5 temporadas (2013, 2014, 2015, 2017, 2018). 
+<<Ridge_3, include=TRUE, echo=FALSE, eval=FALSE>>=
+mod4 <- lm(y~x, subset=train)
+ridge.pred <- predict(ridge.mod, s=0, exact=T, type="coefficients", x=x[train, ], y=y[train])
+@
 
 
+<<Ridge_4, include=TRUE, echo=FALSE, eval=FALSE>>=
+set.seed(1)
+cv.out <- cv.glmnet(x[train, ], y[train], alpha=0)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
 
+ridge.pred <- predict(ridge.mod, s=bestlam, newx=x[test, ])
+mean((ridge.pred - y.test)^2)
 
+out <- glmnet(x, y, alpha=0)
+pred <- predict(out, type="coefficients", s=bestlam)
 
+@
 
+\clearpage
 
 \addcontentsline{toc}{section}{Referencias}
 
 \begin{thebibliography}{X}
 	\bibitem{RAPM} \textsc{Joseph Sill}, \textit{Improved NBA Adjusted +/- Using Regularization and Out-of-Sample Testing}, PDF, 6 Marzo 2010.
 	
-	\bibitem{HappyGH} \textsc{Happy Git}, \textit{Let’s Git started}, url: \url{https://happygitwithr.com/index.html}, .
+	\bibitem{HappyGH} \textsc{Happy Git}, \textit{Let’s Git started}, url: \url{https://happygitwithr.com/index.html}.
+
+  \bibitem{RAPM_explained} \textsc{NBAstuffer.com}, \textit{Regularized Adjusted Plus Minus (RAPM)}, url: \url{https://www.nbastuffer.com/analytics101/regularized-adjusted-plus-minus-rapm/}.
+  
+  
 \end{thebibliography}
 
 \clearpage
@@ -481,6 +690,51 @@ En este estudio vamos a analizar los datos de todas las jugadas registradas en p
 
 
 \section{Annexo}
+
+\subsection{Glosario}
+
+Estos son los conceptos técnicos que se mencionan en este informe:
+
+\begin{itemize}
+  \item Box score: Resumen estructurado de la información individual de cada jugador que participó en el juego, en formato de tabla.
+  \item Play-by-Play: Relato detallado de las acciones en un partido de baloncesto. Solo describe las acciones valiosas, por lo que no se describen los pases ni los \emph{dribblings}.
+  \item Tiempo extra o prórroga: los partidos de baloncesto deben tener un ganador. Si, después del tiempo reglamentario (4 cuartos de 10 minutos cada uno), los dos equipos están empatados, se otorga un tiempo extra (cuarto adicional de 5 minutos). Si es necesario, se otorgan horas extra adicionales hasta que haya un ganador.
+\end{itemize}
+
+
+\textbf{Tipos de jugadas descritas en el \emph{play-by-play}:}
+
+\begin{itemize}
+  \item Puntos: Sistema de puntuación en baloncesto. El equipo que obtiene la mayor cantidad de puntos gana el juego.
+  \item Tiro: Intento de canasta. En caso de que entre un intento, el equipo puede obtener uno, dos o tres puntos.
+  \item Tiro libre: intento de 1 punto. El jugador dispara sin oposición desde detrás de una línea que está a 4,6m de la canasta. Este tiro se otorga tras determinadas situaciones ilegales.
+  \item Tiro de campo: Tiro realizado (encestado) durante una jugada.
+  
+    \subitem Intento de 2 puntos: cualquier tiro realizado dentro de la línia de triple.
+    \subitem Intento de 3 puntos: También llamado triple. El jugador tira detrás de un arco de 6,75 metros lejos de la canasta. Esta distancia es la máxima, ya que el arco se convierte en una línea paralela a las líneas laterales cuando se acerca a ellas. Esto deja algo de espacio entre la línea de 3 puntos y la línea lateral. Esta modificación hace que la distancia se reduzca 6,6 metros.
+  \item Rebote: Recogida del balón tras un tiro fallado.
+    \subitem Rebote defensivo: El jugador que consigue el rebote es del equipo que estaba defendiendo.
+    \subitem Rebote ofensivo: El jugador que consigue el rebote es del equipo que intentó anotar.
+  \item Asistencia: Pase que provoca un tiro de campo anotado. Si el jugador X pasa el balón a Y y este tarda poco tiempo en anotar, X recibe una asistencia.
+  \item Robo: Cuando un jugador que defiende consigue quitar la pelota a un jugador que está atacando.
+  \item Pérdida de balón: Pérdida de la posesión por parte de un equipo antes de ejecutar un tiro. Puede deberse a una infracción, al robo del balón, a la comisión de una falta ofensiva, etc.
+  \item Tapón: Desvío por parte de un jugador de un tiro del otro equipo con la intención de impedir que anoté
+  \item Falta: Infracción de las reglas más grave que una violación. La acumulación de faltas por parte de un jugador puede implicar la descalificación.
+    \subitem Falta personal: Falta por contacto personal ilegal con un adversario. Si la falta es antideportiva (excesiva o injustificada), se sanciona con falta flagrante.
+    \subitem Falta técnica: Falta por actitud antideportiva.
+  \item Tiempo muerto: Pausa a la mitad de un cuarto para permitir que los entrenadores den indicaciones a los jugadores.
+\end{itemize}
+
+\textbf{Métricas en el Box-Score:}
+
+\begin{itemize}
+  \item +/- (más-menos): fórmula estadística para medir el impacto del jugador en un juego. Da cuenta de los puntos que se hicieron mientras el jugador estaba en la cancha.
+  \item \emph{Performance Index Rating} (PIR): Fórmula estadística utilizada para medir la eficiencia de un jugador en un juego.
+  \item Eficacia (EFF): Fórmula estadística utilizada para evaluar el rendimiento de un jugador a lo largo de una temporada.
+\end{itemize}
+
+
+
 
 \subsection{¿Qué es GitHub?}
 
@@ -526,7 +780,7 @@ Git es un software de control de versiones diseñado por Linus Torvalds, pensand
 Entonces, ¿qué diferencia a Git de GitHub? La principal diferencia es que Git es un sistema que permite establecer un control de versiones, mientras que GitHub es una plataforma que ofrece un grupo de funciones que facilitan el uso de Git y la colaboración en tiempo real, así como el almacenamiento en la nube.
 
 
-\subsection{Descripción de las variables} \label{sec:Annexo1}
+\subsection{Descripción de las variables}
 
 \begin{itemize}
 \item MIN (\emph{Minutes}): Minutos totales jugados
@@ -539,10 +793,10 @@ Entonces, ¿qué diferencia a Git de GitHub? La principal diferencia es que Git 
 \item FTM (\emph{Free Throws Made}): Número de tiros libres anotados
 \end{itemize}
 
-\clearpage
-
 \subsection{Code}
 
 URL GITHUB
+
+
 
 \end{document}

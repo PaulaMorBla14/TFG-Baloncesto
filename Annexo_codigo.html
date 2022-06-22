@@ -1615,6 +1615,34 @@ pbp_2018_fixed &lt;- split(pbp_2018, factor(pbp_2018$game_code)) %&gt;%
 pbp &lt;- rbind(pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp_2015_fixed, pbp_2017_fixed, pbp_2018_fixed)
 
 summary(pbp[1:18])</code></pre>
+<p>Hemos encontrado errores en los nombres, ya que al cambiar de
+temporada, hay jugadores que los nombran diferentes (por el apodo,
+cambios ortograficos o cambios de nombre). Por lo tanto primero hemos
+tenido que limpiar la base de datos para que coincidan los nombres con
+un único jugador.</p>
+<pre class="r"><code>data_subset &lt;- as.data.frame(pbp) %&gt;%
+  select(contains(c(&quot;home_player&quot;, &quot;away_player&quot;))) %&gt;%
+  arrange(home_player1)
+
+WRONG &lt;- c(&quot;ABRINES, ALEJANDRO&quot;, &quot;ACIK, TUTKU&quot;, &quot;AGRAVANIS, DIMITRIS&quot;, &quot;ALFRED&quot;, &quot;AMAGOU, PAPE&quot;, &quot;ANDUSIC, DANILO&quot;, &quot;ANDRIC, MIHAJILO&quot;, &quot;ANTETOKOUNMPO, ATHANASIOS&quot;, &quot;BOST, DEMARQUIS&quot;, &quot;BREMER, ERNEST&quot;, &quot;BREMER, J.R.&quot;, &quot;CARTER, JOSHUA&quot;, &quot;CHARALAMPOPOULOS, V.&quot;, &quot;DJEDOVIC, NIHAD&quot;, &quot;FISCHER, D\&#39;OR&quot;, &quot;FISCHER, LUCAS&quot;, &quot;GORDON, JAMONT&quot;, &quot;JANNING, MATTHEW&quot;,  &quot;JAWAI, NATHAN&quot;, &quot;KATSIVELIS, DIMITRIS&quot;, &quot;KHRYAPA, VICTOR&quot;, &quot;KHVOSTOV, DIMITRIY&quot;, &quot;LIDEKA, TAUTVYDAS&quot;, &quot;LIKHODEI, VALERII&quot;, &quot;LIMA, AUGUSTO&quot;, &quot;LOJESKI, MATTHEW&quot;, &quot;MANTZARIS, EVANGELOS&quot;, &quot;MAVROKEFALIDES, LOUKAS&quot;, &quot;McCALEBB, BO&quot;, &quot;McLEAN, JAMEL&quot;, &quot;MONYA, SERGEY&quot;, &quot;NELSON, DeMARCUS&quot;, &quot;NGUIRANE, MAODO MALICK&quot;, &quot;REYNOLDS, J.R.&quot;, &quot;RIVERS, K.C.&quot;, &quot;RIVERS, KELVIN&quot;, &quot;SLAUGHTER, A.J.&quot;, &quot;SOLUADE, MORAYONINUOLUWA&quot;, &quot;STRAWBERRY, D.J.&quot;, &quot;THOMAS, MALCOM&quot;, &quot;VASILIADIS, KOSTAS&quot;, &quot;VIALTSEV, EGOR&quot;, &quot;VIGGIANO, JEFFREY&quot;, &quot;VORONOV, EUGENY&quot;, &quot;WANAMAKER, BRADLEY&quot;, &quot;WHITE, D.J.&quot;, &quot;WHITE, DJ&quot;, &quot;XANTHOPOULOS, VAISSILIS&quot;, &quot;YUTTSEVEN, OMER FARUK&quot;)
+RIGHT &lt;- c(&quot;ABRINES, ALEX&quot;, &quot;AÇIK, TUTKU&quot;, &quot;AGRAVANIS, DIMITRIOS&quot;, &quot;LUCAS, JAMON ALFRED&quot;, &quot;AMAGOU, PAPE PHILIPPE&quot;, &quot;ANDJUSIC, DANILO&quot;, &quot;ANDRIC, MIHAJLO&quot;, &quot;ANTETOKOUMPO, THANASIS&quot;, &quot;BOST, DEE&quot;, &quot;BREMER, JR&quot;, &quot;BREMER, JR&quot;, &quot;CARTER, JOSH&quot;, &quot;CHARALAMPOPOULOS, VASILIS&quot;, &quot;DEDOVIC, NIHAD&quot;, &quot;FISCHER, DOR&quot;, &quot;FISCHER, LUKE&quot;, &quot;GORDON, JAMON&quot;, &quot;JANNING, MATT&quot;, &quot;JAWAI, NATE&quot;, &quot;KATSIVELIS, DIMITRIOS&quot;, &quot;KHRYAPA, VIKTOR&quot;, &quot;KHVOSTOV, DIMITRY&quot;, &quot;LYDEKA, TAUTVYDAS&quot;, &quot;LIKHODEY, VALERIY&quot;, &quot;LIMA, AUGUSTO CESAR&quot;, &quot;LOJESKI, MATT&quot;, &quot;MANTZARIS, VANGELIS&quot;, &quot;MAVROKEFALIDIS, LOUKAS&quot;, &quot;MCCALEBB, BO&quot;, &quot;MCLEAN, JAMEL&quot;, &quot;MONIA, SERGEY&quot;, &quot;NELSON, DEMARCUS&quot;, &quot;NGUIRANE, MAODO&quot;, &quot;REYNOLDS, JR&quot;, &quot;RIVERS, KC&quot;, &quot;RIVERS, KC&quot;, &quot;SLAUGHTER, AJ&quot;, &quot;SOLUADE, MO&quot;, &quot;STRAWBERRY, DJ&quot;, &quot;THOMAS, MALCOLM&quot;, &quot;VASILEIADIS, KOSTAS&quot;, &quot;VYALTSEV, EGOR&quot;, &quot;VIGIIANO, JEFF&quot;, &quot;VORONOV, EVGENY&quot;, &quot;WANAMAKER, BRAD&quot;, &quot;WHITE, JAMES&quot;, &quot;WHITE, JAMES&quot;, &quot;XANTHOPOULOS, VASILIS&quot;, &quot;YURTSEVEN, OMER&quot;)
+           
+players_with_errors &lt;- data.frame(&quot;wrong&quot;=WRONG, 
+                                  &quot;right&quot;=RIGHT)
+
+data_subset_head &lt;- head(data_subset)
+
+#Numero de errores
+source(here(&quot;R&quot;, &quot;errors_fun.R&quot;))
+ERRORS_totals &lt;- errors_fun(data_subset, players_with_errors)
+
+#Limpieza errores
+
+#????????????????????????????????
+
+
+#Check
+#errors_fun(data_clean, players_with_errors) &gt; 0</code></pre>
 </div>
 </div>
 <div id="categorización-y-edición-bbdd" class="section level1">
@@ -1951,9 +1979,8 @@ source(here(&quot;R&quot;, &quot;Print_MS_fun.R&quot;))
 
 #combinar mismos stints
 PlusMinus_Lineups &lt;- df_dummys_PlusMinus_2 %&gt;%
-                     mutate(stint_seconds = Print_MS(stint_seconds))
-
-PlusMinus_Classic &lt;- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
+                     mutate(stint_seconds = Print_MS(stint_seconds))</code></pre>
+<pre class="r"><code>PlusMinus_Classic &lt;- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
 
 PlusMinus_Classic_df &lt;- as.data.frame(PlusMinus_Classic) %&gt;%
   tibble::rownames_to_column(var=&quot;Players&quot;) %&gt;%

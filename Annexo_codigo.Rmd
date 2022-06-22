@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval=FALSE)
+knitr::opts_chunk$set(eval=FALSE, cache=TRUE)
 ```
 
 ## Abstract
@@ -20,7 +20,7 @@ Este es un documento Annexo al Trabajo *Métodos estadísticos aplicados al balo
 
 # Paquetes
 
-```{r}
+```{r Packages}
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -45,7 +45,7 @@ library(car)                   # VIF
 
 # Datos
 
-```{r}
+```{r ReadData}
 pbp_2008 <- read_csv("pbp2008.csv")
 
 ## Check how many rows are affected by this
@@ -66,7 +66,7 @@ Cuando haciamos la primera lectura de los datos, nos dimos cuenta que se produci
 
 Para solucionar estos errores creamos una función llamada `fix-lineups.R` [(código)](#annexo)y la aplicamos a todos nuestros datos.
 
-```{r}
+```{r CleanData}
 source(here("R", "fix-lineups.R"))
 
 ## Function fix_lineups() only takes data from a single game,
@@ -115,6 +115,36 @@ pbp <- rbind(pbp_2011_fixed, pbp_2012_fixed, pbp_2013_fixed, pbp_2014_fixed, pbp
 summary(pbp[1:18])
 ```
 
+Hemos encontrado errores en los nombres, ya que al cambiar de temporada, hay jugadores que los nombran diferentes (por el apodo, cambios ortograficos o cambios de nombre). Por lo tanto primero hemos tenido que limpiar la base de datos para que coincidan los nombres con un único jugador. 
+
+```{r}
+data_subset <- as.data.frame(pbp) %>%
+  select(contains(c("home_player", "away_player"))) %>%
+  arrange(home_player1)
+
+WRONG <- c("ABRINES, ALEJANDRO", "ACIK, TUTKU", "AGRAVANIS, DIMITRIS", "ALFRED", "AMAGOU, PAPE", "ANDUSIC, DANILO", "ANDRIC, MIHAJILO", "ANTETOKOUNMPO, ATHANASIOS", "BOST, DEMARQUIS", "BREMER, ERNEST", "BREMER, J.R.", "CARTER, JOSHUA", "CHARALAMPOPOULOS, V.", "DJEDOVIC, NIHAD", "FISCHER, D\'OR", "FISCHER, LUCAS", "GORDON, JAMONT", "JANNING, MATTHEW",  "JAWAI, NATHAN", "KATSIVELIS, DIMITRIS", "KHRYAPA, VICTOR", "KHVOSTOV, DIMITRIY", "LIDEKA, TAUTVYDAS", "LIKHODEI, VALERII", "LIMA, AUGUSTO", "LOJESKI, MATTHEW", "MANTZARIS, EVANGELOS", "MAVROKEFALIDES, LOUKAS", "McCALEBB, BO", "McLEAN, JAMEL", "MONYA, SERGEY", "NELSON, DeMARCUS", "NGUIRANE, MAODO MALICK", "REYNOLDS, J.R.", "RIVERS, K.C.", "RIVERS, KELVIN", "SLAUGHTER, A.J.", "SOLUADE, MORAYONINUOLUWA", "STRAWBERRY, D.J.", "THOMAS, MALCOM", "VASILIADIS, KOSTAS", "VIALTSEV, EGOR", "VIGGIANO, JEFFREY", "VORONOV, EUGENY", "WANAMAKER, BRADLEY", "WHITE, D.J.", "WHITE, DJ", "XANTHOPOULOS, VAISSILIS", "YUTTSEVEN, OMER FARUK")
+RIGHT <- c("ABRINES, ALEX", "AÇIK, TUTKU", "AGRAVANIS, DIMITRIOS", "LUCAS, JAMON ALFRED", "AMAGOU, PAPE PHILIPPE", "ANDJUSIC, DANILO", "ANDRIC, MIHAJLO", "ANTETOKOUMPO, THANASIS", "BOST, DEE", "BREMER, JR", "BREMER, JR", "CARTER, JOSH", "CHARALAMPOPOULOS, VASILIS", "DEDOVIC, NIHAD", "FISCHER, DOR", "FISCHER, LUKE", "GORDON, JAMON", "JANNING, MATT", "JAWAI, NATE", "KATSIVELIS, DIMITRIOS", "KHRYAPA, VIKTOR", "KHVOSTOV, DIMITRY", "LYDEKA, TAUTVYDAS", "LIKHODEY, VALERIY", "LIMA, AUGUSTO CESAR", "LOJESKI, MATT", "MANTZARIS, VANGELIS", "MAVROKEFALIDIS, LOUKAS", "MCCALEBB, BO", "MCLEAN, JAMEL", "MONIA, SERGEY", "NELSON, DEMARCUS", "NGUIRANE, MAODO", "REYNOLDS, JR", "RIVERS, KC", "RIVERS, KC", "SLAUGHTER, AJ", "SOLUADE, MO", "STRAWBERRY, DJ", "THOMAS, MALCOLM", "VASILEIADIS, KOSTAS", "VYALTSEV, EGOR", "VIGIIANO, JEFF", "VORONOV, EVGENY", "WANAMAKER, BRAD", "WHITE, JAMES", "WHITE, JAMES", "XANTHOPOULOS, VASILIS", "YURTSEVEN, OMER")
+           
+players_with_errors <- data.frame("wrong"=WRONG, 
+                                  "right"=RIGHT)
+
+data_subset_head <- head(data_subset)
+
+#Numero de errores
+source(here("R", "errors_fun.R"))
+ERRORS_totals <- errors_fun(data_subset, players_with_errors)
+
+#Limpieza errores
+
+#????????????????????????????????
+
+
+#Check
+#errors_fun(data_clean, players_with_errors) > 0
+```
+
+
+
 # Categorización y edición BBDD
 
 En esta parte del código hemos categorizado las variables según su características y empezado a trabajar con nuestra base de datos.
@@ -133,7 +163,7 @@ Al final del proceso, hemos obtenido una base de datos con todos los lineups de 
 
 Se puede encontrar toda la función completa en el Annexo.
 
-```{r}
+```{r dummys_fun_FactorData}
 factor_names <- c('season', 'game_code', 'team_code', 'play_number', 'play_type')
 pbd_datos_fixed[,factor_names] <- lapply(pbd_datos_fixed[,factor_names] , factor)
   
@@ -141,7 +171,7 @@ summary(pbd_datos_fixed[1:18])
 ```
 
 
-```{r}
+```{r dummys_fun_NumPlayers}
 df <- pbd_datos_fixed
 N_df <- dim(df)[1] # Numero de jugadas
 M_df <- dim(df)[2] # Numero de variables
@@ -176,7 +206,7 @@ Para facilitar los calculos con el tiempo, se va a pasar los mm:ss a segundos.
 - CHR\_to\_seconds: Para pasar la variable tiempo que nos llega como chracter a segundos.
 - Print\_MS: Que nos devolverá los segundos a formato mm:SS (se hará servir más adelante)
 
-```{r}
+```{r dummys_fun_TimeFunctions}
 CHR_to_seconds <- function(x){
   a <- as.POSIXct(x, tz = '', format = "%H:%M:%S", usetz = FALSE)
   tms <- secondss(format(a, "%H:%M:%S"))
@@ -192,7 +222,7 @@ Print_MS <- function(x){
 
 ### Lista Jugadores-Equipo
 
-```{r}
+```{r dummys_fun_PlayersTeams}
 TP_home <- df_pbp %>%
   select(c(contains("home_"))) %>%
   unique()
@@ -230,7 +260,7 @@ Players_Sorted_byTeam <- TeamPlayers$Player
 
 Se crea variable `lineups` que recoge los quintetos de ambos equipos en pista.
 
-```{r}
+```{r dummys_fun_Lineups}
 Lineups_PasteSort <- function(x) {
   paste(sort(x), collapse = " - ")
 }
@@ -255,7 +285,7 @@ df_lineups_sorted <- df_pbp %>%
 
 Se modifica variable *game\_code* para que quede categorizada con el mismo numero de caracteres. Y unimos *Season* y *Game\_Code* para tener una variable identificadora del partido.
 
-```{r}
+```{r dummys_fun_Season+Game}
 df_merged <- df_lineups_sorted %>%
   mutate(game_code = paste0("G", str_pad(game_code, 6, pad = "0")), 
                      quarter   = paste0("Q", quarter)) %>%
@@ -266,7 +296,7 @@ df_merged <- df_lineups_sorted %>%
 
 Queremos obtener un df con los quintetos identificados cada vez que se produce un cambio. Se dejaran aquellos que esten duplicados ya que es necesario diferenciarlos para posteriormente poder hacer el Mas/Menos correctamente. 
 
-```{r}
+```{r dummys_fun_Stints}
 df_stints <- df_merged %>%
   arrange(SeasonGame) %>%
   mutate(StintChanged = (lineup != lag(lineup)),
@@ -284,7 +314,7 @@ df_reduced <- df_stints %>%
 Obtenemos el Mas/Menos segun cada stint. Se tendrá en cuenta el cambio de partido.
 Además, esta variable estara hecha con HOME como referencia, pero eso no hace ninguna diferencia estadística importante en nuestro resultado final.
 
-```{r}
+```{r dummys_fun_PlusMinus}
 PlusMinus_function <- function(h,a){
   (h-lag(h))-(a-lag(a))
 }
@@ -313,7 +343,7 @@ df_PlusMinus_reduced_bylineups <- df_PlusMinus_reduced %>%
 
 ### Dummys Jugadores
 
-```{r}
+```{r dummys_fun_Dummys}
 df_dummys_H <- fastDummies::dummy_cols(df_PlusMinus_reduced_bylineups, 
                                        select_columns = "lineup_home", 
                                        split = "-")
@@ -367,7 +397,7 @@ Ahora mismo tenemos un DF con el PlusMinus con HOME como referencia (si es posit
 
 Seleccionamos a partir de 2011 porque la variable "seconds" esta mal definida en los años anteriores, ya que no son segundos sino minutos y por lo tanto hay varias acciones del partido en el mismo momento exacto en el marcador del tiempo, cosa que no puede ser posible por incoherencia. Por lo tanto, tenemos un total de 5 temporadas con XXX jugadas.
 
-```{r}
+```{r apply_dummys_fun}
 source(here("R", "dummys_fun.R"))
 
 df_dummys_2011 <- dummys_fun(pbp_2011_fixed)
@@ -387,7 +417,7 @@ write.csv(df_dummys_2017,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\
 write.csv(df_dummys_2018,"C:\\Users\\paula\\Documents\\GitHub\\TFG-Baloncesto2\\Dummys\\dummys_2018.csv", row.names = FALSE)
 ```
 
-```{r}
+```{r ReadDummys}
 #dummys_2011 <- read_csv("Dummys/dummys_2011.csv") #PROBLEMAS
 #dummys_2012 <- read_csv("Dummys/dummys_2012.csv") #PROBLEMAS
 dummys_2013 <- read_csv("Dummys/dummys_2013.csv")
@@ -403,7 +433,7 @@ N_rows <- nrow(dummys_2013)+nrow(dummys_2014)+nrow(dummys_2015)+nrow(dummys_2017
 
 Una vez tenemos la base de datos, hemos trabajado para obtener un vector con todos los jugadores de todas las temporadas.
 
-```{r}
+```{r Players}
 #players_2011 <- colnames(dummys_2011)[-c(1:5)]
 #players_2012 <- colnames(dummys_2012)[-c(1:5)]
 players_2013 <- colnames(dummys_2013)[-c(1:5)]
@@ -420,7 +450,7 @@ players_vec <- players$player
 ```
 
 
-```{r}
+```{r MergeDummys}
 df_dummys <- dplyr::bind_rows(dummys_2013, dummys_2014, dummys_2015, dummys_2017, dummys_2018) %>%
   mutate_all(~replace(., is.na(.), 0))
 
@@ -441,7 +471,7 @@ nrow(df_dummys) != N_rows
 
 # PlusMinus por stint (*PlusMinus CLASSIC*)
 
-```{r}
+```{r PlusMinus_by_Stint}
 df_dummys_PlusMinus <- df_dummys %>%
   group_by(SeasonGame, quarter) %>%
   mutate(across(matches(players_vec), function(x) x*PlusMinus)) %>%
@@ -456,7 +486,10 @@ source(here("R", "Print_MS_fun.R"))
 #combinar mismos stints
 PlusMinus_Lineups <- df_dummys_PlusMinus_2 %>%
                      mutate(stint_seconds = Print_MS(stint_seconds))
+```
 
+
+```{r PlusMinus_Classic}
 PlusMinus_Classic <- colSums(PlusMinus_Lineups[5:ncol(PlusMinus_Lineups)])
 
 PlusMinus_Classic_df <- as.data.frame(PlusMinus_Classic) %>%
@@ -469,7 +502,7 @@ t<-table(PlusMinus_Classic)
 
 # Modelar
 
-```{r}
+```{r Models}
 mod1 <- lm(PlusMinus ~ . -SeasonGame -quarter -lineup -stint_seconds, data=df_dummys)
 sum1  <- summary(mod1)
 coef1 <- as.data.frame(summary(mod1)$coefficients) %>%
@@ -494,13 +527,69 @@ coef3 <- as.data.frame(summary(mod3)$coefficients) %>%
 match_firstplayer <- 5
 n <- dim(df_dummys_PlusMinus)[2]
 
-correlations <- round(cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n])), 5)
+x <- model.matrix(~.-1, data=df_dummys_PlusMinus[,match_firstplayer:n])
+correlations <- round(cor(x), 5)
+
+corrplot(correlations, type = "upper", tl.col = "black", tl.srt = 90, tl.cex = 0.2)
+
+col<- colorRampPalette(c("red", "white", "blue"))(20)
+#heatmap(x = correlations, col = col, symm = TRUE)
 ```
 
 # Ridge
 
-```{r}
+```{r Ridge}
+match_firstplayer <- 6
+n <- dim(df_dummys)[2]
 
+y <- df_dummys$PlusMinus
+
+library(glmnet)
+grid <- 10^seq(10, -2, length=100)
+ridge.mod <- glmnet(x, y, alpha=0, lambda=grid)
+
+dim(coef(ridge.mod))
+
+#Ejemplo para lambda=11497.57
+ridge.mod$lambda[50]
+coef(ridge.mod)[, 50]
+
+sqrt(sum(coef(ridge.mod)[-1, 50]^2))
+predict(ridge.mod, s=50, type="coefficients")
+
+set.seed(1)
+
+train <- sample(1:nrow(x), nrow(x)/2)
+test <- (-train)
+y.test <- y[test]
+
+ridge.mod <- glmnet(x[train, ], y[train], alpha=0, 
+                    lambda=grid, thresh=1e-12)
+ridge.pred <- predict(ridge.mod, s=4, newx=x[test, ])
+#mean((ridge.pred - y.test)^2)
+
+#mean((mean(y[train]) - y.test)^2)
+
+ridge.pred <- predict(ridge.mod, s=1e10, newx=x[test, ])
+#mean((ridge.pred - y.test)^2)
+
+ridge.pred <- predict(ridge.mod, s=0, newx=x[test, ], exact=T, x=x[train, ], y = y[train])
+#mean((ridge.pred - y.test)^2)
+
+mod4 <- lm(y~x, subset=train)
+ridge.pred <- predict(ridge.mod, s=0, exact=T, type="coefficients", x=x[train, ], y=y[train])
+
+set.seed(1)
+cv.out <- cv.glmnet(x[train, ], y[train], alpha=0)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
+
+ridge.pred <- predict(ridge.mod, s=bestlam, newx=x[test, ])
+mean((ridge.pred - y.test)^2)
+
+out <- glmnet(x, y, alpha=0)
+pred <- predict(out, type="coefficients", s=bestlam)
 ```
 
 
@@ -509,7 +598,7 @@ correlations <- round(cor(model.matrix(~.-1, data=df_dummys_PlusMinus[,match_fir
 
 ## Función 1: `fix-lineups.R`
 
-```{r}
+```{r func_fix_lineups}
 fix_lineups <- function(pbp) {
   game_code <- unique(pbp$game_code)
   season <- unique(pbp$season)
